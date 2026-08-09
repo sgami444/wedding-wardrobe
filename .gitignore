@@ -1,0 +1,19 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor settings
+.idea/
+.vscode/
+*.code-workspace
+
+# Local environment and logs
+.env
+.env.*
+!.env.example
+*.log
+
+# Temporary render and image-processing output
+.test-output/
+tmp/

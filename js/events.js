@@ -1,0 +1,172 @@
+/*
+ * WEDDING WARDROBE CONTENT
+ * ------------------------
+ * This is the only file you need to edit when event details or outfit
+ * inspiration changes.
+ *
+ * TEXT
+ * - Change event names, dates, taglines, descriptions, recommendations, or
+ *   restrictions directly below.
+ *
+ * IMAGES
+ * - Every gallery item is an object with its own `src` and `alt` text.
+ * - `recommended`, `avoid`, and `images` are three INDEPENDENT lists. They do
+ *   not need the same number of items and their order does not need to match.
+ * - To replace a photo, change only its `src` and `alt` values.
+ * - To add a photo, copy one complete `{ src: "...", alt: "..." }` entry.
+ * - Put photo files in the matching folder under `assets/<event>/<group>/`.
+ * - If an image is not available yet, the site shows a graceful placeholder.
+ *
+ * EVENTS
+ * - To add an event, copy one complete event object, give it a unique `id`,
+ *   and update its content. Navigation and page sections are created for you.
+ */
+
+window.WEDDING_WARDROBE = {
+  site: {
+    kicker: "You're invited to celebrate",
+    titleLead: "Margee & Sahil's",
+    title: "Wedding Wardrobe",
+    intro:
+      "We're so excited to celebrate with you. To make getting ready a little easier, we've put together a wardrobe guide for each celebration.",
+    note: "Come dressed, celebrate, dance and make memories with us.",
+    footerNames: "Margee & Sahil",
+    footerDates: "February 8–10, 2027",
+    footerMessage: "Thank you for dressing up and celebrating with us."
+  },
+
+  events: [
+    {
+      id: "mandap",
+      name: "Mandap",
+      date: "February 8, 2027",
+      time: "",
+      tagline: "A sacred beginning to our forever.",
+      description: "Traditional, elegant Gujarati and Indian attire.",
+      theme: "sacred",
+      women: {
+        recommended: ["Bandhani", "Silk Saree", "Choli"],
+        avoid: ["Patola", "Paithani"],
+        images: [
+          {
+            src: "assets/mandap/women/outfit-caricature-01.webp",
+            alt: "Illustrated red Bandhani and mustard silk saree inspiration for the Mandap"
+          }
+        ]
+      },
+      men: {
+        recommended: ["Kurta", "Koti / traditional waistcoat"],
+        avoid: [],
+        images: [
+          {
+            src: "assets/mandap/men/outfit-caricature-01.webp",
+            alt: "Illustrated white kurtas with red and cream traditional Koti inspiration"
+          }
+        ]
+      }
+    },
+    {
+      id: "carnival",
+      name: "Carnival",
+      date: "February 9, 2027",
+      time: "Daytime",
+      tagline: "A day of joy, laughter and celebration.",
+      description: "Light, breezy, floral and festive.",
+      theme: "daylight",
+      women: {
+        recommended: ["Floral chiffon gown", "Floral Indo-Western outfit"],
+        avoid: ["Blue"],
+        images: [
+          {
+            src: "assets/carnival/women/outfit-caricature-01.webp",
+            alt: "Illustrated ivory floral chiffon gown and blush Indo-Western outfit inspiration"
+          }
+        ]
+      },
+      men: {
+        recommended: [
+          "Floral shirt",
+          "Floral overshirt",
+          "Light / neutral trousers"
+        ],
+        avoid: ["Blue"],
+        images: [
+          {
+            src: "assets/carnival/men/outfit-caricature-01.webp",
+            alt: "Illustrated floral shirt and overshirt looks with light neutral trousers"
+          }
+        ]
+      }
+    },
+    {
+      id: "garba",
+      name: "Garba",
+      date: "February 9, 2027",
+      time: "Evening",
+      tagline: "An evening filled with rhythm, tradition and vibrant energy.",
+      description: "Colourful Gujarati attire made for a night of dancing.",
+      theme: "festive",
+      women: {
+        recommended: [
+          "Gujarati-style Chaniya Choli",
+          "Traditional colourful Garba attire"
+        ],
+        avoid: [],
+        images: [
+          {
+            src: "assets/garba/women/outfit-caricature-01.webp",
+            alt: "Illustrated green and orange Gujarati Chaniya Choli inspiration with mirror work"
+          }
+        ]
+      },
+      men: {
+        recommended: [
+          "Gujarati Kurta",
+          "Koti / traditional embroidered waistcoat"
+        ],
+        avoid: [],
+        images: [
+          {
+            src: "assets/garba/men/outfit-caricature-01.webp",
+            alt: "Illustrated white and mustard Gujarati kurtas with embroidered Koti inspiration"
+          }
+        ]
+      }
+    },
+    {
+      id: "wedding",
+      name: "Wedding",
+      date: "February 10, 2027",
+      time: "",
+      tagline: "A timeless union of love and tradition.",
+      description: "Luxurious, sophisticated and ceremonial Indian attire.",
+      theme: "ceremonial",
+      women: {
+        recommended: [
+          "Patola",
+          "Paithani",
+          "Indo-Western",
+          "Festive sarees",
+          "Saree-style choli / traditional festive Indian attire"
+        ],
+        avoid: ["White"],
+        images: [
+          {
+            src: "assets/wedding/women/outfit-caricature-01.webp",
+            alt: "Illustrated Patola-style lehenga and rich green Paithani saree wedding inspiration"
+          }
+        ]
+      },
+      men: {
+        recommended: ["Jodhpuri", "Bandhgala / Jodhpuri-style festive attire"],
+        avoid: [],
+        images: [
+          {
+            src: "assets/wedding/men/outfit-caricature-01.webp",
+            alt: "Illustrated ivory and burgundy Jodhpuri Bandhgala wedding inspiration"
+          }
+        ]
+      }
+    }
+  ]
+};
