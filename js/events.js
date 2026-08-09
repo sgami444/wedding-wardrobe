@@ -46,7 +46,7 @@ window.WEDDING_WARDROBE = {
       theme: "sacred",
       women: {
         recommended: ["Bandhani", "Silk Saree", "Choli"],
-        avoid: ["Patola", "Paithani"],
+        avoid: ["Patola", "Pathani"],
         images: [
           {
             src: "assets/mandap/women/outfit-caricature-01.webp",
@@ -144,7 +144,7 @@ window.WEDDING_WARDROBE = {
       women: {
         recommended: [
           "Patola",
-          "Paithani",
+          "Pathani",
           "Indo-Western",
           "Festive sarees",
           "Saree-style choli / traditional festive Indian attire"
