@@ -28,17 +28,19 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
 
-      - name: Prepare root and wardrobe routes
+      - name: Prepare audience routes
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p _site/wardrobe
+          mkdir -p _site/wardrobe _site/attire
 
           cp index.html _site/index.html
           cp -R assets css js _site/
 
-          cp index.html _site/wardrobe/index.html
-          cp -R assets css js _site/wardrobe/
+          for route in wardrobe attire; do
+            cp index.html "_site/$route/index.html"
+            cp -R assets css js "_site/$route/"
+          done
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v5

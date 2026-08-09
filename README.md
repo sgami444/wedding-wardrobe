@@ -3,7 +3,19 @@
 A mobile-first, framework-free wedding wardrobe guide. Open `index.html`
 directly in a browser or publish this folder to any static host.
 
-Live site: <https://thesamarstory.com/wardrobe/>
+## Shareable guides
+
+- Friends: <https://thesamarstory.com/wardrobe/> (Sagai is omitted.)
+- Family: <https://thesamarstory.com/attire/> (Carnival is omitted.)
+- Complete guide: <https://thesamarstory.com/> (All events are shown.)
+
+The two audience views are configured in the `routes` object in
+`js/events.js`. Each route lists the event IDs it should exclude, while event
+content still lives in one shared `events` array.
+
+These are tailored public views, not password-protected pages. Because GitHub
+Pages and this repository are public, someone who knows another URL can still
+open it.
 
 ## Edit event content
 

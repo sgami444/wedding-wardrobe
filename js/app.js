@@ -35,9 +35,84 @@
     });
   }
 
-  // Exposing these two pure helpers keeps the data contract easy to verify
-  // without coupling the renderer to a particular test framework.
-  appGlobal.WardrobeApp = Object.freeze({ normaliseList, normaliseImages });
+  function routeKeyFromPath(pathname) {
+    const segments = String(pathname || "")
+      .split("/")
+      .filter(Boolean)
+      .map((segment) => {
+        try {
+          return decodeURIComponent(segment);
+        } catch (_error) {
+          return segment;
+        }
+      });
+
+    let routeKey = segments.pop() || "";
+    if (/^index\.html?$/i.test(routeKey)) routeKey = segments.pop() || "";
+    return routeKey.toLowerCase();
+  }
+
+  function resolveRouteView(value, pathname) {
+    const source = value && typeof value === "object" ? value : {};
+    const routes = source.routes && typeof source.routes === "object"
+      ? source.routes
+      : {};
+    const candidateKey = routeKeyFromPath(pathname);
+    const route =
+      routes[candidateKey] && typeof routes[candidateKey] === "object"
+        ? routes[candidateKey]
+        : null;
+    const excludedEventIds = new Set(
+      normaliseList(route?.excludeEvents)
+        .map((eventId) => safeId(eventId, ""))
+        .filter(Boolean)
+    );
+    const site = {
+      ...(source.site && typeof source.site === "object" ? source.site : {}),
+      ...(route?.site && typeof route.site === "object" ? route.site : {})
+    };
+    const events = Array.isArray(source.events)
+      ? source.events.filter((event) => {
+          const eventId = safeId(event?.id, "");
+          return !eventId || !excludedEventIds.has(eventId);
+        })
+      : [];
+
+    return {
+      key: route ? candidateKey : "",
+      site,
+      events
+    };
+  }
+
+  function eventCountLabel(value) {
+    const count = Number.isInteger(value) && value >= 0 ? value : 0;
+    const words = [
+      "No",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+      "Ten"
+    ];
+    const countCopy = words[count] || String(count);
+    return `${countCopy} ${count === 1 ? "celebration" : "celebrations"}`;
+  }
+
+  // Exposing these pure helpers keeps the data contract and audience routes
+  // easy to verify without coupling the renderer to a particular test framework.
+  appGlobal.WardrobeApp = Object.freeze({
+    normaliseList,
+    normaliseImages,
+    routeKeyFromPath,
+    resolveRouteView,
+    eventCountLabel
+  });
 
   if (typeof document === "undefined") return;
 
@@ -102,22 +177,32 @@
     if (node && typeof value === "string") node.textContent = value;
   }
 
-  function renderSiteCopy(site) {
-    if (!site || typeof site !== "object") return;
+  function renderSiteCopy(site, eventCount) {
+    const copy = site && typeof site === "object" ? site : {};
 
-    setText("[data-site-kicker]", site.kicker);
-    setText("[data-site-intro]", site.intro);
-    setText("[data-site-note]", site.note);
-    setText("[data-footer-names]", site.footerNames);
-    setText("[data-footer-dates]", site.footerDates);
-    setText("[data-footer-message]", site.footerMessage);
+    setText("[data-site-kicker]", copy.kicker);
+    setText("[data-site-intro]", copy.intro);
+    setText("[data-site-note]", copy.note);
+    setText("[data-events-kicker]", eventCountLabel(eventCount));
+    setText("[data-footer-names]", copy.footerNames);
+    setText("[data-footer-dates]", copy.footerDates);
+    setText("[data-footer-message]", copy.footerMessage);
+
+    const canonical = document.querySelector("[data-site-canonical]");
+    if (
+      canonical &&
+      typeof copy.canonicalUrl === "string" &&
+      copy.canonicalUrl.trim()
+    ) {
+      canonical.href = copy.canonicalUrl.trim();
+    }
 
     const title = document.querySelector("[data-site-title]");
-    if (title && (site.titleLead || site.title || site.titleScript)) {
+    if (title && (copy.titleLead || copy.title || copy.titleScript)) {
       const titleParts = [
-        ["hero__title-lead", site.titleLead],
-        ["hero__title-main", site.title],
-        ["hero__title-script", site.titleScript]
+        ["hero__title-lead", copy.titleLead],
+        ["hero__title-main", copy.title],
+        ["hero__title-script", copy.titleScript]
       ]
         .filter(([, copy]) => typeof copy === "string" && copy.trim())
         .map(([className, copy]) => element("span", className, copy));
@@ -125,7 +210,7 @@
       title.replaceChildren(...titleParts);
     }
 
-    const documentTitle = [site.titleLead, site.title, site.titleScript]
+    const documentTitle = [copy.titleLead, copy.title, copy.titleScript]
       .filter((copy) => typeof copy === "string" && copy.trim())
       .join(" ");
 
@@ -562,15 +647,18 @@
       return;
     }
 
-    renderSiteCopy(config.site);
+    const routeView = resolveRouteView(config, window.location.pathname);
+    document.documentElement.dataset.guideRoute = routeView.key || "all";
+
+    renderSiteCopy(routeView.site, routeView.events.length);
     eventsRoot.replaceChildren();
 
-    if (!config.events.length) {
+    if (!routeView.events.length) {
       showConfigurationError("Wardrobe details are coming soon.");
       return;
     }
 
-    const renderedEvents = config.events.map((event, index) => {
+    const renderedEvents = routeView.events.map((event, index) => {
       const rendered = renderEvent(event, index);
       eventsRoot.append(rendered.article);
       return { ...rendered, event };

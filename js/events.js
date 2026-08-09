@@ -20,10 +20,16 @@
  * EVENTS
  * - To add an event, copy one complete event object, give it a unique `id`,
  *   and update its content. Navigation and page sections are created for you.
+ *
+ * AUDIENCE ROUTES
+ * - `/wardrobe/` is the friends guide and excludes Sagai.
+ * - `/attire/` is the family guide and excludes Carnival.
+ * - Add or remove event IDs in `excludeEvents` to adjust either guide.
  */
 
 window.WEDDING_WARDROBE = {
   site: {
+    canonicalUrl: "https://thesamarstory.com/",
     kicker: "What to Wear, Where to Shine",
     titleLead: "Margee & Sahil's",
     title: "Wedding",
@@ -34,6 +40,22 @@ window.WEDDING_WARDROBE = {
     footerNames: "Margee & Sahil",
     footerDates: "January 21 & February 8–10, 2027",
     footerMessage: "Thank you for dressing up and celebrating with us."
+  },
+
+  routes: {
+    wardrobe: {
+      excludeEvents: ["sagai"],
+      site: {
+        canonicalUrl: "https://thesamarstory.com/wardrobe/",
+        footerDates: "February 8–10, 2027"
+      }
+    },
+    attire: {
+      excludeEvents: ["carnival"],
+      site: {
+        canonicalUrl: "https://thesamarstory.com/attire/"
+      }
+    }
   },
 
   events: [
@@ -62,7 +84,7 @@ window.WEDDING_WARDROBE = {
       },
       men: {
         recommended: ["Suit", "Blazer", "Pastel colours only"],
-        avoid: ["Bright colours", "Dark colours", "Heavy prints"],
+        avoid: ["Heavy prints", "Jodhpuri"],
         images: [
           {
             src: "assets/sagai/men/outfit-caricature-02.webp",
@@ -110,7 +132,7 @@ window.WEDDING_WARDROBE = {
       theme: "daylight",
       women: {
         recommended: ["Floral chiffon gown", "Floral Indo-Western outfit"],
-        avoid: ["Blue"],
+        avoid: ["All shades of BLUE"],
         images: [
           {
             src: "assets/carnival/women/outfit-caricature-01.webp",
@@ -124,7 +146,7 @@ window.WEDDING_WARDROBE = {
           "Floral overshirt",
           "Light / neutral trousers"
         ],
-        avoid: ["Blue", "Full Jacket"],
+        avoid: ["All shades of BLUE", "Full Jacket"],
         images: [
           {
             src: "assets/carnival/men/outfit-caricature-01.webp",
