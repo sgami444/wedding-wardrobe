@@ -80,7 +80,7 @@ window.WEDDING_WARDROBE = {
         ]
       },
       men: {
-        recommended: ["Suit", "Blazer", "Pastel colours only"],
+        recommended: ["Suit", "Blazer", "Pastel colours"],
         avoid: ["Heavy prints", "Jodhpuri"],
         images: [
           {
@@ -194,12 +194,10 @@ window.WEDDING_WARDROBE = {
       women: {
         recommended: [
           "Patola",
-          "Pathani",
-          "Indo-Western",
-          "Festive sarees",
-          "Saree-style choli / traditional festive Indian attire"
+          "Paithani",
+          "Saree-style choli"
         ],
-        avoid: ["White"],
+        avoid: ["White", "Bandhani"],
         images: [
           {
             src: "assets/wedding/women/outfit-caricature-01.webp",
@@ -208,7 +206,7 @@ window.WEDDING_WARDROBE = {
         ]
       },
       men: {
-        recommended: ["Jodhpuri", "Bandhgala / Jodhpuri-style festive attire"],
+        recommended: ["Jodhpuri", "Bandhgala"],
         avoid: ["White"],
         images: [
           {

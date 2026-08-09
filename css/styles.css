@@ -583,21 +583,6 @@ main {
   text-align: center;
 }
 
-.event-card__number {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  margin: 0 auto 1rem;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  place-items: center;
-  color: var(--gold);
-  background: rgba(255, 250, 246, 0.8);
-  font-family: var(--serif);
-  font-size: 0.75rem;
-  font-variant-numeric: tabular-nums;
-}
-
 .event-card__date {
   display: flex;
   flex-wrap: wrap;

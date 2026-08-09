@@ -385,7 +385,6 @@
     article.setAttribute("aria-labelledby", `${sectionId}-title`);
 
     const header = element("header", "event-card__header");
-    header.append(element("span", "event-card__number", String(index + 1).padStart(2, "0")));
 
     const dateLine = element("p", "event-card__date");
     if (event.date) {
