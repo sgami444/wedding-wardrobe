@@ -113,14 +113,23 @@
     setText("[data-footer-message]", site.footerMessage);
 
     const title = document.querySelector("[data-site-title]");
-    if (title && (site.titleLead || site.title)) {
-      const lead = element("span", "", site.titleLead || "");
-      title.replaceChildren(lead, document.createTextNode(site.title || ""));
+    if (title && (site.titleLead || site.title || site.titleScript)) {
+      const titleParts = [
+        ["hero__title-lead", site.titleLead],
+        ["hero__title-main", site.title],
+        ["hero__title-script", site.titleScript]
+      ]
+        .filter(([, copy]) => typeof copy === "string" && copy.trim())
+        .map(([className, copy]) => element("span", className, copy));
+
+      title.replaceChildren(...titleParts);
     }
 
-    if (site.titleLead && site.title) {
-      document.title = `${site.titleLead} ${site.title}`;
-    }
+    const documentTitle = [site.titleLead, site.title, site.titleScript]
+      .filter((copy) => typeof copy === "string" && copy.trim())
+      .join(" ");
+
+    if (documentTitle) document.title = documentTitle;
   }
 
   function createPlaceholder(context) {

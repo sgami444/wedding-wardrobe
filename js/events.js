@@ -24,9 +24,10 @@
 
 window.WEDDING_WARDROBE = {
   site: {
-    kicker: "You're invited to celebrate",
+    kicker: "What to Wear, Where to Shine",
     titleLead: "Margee & Sahil's",
-    title: "Wedding Wardrobe",
+    title: "Wedding",
+    titleScript: "Wardrobe",
     intro:
       "We're so excited to celebrate with you. To make getting ready a little easier, we've put together a wardrobe guide for each celebration.",
     note: "Come dressed, celebrate, dance and make memories with us.",
