@@ -177,8 +177,8 @@ window.WEDDING_WARDROBE = {
         avoid: ["Jacket"],
         images: [
           {
-            src: "assets/garba/men/outfit-caricature-02.webp",
-            alt: "Illustrated white and mustard Gujarati kurtas with embroidered Koti inspiration"
+            src: "assets/garba/men/outfit-caricature-03.jpeg",
+            alt: "Illustrated lime-green mirror-work Gujarati kurta with colourful dupatta and mustard kurta with embroidered Koti inspiration"
           }
         ]
       }
