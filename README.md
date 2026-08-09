@@ -3,7 +3,7 @@
 A mobile-first, framework-free wedding wardrobe guide. Open `index.html`
 directly in a browser or publish this folder to any static host.
 
-Live site: <https://sgami444.github.io/wedding-wardrobe/>
+Live site: <https://thesamarstory.com/wardrobe/>
 
 ## Edit event content
 

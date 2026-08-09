@@ -28,10 +28,22 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
 
+      - name: Prepare root and wardrobe routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site/wardrobe
+
+          cp index.html _site/index.html
+          cp -R assets css js _site/
+
+          cp index.html _site/wardrobe/index.html
+          cp -R assets css js _site/wardrobe/
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: .
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
