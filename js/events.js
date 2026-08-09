@@ -32,11 +32,45 @@ window.WEDDING_WARDROBE = {
       "We're so excited to celebrate with you. To make getting ready a little easier, we've put together a wardrobe guide for each celebration.",
     note: "Come dressed, celebrate, dance and make memories with us.",
     footerNames: "Margee & Sahil",
-    footerDates: "February 8–10, 2027",
+    footerDates: "January 21 & February 8–10, 2027",
     footerMessage: "Thank you for dressing up and celebrating with us."
   },
 
   events: [
+    {
+      id: "sagai",
+      name: "Sagai",
+      date: "January 21, 2027",
+      time: "",
+      tagline: "A beautiful promise of forever, celebrated with love and blessings.",
+      description: "Soft, refined pastels for a beautiful engagement celebration.",
+      theme: "romantic",
+      women: {
+        recommended: [
+          "Silk Saree",
+          "Chiffon Saree",
+          "Indo-Western",
+          "Pastel colours only"
+        ],
+        avoid: ["Bright colours", "Dark colours", "Heavy prints"],
+        images: [
+          {
+            src: "assets/sagai/women/outfit-caricature-02.webp",
+            alt: "Illustrated blush silk saree, mint chiffon saree and lavender Indo-Western Sagai outfit inspiration"
+          }
+        ]
+      },
+      men: {
+        recommended: ["Suit", "Blazer", "Pastel colours only"],
+        avoid: ["Bright colours", "Dark colours", "Heavy prints"],
+        images: [
+          {
+            src: "assets/sagai/men/outfit-caricature-02.webp",
+            alt: "Illustrated ivory suit and pale sage blazer Sagai outfit inspiration"
+          }
+        ]
+      }
+    },
     {
       id: "mandap",
       name: "Mandap",
@@ -56,8 +90,8 @@ window.WEDDING_WARDROBE = {
         ]
       },
       men: {
-        recommended: ["Kurta", "Koti / traditional waistcoat"],
-        avoid: [],
+        recommended: ["Plain Kurta", "Koti / traditional waistcoat"],
+        avoid: ["Handwork Kurta", "Patola"],
         images: [
           {
             src: "assets/mandap/men/outfit-caricature-01.webp",
@@ -90,7 +124,7 @@ window.WEDDING_WARDROBE = {
           "Floral overshirt",
           "Light / neutral trousers"
         ],
-        avoid: ["Blue"],
+        avoid: ["Blue", "Full Jacket"],
         images: [
           {
             src: "assets/carnival/men/outfit-caricature-01.webp",
@@ -115,7 +149,7 @@ window.WEDDING_WARDROBE = {
         avoid: [],
         images: [
           {
-            src: "assets/garba/women/outfit-caricature-01.webp",
+            src: "assets/garba/women/outfit-caricature-02.webp",
             alt: "Illustrated green and orange Gujarati Chaniya Choli inspiration with mirror work"
           }
         ]
@@ -125,10 +159,10 @@ window.WEDDING_WARDROBE = {
           "Gujarati Kurta",
           "Koti / traditional embroidered waistcoat"
         ],
-        avoid: [],
+        avoid: ["Jacket"],
         images: [
           {
-            src: "assets/garba/men/outfit-caricature-01.webp",
+            src: "assets/garba/men/outfit-caricature-02.webp",
             alt: "Illustrated white and mustard Gujarati kurtas with embroidered Koti inspiration"
           }
         ]
@@ -160,7 +194,7 @@ window.WEDDING_WARDROBE = {
       },
       men: {
         recommended: ["Jodhpuri", "Bandhgala / Jodhpuri-style festive attire"],
-        avoid: [],
+        avoid: ["White"],
         images: [
           {
             src: "assets/wedding/men/outfit-caricature-01.webp",

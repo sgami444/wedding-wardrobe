@@ -78,6 +78,7 @@ omitted automatically.
 └── assets/
     ├── logo/
     ├── florals/
+    ├── sagai/{women,men}/
     ├── mandap/{women,men}/
     ├── carnival/{women,men}/
     ├── garba/{women,men}/
