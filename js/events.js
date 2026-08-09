@@ -69,12 +69,9 @@ window.WEDDING_WARDROBE = {
       theme: "romantic",
       women: {
         recommended: [
-          "Silk Saree",
-          "Chiffon Saree",
-          "Indo-Western",
-          "Pastel colours only"
+          "Silk/Chiffon Saree", "Indo-Western", "Pastel colours only"
         ],
-        avoid: ["Bright colours", "Dark colours", "Heavy prints"],
+        avoid: ["Bright / Dark colours", "Heavy prints"],
         images: [
           {
             src: "assets/sagai/women/outfit-caricature-02.webp",
@@ -113,7 +110,7 @@ window.WEDDING_WARDROBE = {
       },
       men: {
         recommended: ["Plain Kurta", "Koti / traditional waistcoat"],
-        avoid: ["Handwork Kurta", "Patola"],
+        avoid: ["Handwork Kurta", "Patola", "Dupatta"],
         images: [
           {
             src: "assets/mandap/men/outfit-caricature-01.webp",
@@ -131,7 +128,7 @@ window.WEDDING_WARDROBE = {
       description: "Light, breezy, floral and festive.",
       theme: "daylight",
       women: {
-        recommended: ["Floral chiffon gown", "Floral Indo-Western outfit"],
+        recommended: ["Floral / Flower print", "Chiffon gown", "Indo-Western outfit"],
         avoid: ["All shades of BLUE"],
         images: [
           {
@@ -142,9 +139,7 @@ window.WEDDING_WARDROBE = {
       },
       men: {
         recommended: [
-          "Floral shirt",
-          "Floral overshirt",
-          "Light / neutral trousers"
+          "Floral / Flower print", "Shirt / overshirt"
         ],
         avoid: ["All shades of BLUE", "Full Jacket"],
         images: [
@@ -165,10 +160,9 @@ window.WEDDING_WARDROBE = {
       theme: "festive",
       women: {
         recommended: [
-          "Gujarati-style Chaniya Choli",
-          "Traditional colourful Garba attire"
+          "Gujarati-style Chaniya Choli"
         ],
-        avoid: [],
+        avoid: ["Cocktail Style Outfits"],
         images: [
           {
             src: "assets/garba/women/outfit-caricature-02.webp",
@@ -178,8 +172,7 @@ window.WEDDING_WARDROBE = {
       },
       men: {
         recommended: [
-          "Gujarati Kurta",
-          "Koti / traditional embroidered waistcoat"
+          "Gujarati Kurta", "Koti / Dupatta"
         ],
         avoid: ["Jacket"],
         images: [
@@ -219,8 +212,8 @@ window.WEDDING_WARDROBE = {
         avoid: ["White"],
         images: [
           {
-            src: "assets/wedding/men/outfit-caricature-01.webp",
-            alt: "Illustrated ivory and burgundy Jodhpuri Bandhgala wedding inspiration"
+            src: "assets/wedding/men/outfit-caricature-03.jpeg",
+            alt: "Illustrated navy-blue and burgundy Jodhpuri Bandhgala wedding inspiration"
           }
         ]
       }
