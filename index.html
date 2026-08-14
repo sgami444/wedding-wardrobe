@@ -1,25 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-motion-preference="playing">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta
       name="description"
       content="Margee and Sahil's wedding wardrobe guide for every celebration."
     >
     <meta name="theme-color" content="#170b18">
+    <meta name="color-scheme" content="light">
     <title>Margee &amp; Sahil's Wedding Wardrobe</title>
-    <link
-      rel="canonical"
-      href="https://thesamarstory.com/"
-      data-site-canonical
-    >
+    <link rel="canonical" href="https://thesamarstory.com/" data-site-canonical>
     <link rel="icon" type="image/png" href="assets/logo/ms-monogram-transparent.png">
     <link
       rel="preload"
       as="image"
-      href="assets/invitation/royal-arch-mobile.webp"
+      href="assets/invitation/royal-arch-clean-mobile-v2.webp"
       type="image/webp"
+      fetchpriority="high"
     >
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +27,7 @@
     >
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/events.js" defer></script>
+    <script src="js/motion-packs.js" defer></script>
     <script src="js/invitation.js" defer></script>
     <script src="js/app.js" defer></script>
   </head>
@@ -40,6 +39,15 @@
       aria-describedby="invitation-hint"
       hidden
     >
+      <div class="invitation__jasmine" aria-hidden="true">
+        <img
+          src="assets/invitation/jasmine-toran-overlay-v1.webp"
+          alt=""
+          width="900"
+          height="1600"
+          decoding="async"
+        >
+      </div>
       <div class="invitation__atmosphere" aria-hidden="true">
         <span></span><span></span><span></span><span></span><span></span>
       </div>
@@ -93,123 +101,153 @@
     <div class="site-shell" data-site-shell>
       <a class="skip-link" href="#events">Skip to the wardrobe</a>
 
-    <header class="hero" id="top">
-      <div class="hero__frame" aria-hidden="true"></div>
-      <div class="hero__ambience" aria-hidden="true">
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
-      </div>
-      <div class="hero__diya-glow" aria-hidden="true"><span></span><span></span></div>
-      <div class="botanical botanical--top-left" aria-hidden="true">
-        <span></span><span></span><span></span><span></span>
-      </div>
-      <div class="botanical botanical--bottom-right" aria-hidden="true">
-        <span></span><span></span><span></span><span></span>
-      </div>
+      <header class="hero" id="top">
+        <div class="hero__scenery" aria-hidden="true"></div>
+        <div class="hero__veil" aria-hidden="true"></div>
+        <div class="hero__frame" aria-hidden="true"></div>
+        <div class="hero__ambience" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="hero__flames" aria-hidden="true">
+          <span class="hero__flame hero__flame--left"><i></i></span>
+          <span class="hero__flame hero__flame--right"><i></i></span>
+        </div>
+        <div class="hero__jasmine-layer" data-jasmine-motion-layer aria-hidden="true">
+          <img
+            src="assets/invitation/jasmine-toran-overlay-v1.webp"
+            alt=""
+            width="900"
+            height="1600"
+            decoding="async"
+          >
+        </div>
 
-      <div class="hero__content">
+        <div class="hero__content">
+          <img
+            class="monogram"
+            src="assets/logo/ms-monogram-transparent.png"
+            alt="M and S monogram"
+            width="1254"
+            height="1254"
+            decoding="async"
+            fetchpriority="high"
+          >
+          <p class="hero__audience" data-audience-badge>Complete celebration guide</p>
+          <p class="eyebrow" data-site-kicker>You're invited to celebrate</p>
+          <h1 data-site-title tabindex="-1">
+            <span class="hero__title-lead">Margee &amp; Sahil's</span>
+            <span class="hero__title-main">Wedding</span>
+            <span class="hero__title-script">Wardrobe</span>
+          </h1>
+          <div class="title-flourish" aria-hidden="true"><span></span></div>
+          <p class="hero__intro" data-site-intro>
+            We're so excited to celebrate with you. To make getting ready a
+            little easier, we've put together a wardrobe guide for each celebration.
+          </p>
+          <p class="hero__note" data-site-note>
+            Come dressed, celebrate, dance and make memories with us.
+          </p>
+          <a class="button button--primary" href="#events">
+            Explore the celebrations
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5v14M6.5 13.5 12 19l5.5-5.5"></path>
+            </svg>
+          </a>
+        </div>
+
+        <a class="hero__scroll" href="#event-navigation" aria-label="Scroll to event navigation">
+          <span></span>
+        </a>
+      </header>
+
+      <nav class="event-nav" id="event-navigation" aria-label="Wedding events">
+        <div class="event-nav__viewport">
+          <div class="event-nav__inner" data-event-nav></div>
+        </div>
+        <div class="event-nav__progress" aria-hidden="true">
+          <span data-event-progress></span>
+        </div>
+      </nav>
+
+      <button
+        class="motion-toggle"
+        type="button"
+        data-motion-toggle
+        aria-pressed="false"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path class="motion-toggle__pause" d="M8 6v12M16 6v12"></path>
+          <path class="motion-toggle__play" d="m9 6 9 6-9 6Z"></path>
+        </svg>
+        <span data-motion-toggle-label>Pause motion</span>
+      </button>
+      <p class="sr-only" data-motion-status aria-live="polite"></p>
+      <p class="sr-only" data-attire-status aria-live="polite"></p>
+
+      <main id="events" tabindex="-1">
+        <div class="events-intro">
+          <p class="eyebrow" data-events-kicker>Five celebrations</p>
+          <h2>A wardrobe for every moment</h2>
+          <p>
+            Choose who you are dressing for, then step through each celebration for
+            outfit inspiration and the few styles or colours to save for another day.
+          </p>
+        </div>
+
+        <div class="events" data-events-root>
+          <noscript>
+            <p class="empty-state">
+              Please enable JavaScript to view the wedding wardrobe guide.
+            </p>
+          </noscript>
+        </div>
+      </main>
+
+      <footer class="footer">
         <img
-          class="monogram"
+          class="footer__monogram"
           src="assets/logo/ms-monogram-transparent.png"
-          alt="M and S monogram"
+          alt=""
           width="1254"
           height="1254"
+          loading="lazy"
           decoding="async"
-          fetchpriority="high"
         >
-        <p class="eyebrow" data-site-kicker>You're invited to celebrate</p>
-        <h1 data-site-title tabindex="-1">
-          <span class="hero__title-lead">Margee &amp; Sahil's</span>
-          <span class="hero__title-main">Wedding</span>
-          <span class="hero__title-script">Wardrobe</span>
-        </h1>
-        <div class="title-flourish" aria-hidden="true"><span></span></div>
-        <p class="hero__intro" data-site-intro>
-          We're so excited to celebrate with you. To make getting ready a
-          little easier, we've put together a wardrobe guide for each celebration.
+        <p class="footer__names" data-footer-names>Margee &amp; Sahil</p>
+        <p data-footer-dates>January 21 &amp; February 8–10, 2027</p>
+        <div class="title-flourish title-flourish--small" aria-hidden="true"><span></span></div>
+        <p class="footer__thanks" data-footer-message>
+          Thank you for dressing up and celebrating with us.
         </p>
-        <p class="hero__note" data-site-note>
-          Come dressed, celebrate, dance and make memories with us.
-        </p>
-        <a class="button button--primary" href="#events">
-          Explore the wardrobe
+        <button class="footer__replay" type="button" data-invitation-replay hidden>
+          Replay invitation
+        </button>
+        <a href="#top" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
+      </footer>
+
+      <dialog class="lightbox" data-lightbox aria-label="Outfit image viewer">
+        <button class="lightbox__close" type="button" data-lightbox-close aria-label="Close image viewer">
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 5v14M6.5 13.5 12 19l5.5-5.5"/>
+            <path d="m6 6 12 12M18 6 6 18"></path>
           </svg>
-        </a>
-      </div>
-      <a class="hero__scroll" href="#event-navigation" aria-label="Scroll to event navigation">
-        <span></span>
-      </a>
-    </header>
-
-    <nav class="event-nav" id="event-navigation" aria-label="Wedding events">
-      <div class="event-nav__inner" data-event-nav></div>
-    </nav>
-
-    <main id="events" tabindex="-1">
-      <div class="events-intro">
-        <p class="eyebrow" data-events-kicker>Five celebrations</p>
-        <h2>A wardrobe for every moment</h2>
-        <p>
-          Each celebration has its own spirit. Choose an event below for outfit
-          ideas and the few styles or colours we'd love you to save for another day.
-        </p>
-      </div>
-
-      <div class="events" data-events-root>
-        <noscript>
-          <p class="empty-state">
-            Please enable JavaScript to view the wedding wardrobe guide.
-          </p>
-        </noscript>
-      </div>
-    </main>
-
-    <footer class="footer">
-      <img
-        class="footer__monogram"
-        src="assets/logo/ms-monogram-transparent.png"
-        alt=""
-        width="1254"
-        height="1254"
-        loading="lazy"
-        decoding="async"
-      >
-      <p class="footer__names" data-footer-names>Margee &amp; Sahil</p>
-      <p data-footer-dates>January 21 &amp; February 8–10, 2027</p>
-      <div class="title-flourish title-flourish--small" aria-hidden="true"><span></span></div>
-      <p class="footer__thanks" data-footer-message>
-        Thank you for dressing up and celebrating with us.
-      </p>
-      <button class="footer__replay" type="button" data-invitation-replay hidden>
-        Replay invitation
-      </button>
-      <a href="#top" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
-    </footer>
-
-    <dialog class="lightbox" data-lightbox aria-label="Outfit image viewer">
-      <button class="lightbox__close" type="button" data-lightbox-close aria-label="Close image viewer">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="m6 6 12 12M18 6 6 18"/>
-        </svg>
-      </button>
-      <button class="lightbox__nav lightbox__nav--previous" type="button" data-lightbox-previous aria-label="Previous image">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
-      </button>
-      <figure class="lightbox__figure">
-        <div class="lightbox__image-wrap">
-          <img data-lightbox-image src="" alt="">
-        </div>
-        <figcaption>
-          <span data-lightbox-caption></span>
-          <span class="lightbox__counter" data-lightbox-counter></span>
-        </figcaption>
-      </figure>
-      <button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label="Next image">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
-      </button>
-    </dialog>
+        </button>
+        <button class="lightbox__nav lightbox__nav--previous" type="button" data-lightbox-previous aria-label="Previous image">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+        </button>
+        <figure class="lightbox__figure">
+          <div class="lightbox__image-wrap">
+            <img data-lightbox-image alt="">
+          </div>
+          <figcaption>
+            <span data-lightbox-caption></span>
+            <span class="lightbox__counter" data-lightbox-counter></span>
+          </figcaption>
+        </figure>
+        <button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label="Next image">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"></path></svg>
+        </button>
+      </dialog>
     </div>
   </body>
 </html>

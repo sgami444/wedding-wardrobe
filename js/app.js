@@ -13,8 +13,6 @@
     if (!Array.isArray(value)) return [];
 
     return value.flatMap((image) => {
-      // String paths from early versions of the guide remain supported, but
-      // object entries are preferred because they carry meaningful alt text.
       if (typeof image === "string" && image.trim()) {
         return [{ src: image.trim(), alt: `${context} outfit inspiration` }];
       }
@@ -31,7 +29,11 @@
           ? image.alt.trim()
           : `${context} outfit inspiration`;
 
-      return [{ src, alt }];
+      return {
+        ...image,
+        src,
+        alt
+      };
     });
   }
 
@@ -50,6 +52,16 @@
     let routeKey = segments.pop() || "";
     if (/^index\.html?$/i.test(routeKey)) routeKey = segments.pop() || "";
     return routeKey.toLowerCase();
+  }
+
+  function safeId(value, fallback) {
+    const id = String(value || "")
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    return id || fallback;
   }
 
   function resolveRouteView(value, pathname) {
@@ -104,8 +116,6 @@
     return `${countCopy} ${count === 1 ? "celebration" : "celebrations"}`;
   }
 
-  // Exposing these pure helpers keeps the data contract and audience routes
-  // easy to verify without coupling the renderer to a particular test framework.
   appGlobal.WardrobeApp = Object.freeze({
     normaliseList,
     normaliseImages,
@@ -119,7 +129,12 @@
   const config = appGlobal.WEDDING_WARDROBE;
   const eventsRoot = document.querySelector("[data-events-root]");
   const navRoot = document.querySelector("[data-event-nav]");
+  const progressBar = document.querySelector("[data-event-progress]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const motionToggle = document.querySelector("[data-motion-toggle]");
+  const motionToggleLabel = document.querySelector("[data-motion-toggle-label]");
+  const motionStatus = document.querySelector("[data-motion-status]");
+  const attireStatus = document.querySelector("[data-attire-status]");
 
   const lightbox = document.querySelector("[data-lightbox]");
   const lightboxImage = document.querySelector("[data-lightbox-image]");
@@ -129,48 +144,74 @@
   const lightboxNext = document.querySelector("[data-lightbox-next]");
   const lightboxClose = document.querySelector("[data-lightbox-close]");
 
+  const attirePreferenceKey = "samarstory:attire-preference:v1";
+  const motionPreferenceKey = "samarstory:motion-preference:v1";
+  const attireKeys = ["women", "men"];
+  const attireSwitchers = [];
+  const motionViewportState = new Map();
+  const motionTargets = new Set();
+
+  let selectedAttire = readSession(attirePreferenceKey) === "men" ? "men" : "women";
+  let userPausedMotion = readSession(motionPreferenceKey) === "paused";
   let lightboxState = null;
   let touchStartX = null;
-  let motionCardIndex = 0;
+  let activeEventId = "";
+  let motionSequence = 0;
 
   const icons = {
     hanger:
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5.5a2 2 0 1 1 2 2v2M12 9.5 3.5 16a1.5 1.5 0 0 0 .9 2.7h15.2a1.5 1.5 0 0 0 .9-2.7L12 9.5Z"/></svg>',
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5.5a2 2 0 1 1 3.6 1.2c-.6.8-1.6 1.1-1.6 2.3v.8l8 4.8a1.5 1.5 0 0 1-.8 2.8H4.8a1.5 1.5 0 0 1-.8-2.8l8-4.8"/></svg>',
     check:
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>',
     gallery:
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="m5.5 17 4.3-4.5 3.2 3 2.3-2.3 3.2 3.3M15.8 9h.01"/></svg>',
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m4 18 5-4 3 2 3-3 5 5"/></svg>',
     avoid:
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>',
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m6 18 12-12"/></svg>',
     placeholder:
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5.5a2 2 0 1 1 2 2v2M12 9.5 3.5 16a1.5 1.5 0 0 0 .9 2.7h15.2a1.5 1.5 0 0 0 .9-2.7L12 9.5Z"/><path d="M7 21h10"/></svg>'
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg>',
+    arrow:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
   };
 
-  function element(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text !== undefined) node.textContent = text;
-    return node;
+  function readSession(key) {
+    try {
+      return window.sessionStorage.getItem(key);
+    } catch (_error) {
+      return null;
+    }
   }
 
-  function safeId(value, fallback) {
-    const id = String(value || fallback)
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9_-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+  function writeSession(key, value) {
+    try {
+      window.sessionStorage.setItem(key, value);
+    } catch (_error) {
+      // The experience remains usable when storage is blocked.
+    }
+  }
 
-    return id || fallback;
+  function element(tagName, className, text) {
+    const node = document.createElement(tagName);
+    if (className) node.className = className;
+    if (typeof text === "string") node.textContent = text;
+    return node;
   }
 
   function dateTimeValue(dateLabel) {
     const parsed = new Date(dateLabel);
     if (Number.isNaN(parsed.getTime())) return "";
-
     const year = parsed.getFullYear();
     const month = String(parsed.getMonth() + 1).padStart(2, "0");
     const day = String(parsed.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
+  }
+
+  function shortDate(event) {
+    if (!event?.date) return "";
+    const parsed = new Date(event.date);
+    const dateCopy = Number.isNaN(parsed.getTime())
+      ? event.date
+      : `${parsed.toLocaleDateString("en-US", { month: "short" })} ${String(parsed.getDate()).padStart(2, "0")}`;
+    return event.time ? `${dateCopy} · ${event.time}` : dateCopy;
   }
 
   function setText(selector, value) {
@@ -178,23 +219,28 @@
     if (node && typeof value === "string") node.textContent = value;
   }
 
-  function renderSiteCopy(site, eventCount) {
-    const copy = site && typeof site === "object" ? site : {};
+  function audienceLabel(routeKey, site) {
+    if (typeof site?.guideLabel === "string" && site.guideLabel.trim()) {
+      return site.guideLabel.trim();
+    }
+    if (routeKey === "wardrobe") return "Friends' celebration guide";
+    if (routeKey === "attire") return "Family celebration guide";
+    return "Complete celebration guide";
+  }
 
+  function renderSiteCopy(routeView) {
+    const copy = routeView.site && typeof routeView.site === "object" ? routeView.site : {};
     setText("[data-site-kicker]", copy.kicker);
     setText("[data-site-intro]", copy.intro);
     setText("[data-site-note]", copy.note);
-    setText("[data-events-kicker]", eventCountLabel(eventCount));
+    setText("[data-events-kicker]", eventCountLabel(routeView.events.length));
     setText("[data-footer-names]", copy.footerNames);
     setText("[data-footer-dates]", copy.footerDates);
     setText("[data-footer-message]", copy.footerMessage);
+    setText("[data-audience-badge]", audienceLabel(routeView.key, copy));
 
     const canonical = document.querySelector("[data-site-canonical]");
-    if (
-      canonical &&
-      typeof copy.canonicalUrl === "string" &&
-      copy.canonicalUrl.trim()
-    ) {
+    if (canonical && typeof copy.canonicalUrl === "string" && copy.canonicalUrl.trim()) {
       canonical.href = copy.canonicalUrl.trim();
     }
 
@@ -205,32 +251,107 @@
         ["hero__title-main", copy.title],
         ["hero__title-script", copy.titleScript]
       ]
-        .filter(([, copy]) => typeof copy === "string" && copy.trim())
-        .map(([className, copy]) => element("span", className, copy));
-
+        .filter(([, value]) => typeof value === "string" && value.trim())
+        .map(([className, value]) => element("span", className, value));
       title.replaceChildren(...titleParts);
     }
 
     const documentTitle = [copy.titleLead, copy.title, copy.titleScript]
-      .filter((copy) => typeof copy === "string" && copy.trim())
+      .filter((value) => typeof value === "string" && value.trim())
       .join(" ");
-
     if (documentTitle) document.title = documentTitle;
+  }
+
+  function normaliseMotionPack(value) {
+    if (!value || typeof value !== "object" || typeof value.base !== "string") return null;
+    const base = value.base.trim();
+    if (!base) return null;
+
+    const normalisePercent = (number, fallback = 0) =>
+      Number.isFinite(number) ? Math.min(100, Math.max(0, number)) : fallback;
+
+    const layers = Array.isArray(value.layers)
+      ? value.layers.flatMap((layer) => {
+          if (!layer || typeof layer.src !== "string" || !layer.src.trim()) return [];
+          const clip = Array.isArray(layer.clip) && layer.clip.length === 4
+            ? layer.clip.map((part) => normalisePercent(part))
+            : null;
+          return [{
+            src: layer.src.trim(),
+            type: safeId(layer.type, "ambient"),
+            x: Number.isFinite(layer.x) ? layer.x : 0,
+            y: Number.isFinite(layer.y) ? layer.y : 0,
+            width: Number.isFinite(layer.width) ? layer.width : 100,
+            delay: Number.isFinite(layer.delay) ? layer.delay : 0,
+            origin: typeof layer.origin === "string" ? layer.origin : "50% 50%",
+            clip
+          }];
+        })
+      : [];
+    const shimmers = Array.isArray(value.shimmers)
+      ? value.shimmers.flatMap((polygon) => {
+          if (!Array.isArray(polygon) || polygon.length < 3) return [];
+          const points = polygon.flatMap((point) => {
+            if (!Array.isArray(point) || point.length !== 2) return [];
+            return [[normalisePercent(point[0]), normalisePercent(point[1])]];
+          });
+          return points.length >= 3 ? [points] : [];
+        })
+      : [];
+    const eyeManifest = typeof value.eyeManifest === "string" && value.eyeManifest.trim()
+      ? value.eyeManifest.trim()
+      : null;
+    const eyeDelay = Number.isFinite(value.eyeDelay) ? value.eyeDelay : 0;
+    return { base, layers, shimmers, eyeManifest, eyeDelay };
+  }
+
+  function eyeLayersFromManifest(manifest, manifestUrl, delay = 0) {
+    if (!manifest || typeof manifest !== "object") return [];
+    const canvas = Array.isArray(manifest.canvas) ? manifest.canvas : [];
+    const canvasWidth = Number(canvas[0]);
+    const canvasHeight = Number(canvas[1]);
+    if (!(canvasWidth > 0) || !(canvasHeight > 0) || !Array.isArray(manifest.eyes)) return [];
+
+    const stageAspect = 4 / 5;
+    const imageAspect = canvasWidth / canvasHeight;
+    const renderedWidth = imageAspect < stageAspect ? (imageAspect / stageAspect) * 100 : 100;
+    const renderedHeight = imageAspect > stageAspect ? (stageAspect / imageAspect) * 100 : 100;
+    const offsetX = (100 - renderedWidth) / 2;
+    const offsetY = (100 - renderedHeight) / 2;
+    const type = manifest.mode === "open" ? "open-eye" : "blink";
+
+    return manifest.eyes.flatMap((eye, index) => {
+      if (!eye || typeof eye.file !== "string" || !Array.isArray(eye.cropPx)) return [];
+      const [cropX, cropY, cropWidth, cropHeight] = eye.cropPx.map(Number);
+      if (![cropX, cropY, cropWidth, cropHeight].every(Number.isFinite)) return [];
+      if (!(cropWidth > 0) || !(cropHeight > 0)) return [];
+      const x = offsetX + (cropX / canvasWidth) * renderedWidth;
+      const y = offsetY + (cropY / canvasHeight) * renderedHeight;
+      const width = (cropWidth / canvasWidth) * renderedWidth;
+      const height = (cropHeight / canvasHeight) * renderedHeight;
+      return [{
+        src: new URL(eye.file, manifestUrl).href,
+        type,
+        x,
+        y,
+        width,
+        height,
+        delay: delay + index * 0.83,
+        origin: `${x + width / 2}% ${y + height / 2}%`,
+        clip: null,
+        cropped: true
+      }];
+    });
   }
 
   function createPlaceholder(context) {
     const placeholder = element("div", "gallery-placeholder");
     placeholder.setAttribute("role", "status");
-    placeholder.setAttribute("aria-live", "polite");
     placeholder.innerHTML = icons.placeholder;
-
-    const copy = element("span", "", "Outfit inspiration coming soon");
-    const detail = element(
-      "small",
-      "",
-      `Photos for ${context} will appear here once added`
+    placeholder.append(
+      element("span", "", "Outfit inspiration coming soon"),
+      element("small", "", `Artwork for ${context} will appear here once added`)
     );
-    placeholder.append(copy, detail);
     return placeholder;
   }
 
@@ -243,15 +364,13 @@
   function removeGalleryImage(group, image) {
     const removedIndex = group.images.indexOf(image);
     if (removedIndex === -1) return;
-
     group.images.splice(removedIndex, 1);
     const card = group.cards.get(image);
     if (card) card.remove();
     group.cards.delete(image);
 
-    if (lightboxState && lightboxState.group === group) {
+    if (lightboxState?.group === group) {
       const wasCurrent = lightboxState.currentImage === image;
-
       if (!group.images.length) {
         closeLightbox();
       } else if (wasCurrent) {
@@ -262,16 +381,92 @@
         updateLightboxControls();
       }
     }
-
     ensureGalleryPlaceholder(group);
   }
 
-  function renderGallery(images, context) {
+  function loadDeferredImage(img) {
+    if (!img || img.hasAttribute("src") || !img.dataset.src) return;
+    img.src = img.dataset.src;
+  }
+
+  async function hydrateMotionPack(card) {
+    if (!card || card.dataset.motionPack !== "pending") return;
+    const pack = card._motionPack;
+    const fallback = card.querySelector(".motion-art__fallback");
+    const layerHost = card.querySelector(".motion-art__layers");
+    if (!pack || !fallback || !layerHost) return;
+    card.dataset.motionPack = "loading";
+
+    try {
+      let layers = [...pack.layers];
+      if (pack.eyeManifest) {
+        const manifestUrl = new URL(pack.eyeManifest, document.baseURI);
+        const response = await fetch(manifestUrl, { cache: "force-cache" });
+        if (!response.ok) throw new Error(`Motion manifest failed: ${response.status}`);
+        const manifest = await response.json();
+        const eyeLayers = eyeLayersFromManifest(manifest, manifestUrl, pack.eyeDelay);
+        if (!eyeLayers.length) throw new Error("Motion manifest contains no eye layers");
+        layers = [...eyeLayers, ...layers];
+      }
+
+      const sources = [...new Set([pack.base, ...layers.map((layer) => layer.src)])];
+      const loadedEntries = await Promise.all(
+        sources.map((src) => new Promise((resolve, reject) => {
+          const image = new Image();
+          image.decoding = "async";
+          image.onload = () => resolve([src, image]);
+          image.onerror = reject;
+          image.src = src;
+        }))
+      );
+      const loaded = new Map(loadedEntries);
+      fallback.src = pack.base;
+      layerHost.replaceChildren();
+      layers.forEach((layer) => {
+        const img = loaded.get(layer.src).cloneNode();
+        img.alt = "";
+        img.setAttribute("aria-hidden", "true");
+        img.className = `motion-art__layer motion-art__layer--${layer.type}`;
+        if (layer.cropped) img.classList.add("motion-art__layer--crop");
+        img.style.setProperty("--layer-x", `${layer.x}%`);
+        img.style.setProperty("--layer-y", `${layer.y}%`);
+        img.style.setProperty("--layer-width", `${layer.width}%`);
+        if (Number.isFinite(layer.height)) {
+          img.style.setProperty("--layer-height", `${layer.height}%`);
+        }
+        img.style.setProperty("--layer-delay", `${layer.delay}s`);
+        img.style.setProperty("--layer-origin", layer.origin);
+        if (layer.clip) {
+          const [x, y, width, height] = layer.clip;
+          const right = Math.max(0, 100 - x - width);
+          const bottom = Math.max(0, 100 - y - height);
+          img.style.setProperty(
+            "--layer-clip",
+            `inset(${y}% ${right}% ${bottom}% ${x}%)`
+          );
+        }
+        layerHost.append(img);
+      });
+      pack.shimmers.forEach((polygon, index) => {
+        const shimmer = element("span", "motion-art__shimmer");
+        shimmer.style.setProperty(
+          "--shimmer-clip",
+          `polygon(${polygon.map(([x, y]) => `${x}% ${y}%`).join(",")})`
+        );
+        shimmer.style.setProperty("--shimmer-delay", `${1.1 + index * 1.37}s`);
+        layerHost.append(shimmer);
+      });
+      layerHost.hidden = false;
+      card.dataset.motionPack = "ready";
+    } catch (_error) {
+      card.dataset.motionPack = "fallback";
+      loadDeferredImage(fallback);
+    }
+  }
+
+  function renderGallery(images, context, initiallyActive) {
     const gallery = element("div", "outfit-gallery");
     gallery.setAttribute("aria-label", `${context} outfit inspiration`);
-
-    // This group is built solely from `images`. It never reads or infers from
-    // `recommended` or `avoid`, so gallery count and order remain independent.
     const group = {
       context,
       element: gallery,
@@ -287,21 +482,34 @@
       card.type = "button";
       card.setAttribute("aria-label", `Open larger image: ${image.alt}`);
       card.dataset.motionArt = "";
+      card.dataset.motionPack = "static";
+      const sequenceIndex = motionSequence++;
+      card.style.setProperty("--motion-delay", `${(sequenceIndex % 3) * 0.38}s`);
+      card.style.setProperty("--glint-delay", `${1.2 + (sequenceIndex % 4) * 0.7}s`);
 
-      const sequenceIndex = motionCardIndex;
-      motionCardIndex += 1;
-      card.style.setProperty("--motion-delay", `${(sequenceIndex % 3) * 0.32}s`);
-      card.style.setProperty("--glint-delay", `${0.8 + (sequenceIndex % 4) * 0.55}s`);
-
+      const art = element("span", "inspiration-card__art motion-art");
+      art.dataset.layeredArt = "";
       const img = document.createElement("img");
+      img.className = "motion-art__fallback";
       img.alt = image.alt;
-      img.width = 640;
-      img.height = 800;
+      img.width = Number.isFinite(image.width) ? image.width : 640;
+      img.height = Number.isFinite(image.height) ? image.height : 800;
       img.loading = "lazy";
       img.decoding = "async";
-
-      const art = element("span", "inspiration-card__art");
+      img.dataset.src = image.src;
+      if (initiallyActive) loadDeferredImage(img);
       art.append(img);
+
+      const motionPack = normaliseMotionPack(image.motion);
+      if (motionPack) {
+        const layers = element("span", "motion-art__layers");
+        layers.hidden = true;
+        layers.setAttribute("aria-hidden", "true");
+        art.append(layers);
+        card._motionPack = motionPack;
+        card.dataset.motionPack = "pending";
+      }
+
       card.append(art);
       group.cards.set(image, card);
       gallery.append(card);
@@ -310,11 +518,7 @@
         const index = group.images.indexOf(image);
         if (index >= 0) openLightbox(group, index, card);
       });
-
-      img.addEventListener("error", () => removeGalleryImage(group, image), {
-        once: true
-      });
-      img.src = image.src;
+      img.addEventListener("error", () => removeGalleryImage(group, image), { once: true });
     });
 
     ensureGalleryPlaceholder(group);
@@ -323,73 +527,102 @@
 
   function renderAvoidList(items) {
     if (!items.length) return null;
-
     const panel = element("aside", "avoid-panel");
     const title = element("p", "avoid-panel__title");
     title.innerHTML = `${icons.avoid}<span>Please avoid</span>`;
-
     const list = element("ul", "avoid-list");
     items.forEach((item) => list.append(element("li", "", item)));
     panel.append(title, list);
     return panel;
   }
 
-  function renderAttire(event, groupKey, groupLabel, sectionId) {
-    const data = event[groupKey] && typeof event[groupKey] === "object"
-      ? event[groupKey]
-      : {};
+  function renderAttirePanel(event, groupKey, groupLabel, sectionId, initiallyActive) {
+    const data = event[groupKey] && typeof event[groupKey] === "object" ? event[groupKey] : {};
     const recommended = normaliseList(data.recommended);
     const avoid = normaliseList(data.avoid);
     const context = `${event.name || "Event"} ${groupLabel.toLowerCase()}`;
+    const panel = element("section", "attire-panel");
+    const panelId = `${sectionId}-${groupKey}-panel`;
+    const tabId = `${sectionId}-${groupKey}-tab`;
+    panel.id = panelId;
+    panel.dataset.attirePanel = groupKey;
+    panel.setAttribute("role", "tabpanel");
+    panel.setAttribute("aria-labelledby", tabId);
+    panel.tabIndex = 0;
+    panel.hidden = !initiallyActive;
 
-    const card = element("section", "attire-card");
-    const headingId = `${sectionId}-${groupKey}`;
-    card.setAttribute("aria-labelledby", headingId);
+    const panelHeading = element("h3", "sr-only", `${groupLabel}'s wardrobe for ${event.name}`);
+    const artBlock = element("div", "look-stage");
+    const artTitle = element("p", "gallery-title");
+    artTitle.innerHTML = `${icons.gallery}<span>Outfit inspiration</span>`;
+    artBlock.append(artTitle, renderGallery(data.images, context, initiallyActive));
 
-    const header = element("div", "attire-card__header");
-    const icon = element("span", "attire-card__icon");
-    icon.setAttribute("aria-hidden", "true");
-    icon.innerHTML = icons.hanger;
-
+    const guidance = element("div", "guidance-card");
+    const guidanceHeading = element("div", "guidance-card__heading");
+    const hanger = element("span", "attire-card__icon");
+    hanger.setAttribute("aria-hidden", "true");
+    hanger.innerHTML = icons.hanger;
     const headingCopy = element("div");
     headingCopy.append(
       element("p", "attire-card__overline", "Wardrobe guide"),
       element("h3", "", groupLabel)
     );
-    headingCopy.querySelector("h3").id = headingId;
-    header.append(icon, headingCopy);
-    card.append(header);
+    guidanceHeading.append(hanger, headingCopy);
+    guidance.append(guidanceHeading);
 
     if (recommended.length) {
-      const guidance = element("div", "guidance-block");
+      const block = element("div", "guidance-block");
       const title = element("p", "guidance-title");
       title.innerHTML = `${icons.check}<span>Recommended</span>`;
       const list = element("ul", "suggestion-list");
-
-      // Dress-code copy has its own rendering loop.
       recommended.forEach((item) => list.append(element("li", "", item)));
-      guidance.append(title, list);
-      card.append(guidance);
+      block.append(title, list);
+      guidance.append(block);
     }
 
-    const galleryBlock = element("div", "gallery-block");
-    const galleryTitle = element("p", "gallery-title");
-    galleryTitle.innerHTML = `${icons.gallery}<span>Outfit inspiration</span>`;
-
-    // The gallery receives only the image collection, never recommendations.
-    galleryBlock.append(galleryTitle, renderGallery(data.images, context));
-    card.append(galleryBlock);
-
     const avoidPanel = renderAvoidList(avoid);
-    if (avoidPanel) card.append(avoidPanel);
-
-    return card;
+    if (avoidPanel) guidance.append(avoidPanel);
+    panel.append(panelHeading, artBlock, guidance);
+    return { panel, tabId, panelId };
   }
 
-  function renderEvent(event, index) {
+  function renderAttireSwitcher(event, sectionId) {
+    const switcher = element("div", "attire-switcher");
+    const tablist = element("div", "attire-tabs");
+    tablist.setAttribute("role", "tablist");
+    tablist.setAttribute("aria-label", `Choose a wardrobe for ${event.name}`);
+
+    const panels = element("div", "attire-panels");
+    const state = { eventName: event.name, tabs: new Map(), panels: new Map() };
+    attireKeys.forEach((groupKey) => {
+      const groupLabel = groupKey === "women" ? "Women" : "Men";
+      const active = groupKey === selectedAttire;
+      const rendered = renderAttirePanel(event, groupKey, groupLabel, sectionId, active);
+      const tab = element("button", "attire-tab", groupLabel);
+      tab.type = "button";
+      tab.id = rendered.tabId;
+      tab.dataset.attireTab = groupKey;
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-controls", rendered.panelId);
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      tab.addEventListener("click", () => selectAttire(groupKey, { announce: true }));
+      tab.addEventListener("keydown", (eventObject) => handleAttireTabKeydown(eventObject, groupKey));
+      state.tabs.set(groupKey, tab);
+      state.panels.set(groupKey, rendered.panel);
+      tablist.append(tab);
+      panels.append(rendered.panel);
+    });
+
+    switcher.append(tablist, panels);
+    attireSwitchers.push(state);
+    return switcher;
+  }
+
+  function renderEvent(event, index, allEvents) {
     const eventId = safeId(event.id, `event-${index + 1}`);
     const sectionId = `event-${eventId}`;
-    const article = element("article", "event-card");
+    const article = element("article", "event-card event-chapter");
     article.id = sectionId;
     article.dataset.eventId = eventId;
     article.dataset.theme = safeId(event.theme, "sacred");
@@ -402,7 +635,8 @@
     });
 
     const header = element("header", "event-card__header");
-
+    const ornament = element("span", "event-card__ornament");
+    ornament.setAttribute("aria-hidden", "true");
     const dateLine = element("p", "event-card__date");
     if (event.date) {
       const time = element("time", "", event.date);
@@ -411,60 +645,196 @@
       dateLine.append(time);
     }
     if (event.time) dateLine.append(element("span", "event-card__time", event.time));
-
     const title = element("h2", "", event.name || `Event ${index + 1}`);
     title.id = `${sectionId}-title`;
-    header.append(dateLine, title);
+    header.append(ornament, dateLine, title);
+    if (event.tagline) header.append(element("p", "event-card__tagline", event.tagline));
+    if (event.description) header.append(element("p", "event-card__description", event.description));
 
-    if (event.tagline) {
-      header.append(element("p", "event-card__tagline", event.tagline));
+    article.append(border, header, renderAttireSwitcher(event, sectionId));
+
+    const nextEvent = allEvents[index + 1];
+    const nextNav = element("nav", "event-next");
+    nextNav.setAttribute("aria-label", nextEvent ? "Next celebration" : "End of celebration guide");
+    const nextLink = element("a", "event-next__link");
+    if (nextEvent) {
+      const nextId = `event-${safeId(nextEvent.id, `event-${index + 2}`)}`;
+      nextLink.href = `#${nextId}`;
+      nextLink.setAttribute("aria-label", `Next celebration: ${nextEvent.name}`);
+      nextLink.append(
+        element("span", "event-next__eyebrow", "Next celebration"),
+        element("strong", "", nextEvent.name || "Next event"),
+        element("span", "event-next__date", shortDate(nextEvent))
+      );
+    } else {
+      nextLink.href = "#top";
+      nextLink.setAttribute("aria-label", "Return to the top of the wardrobe guide");
+      nextLink.append(
+        element("span", "event-next__eyebrow", "Celebrations await"),
+        element("strong", "", "Return to the invitation")
+      );
     }
-    if (event.description) {
-      header.append(element("p", "event-card__description", event.description));
-    }
-
-    const attireGrid = element("div", "attire-grid");
-    attireGrid.append(
-      renderAttire(event, "women", "Women", sectionId),
-      renderAttire(event, "men", "Men", sectionId)
-    );
-
-    article.append(border, header, attireGrid);
-    return { article, eventId, sectionId };
+    const arrow = element("span", "event-next__arrow");
+    arrow.setAttribute("aria-hidden", "true");
+    arrow.innerHTML = icons.arrow;
+    nextLink.append(arrow);
+    nextNav.append(nextLink);
+    article.append(nextNav);
+    return { article, eventId, sectionId, event };
   }
 
   function renderNavigation(renderedEvents) {
     navRoot.replaceChildren();
-
     renderedEvents.forEach(({ event, eventId, sectionId }, index) => {
-      const link = element("a", "event-nav__link", event.name || `Event ${index + 1}`);
+      const link = element("a", "event-nav__link");
       link.href = `#${sectionId}`;
       link.dataset.navEvent = eventId;
+      link.dataset.navIndex = String(index);
+      link.setAttribute("aria-label", `${event.name}, ${shortDate(event)}`);
+      link.append(
+        element("span", "event-nav__date", shortDate(event)),
+        element("span", "event-nav__name", event.name || `Event ${index + 1}`)
+      );
       if (index === 0) {
         link.classList.add("is-active");
         link.setAttribute("aria-current", "true");
       }
       navRoot.append(link);
     });
+    setProgress(0, renderedEvents.length);
+  }
+
+  function setProgress(index, count) {
+    const progress = count > 0 ? (index + 1) / count : 0;
+    document.documentElement.style.setProperty("--event-progress", String(progress));
+    if (progressBar) progressBar.style.transform = `scaleX(${progress})`;
   }
 
   function setActiveNavigation(eventId) {
-    const links = navRoot.querySelectorAll("[data-nav-event]");
-    links.forEach((link) => {
+    if (!eventId || activeEventId === eventId) return;
+    activeEventId = eventId;
+    document.documentElement.dataset.activeEvent = eventId;
+    const links = [...navRoot.querySelectorAll("[data-nav-event]")];
+    links.forEach((link, index) => {
       const active = link.dataset.navEvent === eventId;
       link.classList.toggle("is-active", active);
       if (active) {
         link.setAttribute("aria-current", "true");
-        const targetLeft =
-          link.offsetLeft + link.offsetWidth / 2 - navRoot.clientWidth / 2;
-        navRoot.scrollTo({
+        setProgress(index, links.length);
+        const targetLeft = link.offsetLeft + link.offsetWidth / 2 - navRoot.parentElement.clientWidth / 2;
+        navRoot.parentElement.scrollTo({
           left: Math.max(0, targetLeft),
-          behavior: reducedMotion.matches ? "auto" : "smooth",
+          behavior: motionIsAllowed() ? "smooth" : "auto"
         });
       } else {
         link.removeAttribute("aria-current");
       }
     });
+  }
+
+  function loadPanelImages(panel) {
+    panel.querySelectorAll("img[data-src]").forEach(loadDeferredImage);
+  }
+
+  function selectAttire(groupKey, { announce = false, focusSwitcher = null } = {}) {
+    if (!attireKeys.includes(groupKey)) return;
+    selectedAttire = groupKey;
+    writeSession(attirePreferenceKey, groupKey);
+    attireSwitchers.forEach((switcher) => {
+      switcher.tabs.forEach((tab, key) => {
+        const active = key === groupKey;
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      switcher.panels.forEach((panel, key) => {
+        const active = key === groupKey;
+        panel.hidden = !active;
+        if (active) loadPanelImages(panel);
+      });
+    });
+    focusSwitcher?.tabs.get(groupKey)?.focus();
+    if (announce && attireStatus) {
+      attireStatus.textContent = `Showing ${groupKey === "women" ? "women's" : "men's"} wardrobe guidance for every celebration.`;
+    }
+    refreshMotionState();
+  }
+
+  function handleAttireTabKeydown(eventObject, currentKey) {
+    const currentIndex = attireKeys.indexOf(currentKey);
+    let nextIndex = currentIndex;
+    if (["ArrowRight", "ArrowDown"].includes(eventObject.key)) nextIndex = (currentIndex + 1) % attireKeys.length;
+    if (["ArrowLeft", "ArrowUp"].includes(eventObject.key)) nextIndex = (currentIndex - 1 + attireKeys.length) % attireKeys.length;
+    if (eventObject.key === "Home") nextIndex = 0;
+    if (eventObject.key === "End") nextIndex = attireKeys.length - 1;
+    if (nextIndex === currentIndex && !["Home", "End"].includes(eventObject.key)) return;
+    eventObject.preventDefault();
+    const focusSwitcher = attireSwitchers.find(
+      (switcher) => switcher.tabs.get(currentKey) === eventObject.currentTarget
+    );
+    selectAttire(attireKeys[nextIndex], { announce: true, focusSwitcher });
+  }
+
+  function motionIsAllowed() {
+    const invitationState = document.documentElement.dataset.invitationState;
+    return (
+      !reducedMotion.matches &&
+      !userPausedMotion &&
+      !document.hidden &&
+      (invitationState === "opened" || !invitationState)
+    );
+  }
+
+  function updateMotionControl({ announce = false } = {}) {
+    const systemReduced = reducedMotion.matches;
+    const paused = systemReduced || userPausedMotion;
+    document.documentElement.dataset.motionPreference = systemReduced
+      ? "reduced"
+      : userPausedMotion
+        ? "paused"
+        : "playing";
+    if (motionToggle) {
+      motionToggle.disabled = systemReduced;
+      motionToggle.setAttribute("aria-pressed", String(paused));
+    }
+    if (motionToggleLabel) {
+      motionToggleLabel.textContent = systemReduced
+        ? "Motion reduced"
+        : userPausedMotion
+          ? "Resume motion"
+          : "Pause motion";
+    }
+    if (announce && motionStatus) {
+      motionStatus.textContent = systemReduced
+        ? "Motion is reduced by your device setting."
+        : userPausedMotion
+          ? "Decorative motion paused."
+          : "Decorative motion resumed.";
+    }
+    refreshMotionState();
+  }
+
+  function refreshMotionState() {
+    const allowed = motionIsAllowed();
+    motionTargets.forEach((target) => {
+      const visible = motionViewportState.get(target) === true;
+      const inHiddenPanel = Boolean(target.closest("[hidden]"));
+      const active = allowed && visible && !inHiddenPanel;
+      target.classList.toggle("is-motion-active", active);
+      if (active && target.matches("[data-motion-art]")) hydrateMotionPack(target);
+    });
+  }
+
+  function initialiseMotionControl() {
+    updateMotionControl();
+    motionToggle?.addEventListener("click", () => {
+      if (reducedMotion.matches) return;
+      userPausedMotion = !userPausedMotion;
+      writeSession(motionPreferenceKey, userPausedMotion ? "paused" : "playing");
+      updateMotionControl({ announce: true });
+    });
+    reducedMotion.addEventListener?.("change", () => updateMotionControl({ announce: true }));
+    document.addEventListener("visibilitychange", refreshMotionState);
+    document.addEventListener("wardrobe:invitation-state", refreshMotionState);
   }
 
   function initialiseObservers(articles) {
@@ -480,7 +850,7 @@
             observer.unobserve(entry.target);
           });
         },
-        { rootMargin: "0px 0px -8%", threshold: 0.08 }
+        { rootMargin: "0px 0px -8%", threshold: 0.06 }
       );
       articles.forEach((article) => revealObserver.observe(article));
     }
@@ -493,52 +863,36 @@
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible) setActiveNavigation(visible.target.dataset.eventId);
       },
-      { rootMargin: "-28% 0px -58%", threshold: [0, 0.08, 0.2] }
+      { rootMargin: "-24% 0px -62%", threshold: [0, 0.06, 0.18] }
     );
     articles.forEach((article) => navigationObserver.observe(article));
   }
 
   function initialiseAmbientMotion(articles) {
-    if (!("IntersectionObserver" in window)) return;
-
     const targets = [
       document.querySelector(".hero"),
       document.querySelector(".event-nav"),
       ...articles,
       ...document.querySelectorAll("[data-motion-art]")
     ].filter(Boolean);
-    const viewportState = new Map(targets.map((target) => [target, false]));
+    targets.forEach((target) => motionTargets.add(target));
 
-    function refreshMotionState() {
-      const pageVisible = !document.hidden;
-      const invitationReady =
-        document.documentElement.dataset.invitationState === "opened" ||
-        !document.documentElement.dataset.invitationState;
-      viewportState.forEach((isVisible, target) => {
-        target.classList.toggle(
-          "is-motion-active",
-          !reducedMotion.matches && pageVisible && invitationReady && isVisible
-        );
-      });
+    if (!("IntersectionObserver" in window)) {
+      targets.forEach((target) => motionViewportState.set(target, true));
+      refreshMotionState();
+      return;
     }
 
-    const motionObserver = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          viewportState.set(
-            entry.target,
-            entry.isIntersecting && entry.intersectionRatio >= 0.12
-          );
+          motionViewportState.set(entry.target, entry.isIntersecting && entry.intersectionRatio >= 0.08);
         });
         refreshMotionState();
       },
-      { rootMargin: "0px 0px -5%", threshold: [0, 0.12] }
+      { rootMargin: "10% 0px 10%", threshold: [0, 0.08] }
     );
-
-    targets.forEach((target) => motionObserver.observe(target));
-    document.addEventListener("visibilitychange", refreshMotionState);
-    document.addEventListener("wardrobe:invitation-state", refreshMotionState);
-    reducedMotion.addEventListener?.("change", refreshMotionState);
+    targets.forEach((target) => observer.observe(target));
   }
 
   function isLightboxOpen() {
@@ -547,50 +901,39 @@
 
   function openLightbox(group, index, trigger) {
     if (!group.images.length || !lightbox) return;
-
-    lightboxState = {
-      group,
-      index,
-      currentImage: group.images[index],
-      trigger
-    };
+    lightboxState = { group, index, currentImage: group.images[index], trigger };
     updateLightbox();
-
     if (typeof lightbox.showModal === "function") {
       if (!lightbox.open) lightbox.showModal();
     } else {
       lightbox.setAttribute("open", "");
     }
-
     document.body.classList.add("is-lightbox-open");
-    lightboxClose.focus();
+    lightboxClose?.focus();
   }
 
   function updateLightboxControls() {
     if (!lightboxState) return;
     const total = lightboxState.group.images.length;
-    lightboxCounter.textContent = total
-      ? `${lightboxState.index + 1} / ${total}`
-      : "";
-    lightboxPrevious.disabled = total <= 1;
-    lightboxNext.disabled = total <= 1;
+    if (lightboxCounter) lightboxCounter.textContent = total ? `${lightboxState.index + 1} / ${total}` : "";
+    if (lightboxPrevious) lightboxPrevious.disabled = total <= 1;
+    if (lightboxNext) lightboxNext.disabled = total <= 1;
   }
 
   function updateLightbox() {
-    if (!lightboxState) return;
+    if (!lightboxState || !lightboxImage) return;
     const images = lightboxState.group.images;
     if (!images.length) {
       closeLightbox();
       return;
     }
-
     lightboxState.index = ((lightboxState.index % images.length) + images.length) % images.length;
     const image = images[lightboxState.index];
     lightboxState.currentImage = image;
     lightboxImage.dataset.gallerySrc = image.src;
     lightboxImage.alt = image.alt;
     lightboxImage.src = image.src;
-    lightboxCaption.textContent = image.alt;
+    if (lightboxCaption) lightboxCaption.textContent = image.alt;
     updateLightboxControls();
   }
 
@@ -605,89 +948,67 @@
     const trigger = lightboxState.trigger;
     lightboxState = null;
     document.body.classList.remove("is-lightbox-open");
-    lightboxImage.removeAttribute("src");
-    lightboxImage.removeAttribute("data-gallery-src");
-
-    if (typeof lightbox.close === "function" && lightbox.open) {
+    lightboxImage?.removeAttribute("src");
+    lightboxImage?.removeAttribute("data-gallery-src");
+    if (typeof lightbox?.close === "function" && lightbox.open) {
       lightbox.close();
     } else {
-      lightbox.removeAttribute("open");
+      lightbox?.removeAttribute("open");
     }
-
-    if (trigger && trigger.isConnected) trigger.focus();
+    if (trigger?.isConnected) trigger.focus();
   }
 
   function initialiseLightbox() {
+    if (!lightbox || !lightboxImage || !lightboxClose) return;
     lightboxClose.addEventListener("click", closeLightbox);
-    lightboxPrevious.addEventListener("click", () => moveLightbox(-1));
-    lightboxNext.addEventListener("click", () => moveLightbox(1));
-
+    lightboxPrevious?.addEventListener("click", () => moveLightbox(-1));
+    lightboxNext?.addEventListener("click", () => moveLightbox(1));
     lightboxImage.addEventListener("error", () => {
       if (!lightboxState) return;
       const failedImage = lightboxState.currentImage;
       if (!failedImage || lightboxImage.dataset.gallerySrc !== failedImage.src) return;
       removeGalleryImage(lightboxState.group, failedImage);
     });
-
     lightbox.addEventListener("click", (event) => {
       if (event.target === lightbox) closeLightbox();
     });
-
     lightbox.addEventListener("cancel", (event) => {
       event.preventDefault();
       closeLightbox();
     });
-
     document.addEventListener("keydown", (event) => {
       if (!isLightboxOpen()) return;
       if (event.key === "ArrowLeft") moveLightbox(-1);
       if (event.key === "ArrowRight") moveLightbox(1);
     });
-
-    lightbox.addEventListener(
-      "touchstart",
-      (event) => {
-        touchStartX = event.changedTouches[0]?.clientX ?? null;
-      },
-      { passive: true }
-    );
-    lightbox.addEventListener(
-      "touchend",
-      (event) => {
-        if (touchStartX === null) return;
-        const touchEndX = event.changedTouches[0]?.clientX;
-        if (typeof touchEndX !== "number") return;
-        const distance = touchEndX - touchStartX;
-        touchStartX = null;
-        if (Math.abs(distance) < 48) return;
-        moveLightbox(distance > 0 ? -1 : 1);
-      },
-      { passive: true }
-    );
+    lightbox.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0]?.clientX ?? null;
+    }, { passive: true });
+    lightbox.addEventListener("touchend", (event) => {
+      if (touchStartX === null) return;
+      const touchEndX = event.changedTouches[0]?.clientX;
+      if (typeof touchEndX !== "number") return;
+      const distance = touchEndX - touchStartX;
+      touchStartX = null;
+      if (Math.abs(distance) >= 48) moveLightbox(distance > 0 ? -1 : 1);
+    }, { passive: true });
   }
 
   function showConfigurationError(message) {
     if (!eventsRoot) return;
-    const error = element("p", "empty-state", message);
-    eventsRoot.replaceChildren(error);
+    eventsRoot.replaceChildren(element("p", "empty-state", message));
   }
 
   function honourInitialHash() {
     if (!window.location.hash) return;
-
     let targetId;
     try {
       targetId = decodeURIComponent(window.location.hash.slice(1));
     } catch (_error) {
       return;
     }
-
     const target = document.getElementById(targetId);
     if (!target) return;
-
-    // Jump immediately for an initial fragment. A smooth trip through several
-    // lazy galleries can otherwise overshoot if missing images collapse into
-    // fallbacks while the animation is still calculating its destination.
     const root = document.documentElement;
     const previousScrollBehavior = root.style.scrollBehavior;
     root.style.scrollBehavior = "auto";
@@ -700,16 +1021,13 @@
   function initialise() {
     if (!eventsRoot || !navRoot) return;
     if (!config || !Array.isArray(config.events)) {
-      showConfigurationError(
-        "The wardrobe guide could not be loaded. Please check js/events.js."
-      );
+      showConfigurationError("The wardrobe guide could not be loaded. Please check js/events.js.");
       return;
     }
 
     const routeView = resolveRouteView(config, window.location.pathname);
     document.documentElement.dataset.guideRoute = routeView.key || "all";
-
-    renderSiteCopy(routeView.site, routeView.events.length);
+    renderSiteCopy(routeView);
     eventsRoot.replaceChildren();
 
     if (!routeView.events.length) {
@@ -718,15 +1036,18 @@
     }
 
     const renderedEvents = routeView.events.map((event, index) => {
-      const rendered = renderEvent(event, index);
+      const rendered = renderEvent(event, index, routeView.events);
       eventsRoot.append(rendered.article);
-      return { ...rendered, event };
+      return rendered;
     });
 
     renderNavigation(renderedEvents);
     initialiseLightbox();
+    initialiseMotionControl();
     requestAnimationFrame(() => {
       const articles = renderedEvents.map(({ article }) => article);
+      activeEventId = "";
+      setActiveNavigation(renderedEvents[0].eventId);
       initialiseObservers(articles);
       initialiseAmbientMotion(articles);
       honourInitialHash();

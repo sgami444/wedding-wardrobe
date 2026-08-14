@@ -17,3 +17,15 @@ Desktop.ini
 # Temporary render and image-processing output
 .test-output/
 tmp/
+.test-server.pid
+.tmp-*
+chromedriver/
+selenium-manager.json
+
+# Generated motion masters and QA intermediates (production uses clean-frame,
+# eye-N, and eyes.json files only)
+assets/motion/**/blink-frame.*
+assets/motion/**/open-eye-frame.*
+assets/motion/**/clean-frame-donor.png
+assets/motion/**/*-test.webp
+assets/motion/*-qc.jpg
