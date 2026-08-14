@@ -131,6 +131,7 @@
 
   let lightboxState = null;
   let touchStartX = null;
+  let motionCardIndex = 0;
 
   const icons = {
     hanger:
@@ -279,10 +280,18 @@
       placeholder: null
     };
 
+    if (group.images.length === 1) gallery.classList.add("outfit-gallery--single");
+
     group.images.slice().forEach((image) => {
       const card = element("button", "inspiration-card");
       card.type = "button";
       card.setAttribute("aria-label", `Open larger image: ${image.alt}`);
+      card.dataset.motionArt = "";
+
+      const sequenceIndex = motionCardIndex;
+      motionCardIndex += 1;
+      card.style.setProperty("--motion-delay", `${(sequenceIndex % 3) * 0.32}s`);
+      card.style.setProperty("--glint-delay", `${0.8 + (sequenceIndex % 4) * 0.55}s`);
 
       const img = document.createElement("img");
       img.alt = image.alt;
@@ -291,7 +300,9 @@
       img.loading = "lazy";
       img.decoding = "async";
 
-      card.append(img);
+      const art = element("span", "inspiration-card__art");
+      art.append(img);
+      card.append(art);
       group.cards.set(image, card);
       gallery.append(card);
 
@@ -384,6 +395,12 @@
     article.dataset.theme = safeId(event.theme, "sacred");
     article.setAttribute("aria-labelledby", `${sectionId}-title`);
 
+    const border = element("span", "event-card__draw-border");
+    border.setAttribute("aria-hidden", "true");
+    ["top", "right", "bottom", "left"].forEach((edge) => {
+      border.append(element("span", `event-card__draw-border-${edge}`));
+    });
+
     const header = element("header", "event-card__header");
 
     const dateLine = element("p", "event-card__date");
@@ -412,7 +429,7 @@
       renderAttire(event, "men", "Men", sectionId)
     );
 
-    article.append(header, attireGrid);
+    article.append(border, header, attireGrid);
     return { article, eventId, sectionId };
   }
 
@@ -479,6 +496,49 @@
       { rootMargin: "-28% 0px -58%", threshold: [0, 0.08, 0.2] }
     );
     articles.forEach((article) => navigationObserver.observe(article));
+  }
+
+  function initialiseAmbientMotion(articles) {
+    if (!("IntersectionObserver" in window)) return;
+
+    const targets = [
+      document.querySelector(".hero"),
+      document.querySelector(".event-nav"),
+      ...articles,
+      ...document.querySelectorAll("[data-motion-art]")
+    ].filter(Boolean);
+    const viewportState = new Map(targets.map((target) => [target, false]));
+
+    function refreshMotionState() {
+      const pageVisible = !document.hidden;
+      const invitationReady =
+        document.documentElement.dataset.invitationState === "opened" ||
+        !document.documentElement.dataset.invitationState;
+      viewportState.forEach((isVisible, target) => {
+        target.classList.toggle(
+          "is-motion-active",
+          !reducedMotion.matches && pageVisible && invitationReady && isVisible
+        );
+      });
+    }
+
+    const motionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          viewportState.set(
+            entry.target,
+            entry.isIntersecting && entry.intersectionRatio >= 0.12
+          );
+        });
+        refreshMotionState();
+      },
+      { rootMargin: "0px 0px -5%", threshold: [0, 0.12] }
+    );
+
+    targets.forEach((target) => motionObserver.observe(target));
+    document.addEventListener("visibilitychange", refreshMotionState);
+    document.addEventListener("wardrobe:invitation-state", refreshMotionState);
+    reducedMotion.addEventListener?.("change", refreshMotionState);
   }
 
   function isLightboxOpen() {
@@ -666,7 +726,9 @@
     renderNavigation(renderedEvents);
     initialiseLightbox();
     requestAnimationFrame(() => {
-      initialiseObservers(renderedEvents.map(({ article }) => article));
+      const articles = renderedEvents.map(({ article }) => article);
+      initialiseObservers(articles);
+      initialiseAmbientMotion(articles);
       honourInitialHash();
     });
   }
