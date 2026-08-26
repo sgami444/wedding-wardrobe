@@ -103,7 +103,7 @@ window.WEDDING_WARDROBE = {
         avoid: ["Patola", "Pathani"],
         images: [
           {
-            src: "assets/mandap/women/outfit-caricature-01.webp",
+            src: "assets/mandap/women/outfit-caricature-02.webp",
             alt: "Illustrated red Bandhani and mustard silk saree inspiration for the Mandap"
           }
         ]
@@ -197,10 +197,10 @@ window.WEDDING_WARDROBE = {
           "Paithani",
           "Saree-style choli"
         ],
-        avoid: ["White", "Bandhani"],
+        avoid: ["White", "Red", "Bandhani"],
         images: [
           {
-            src: "assets/wedding/women/outfit-caricature-01.webp",
+            src: "assets/wedding/women/outfit-caricature-02.webp",
             alt: "Illustrated Patola-style lehenga and rich green Paithani saree wedding inspiration"
           }
         ]

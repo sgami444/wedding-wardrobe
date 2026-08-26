@@ -7,8 +7,8 @@
   const dialog = document.querySelector("[data-invitation]");
   const siteShell = document.querySelector("[data-site-shell]");
   const openButton = document.querySelector("[data-invitation-open]");
-  const skipButton = document.querySelector("[data-invitation-skip]");
   const replayButton = document.querySelector("[data-invitation-replay]");
+  const invitationTitle = document.querySelector("#invitation-title");
   const heroTitle = document.querySelector("[data-site-title]");
   const kankotri = document.querySelector("[data-kankotri]");
   const envelopeBack = kankotri?.querySelector(".kankotri__back");
@@ -21,7 +21,7 @@
   const storageKey = "samarstory:kankotri:v2";
   const timelineDuration = 3700;
 
-  if (!dialog || !siteShell || !openButton || !skipButton || !kankotri) return;
+  if (!dialog || !siteShell || !openButton || !kankotri) return;
 
   const cssControlledElements = [
     dialog,
@@ -147,7 +147,6 @@
     document.body.classList.remove("is-invitation-open");
     siteShell.inert = false;
     openButton.disabled = false;
-    skipButton.disabled = false;
 
     if (focus) focusElement(heroTitle);
   }
@@ -404,8 +403,8 @@
     dialog.setAttribute("aria-busy", "true");
     rememberOpenedState();
 
-    // Keep an actionable control focused after disabling the seal.
-    focusElement(skipButton);
+    // Keep focus inside the modal while its only visible control animates away.
+    focusElement(invitationTitle || dialog);
 
     if (reducedMotion.matches) {
       setState("opening");
@@ -456,7 +455,6 @@
     siteShell.inert = true;
     document.body.classList.add("is-invitation-open");
     openButton.disabled = false;
-    skipButton.disabled = false;
 
     if (typeof dialog.showModal === "function") {
       if (!dialog.open) {
@@ -509,7 +507,6 @@
   }
 
   openButton.addEventListener("click", beginOpening);
-  skipButton.addEventListener("click", skipOpening);
   replayButton?.addEventListener("click", () => showInvitation({ replay: true }));
 
   dialog.addEventListener("cancel", (event) => {

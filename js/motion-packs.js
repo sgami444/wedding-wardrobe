@@ -60,7 +60,8 @@
         type: accessory.type,
         clip,
         delay: (accessory.delay || 0) + index * 0.31,
-        origin
+        origin,
+        aboveEyes: Boolean(spec.accessoriesAboveEyes)
       });
     });
 
@@ -110,18 +111,19 @@
         [[51,27],[59,23],[74,23],[83,30],[87,57],[82,92],[54,92],[48,57],[49,34]]
       ]
     },
-    "assets/mandap/women/outfit-caricature-01.webp": {
+    "assets/mandap/women/outfit-caricature-02.webp": {
       canvas: [1122, 1402],
-      eyeManifest: "assets/motion/mandap/women/v1/eyes.json",
-      eyeMode: "open",
+      eyeManifest: "assets/motion/mandap/women/v1/blinks.json",
+      eyeMode: "blink",
       eyeDelay: 0.9,
       eyes: [[30, 13, 11, 4], [61, 13, 11, 4]],
       cleanFrame: "assets/motion/mandap/women/v1/clean-frame.webp",
+      accessoriesAboveEyes: true,
       accessories: [
-        { type: "earrings", box: [26, 15, 5, 6], delay: 0.2 },
-        { type: "earrings", box: [35, 16, 5, 6], delay: 0.6 },
-        { type: "earrings", box: [57, 17, 4, 5], delay: 1.2 },
-        { type: "earrings", box: [64, 15, 5, 7], delay: 1.7 }
+        { type: "earrings", box: [27.3, 16.8, 3.2, 3.1], delay: 0.2 },
+        { type: "earrings", box: [36.4, 18, 2.2, 1.8], delay: 0.6 },
+        { type: "earrings", box: [57.5, 18.1, 2.4, 1.8], delay: 1.2 },
+        { type: "earrings", box: [65.3, 16.8, 3, 3.1], delay: 1.7 }
       ],
       garments: [
         [[20,23],[27,21],[41,21],[47,28],[50,51],[48,91],[14,91],[16,54],[18,31]],
@@ -214,18 +216,19 @@
         [[53,22],[60,20],[75,20],[83,27],[89,51],[84,90],[54,90],[49,51],[50,29]]
       ]
     },
-    "assets/wedding/women/outfit-caricature-01.webp": {
+    "assets/wedding/women/outfit-caricature-02.webp": {
       canvas: [1122, 1402],
-      eyeManifest: "assets/motion/wedding/women/v1/eyes.json",
-      eyeMode: "open",
+      eyeManifest: "assets/motion/wedding/women/v1/blinks.json",
+      eyeMode: "blink",
       eyeDelay: 1.1,
       eyes: [[30, 13, 10, 4], [62, 13, 11, 4]],
       cleanFrame: "assets/motion/wedding/women/v1/clean-frame.webp",
+      accessoriesAboveEyes: true,
       accessories: [
-        { type: "earrings", box: [26, 13, 6, 7], delay: 0.2 },
-        { type: "earrings", box: [35, 13, 5, 7], delay: 0.7 },
-        { type: "earrings", box: [59, 14, 5, 7], delay: 1.2 },
-        { type: "earrings", box: [67, 13, 6, 7], delay: 1.7 }
+        { type: "earrings", box: [28.2, 13.8, 3.5, 5.2], delay: 0.2 },
+        { type: "earrings", box: [36.7, 17.8, 1.8, 2.4], delay: 0.7 },
+        { type: "earrings", box: [60.1, 18, 2, 2.3], delay: 1.2 },
+        { type: "earrings", box: [67.7, 13.8, 3.5, 5.2], delay: 1.7 }
       ],
       garments: [
         [[20,22],[27,20],[42,20],[47,27],[52,51],[50,90],[5,90],[10,53],[16,30]],

@@ -288,7 +288,7 @@
     transform-origin: 50% 6%;
   }
 
-  html[data-invitation-state="closed"]:not([data-motion-preference="paused"]):not([data-motion-preference="reduced"]) .invitation__jasmine img {
+  html[data-invitation-state="closed"]:not([data-motion-preference="reduced"]) .invitation__jasmine img {
     animation: jasmine-sway 6.5s ease-in-out infinite alternate;
   }
 
@@ -571,19 +571,6 @@
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.82);
   }
 
-  .invitation__skip {
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    padding: 0.55rem 0.8rem;
-    border: 0;
-    color: rgba(255, 247, 232, 0.9);
-    background: transparent;
-    font-size: max(0.76rem, 12px);
-    text-decoration: underline;
-    text-underline-offset: 0.3em;
-    cursor: pointer;
-  }
-
   html[data-invitation-state="opening"] .invitation__hint {
     opacity: 0;
     pointer-events: none;
@@ -705,11 +692,20 @@
 
   .monogram {
     width: clamp(6.5rem, 25vw, 9.2rem);
-    height: auto;
+    height: clamp(6.5rem, 25vw, 9.2rem);
     aspect-ratio: 1;
     margin: 0 auto 0.55rem;
+    padding: clamp(0.55rem, 2.2vw, 0.82rem);
+    border: 1px solid rgba(255, 226, 150, 0.86);
+    border-radius: 50%;
     object-fit: contain;
-    filter: drop-shadow(0 0.75rem 1rem rgba(0, 0, 0, 0.38));
+    background:
+      radial-gradient(circle at 38% 30%, rgba(132, 31, 66, 0.98), rgba(48, 10, 35, 0.98) 67%, rgba(21, 8, 21, 0.99));
+    box-shadow:
+      0 0 0 0.22rem rgba(33, 9, 27, 0.78),
+      0 0 0 0.3rem rgba(232, 197, 110, 0.52),
+      0 0.9rem 2.2rem rgba(0, 0, 0, 0.48),
+      0 0 2rem rgba(242, 181, 68, 0.2);
     transform-origin: center;
   }
 
@@ -1001,55 +997,6 @@
     transition: transform 420ms cubic-bezier(0.2, 0.72, 0.22, 1);
   }
 
-  .motion-toggle {
-    position: fixed;
-    z-index: 90;
-    right: max(0.7rem, env(safe-area-inset-right));
-    bottom: max(0.7rem, env(safe-area-inset-bottom));
-    display: inline-flex;
-    min-width: 2.8rem;
-    min-height: 2.8rem;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    padding: 0.62rem 0.82rem;
-    border: 1px solid rgba(232, 197, 110, 0.5);
-    border-radius: 999px;
-    color: var(--ivory-100);
-    background: rgba(21, 8, 21, 0.92);
-    box-shadow: 0 0.55rem 1.6rem rgba(10, 2, 8, 0.32);
-    font-size: max(0.68rem, 11px);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    cursor: pointer;
-  }
-
-  .motion-toggle svg {
-    width: 1rem;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 1.8;
-  }
-
-  .motion-toggle__play,
-  .motion-toggle[aria-pressed="false"] .motion-toggle__play {
-    display: none;
-  }
-
-  .motion-toggle[aria-pressed="true"] .motion-toggle__pause {
-    display: none;
-  }
-
-  .motion-toggle[aria-pressed="true"] .motion-toggle__play {
-    display: block;
-  }
-
-  .motion-toggle:disabled {
-    opacity: 0.72;
-    cursor: default;
-  }
 }
 
 @layer events {
@@ -1721,26 +1668,6 @@
     transform: translateY(-2px);
   }
 
-  .inspiration-card::after {
-    position: absolute;
-    z-index: 5;
-    right: 0.65rem;
-    bottom: 0.65rem;
-    display: grid;
-    width: 2.2rem;
-    height: 2.2rem;
-    border: 1px solid rgba(255, 255, 255, 0.56);
-    border-radius: 50%;
-    place-items: center;
-    color: #fff;
-    background: rgba(38, 14, 28, 0.68);
-    box-shadow: 0 4px 14px rgba(30, 8, 20, 0.2);
-    content: "+";
-    font-size: 1.15rem;
-    font-weight: 300;
-    line-height: 1;
-  }
-
   .inspiration-card__art,
   .motion-art {
     position: relative;
@@ -1798,18 +1725,25 @@
     z-index: 1;
   }
 
+  .motion-art__layer--earrings {
+    z-index: 2;
+  }
+
   .motion-art__layer--blink,
-  .motion-art__layer--open-eye,
-  .motion-art__layer--earrings,
+  .motion-art__layer--open-eye {
+    z-index: 3;
+  }
+
   .motion-art__layer--hair,
   .motion-art__layer--fabric,
-  .motion-art__layer--dupatta {
-    z-index: 2;
+  .motion-art__layer--dupatta,
+  .motion-art__layer--above-eyes {
+    z-index: 4;
   }
 
   .motion-art__shimmer {
     position: absolute;
-    z-index: 4;
+    z-index: 5;
     inset: 0;
     overflow: hidden;
     clip-path: var(--shimmer-clip);
@@ -2023,11 +1957,11 @@
   }
 
   .inspiration-card.is-motion-active[data-motion-pack="ready"] .motion-art__layer--blink {
-    animation: character-blink 6.8s steps(1, end) var(--layer-delay, 0s) infinite;
+    animation: character-blink 6.2s steps(1, end) var(--layer-delay, 0s) infinite;
   }
 
   .inspiration-card.is-motion-active[data-motion-pack="ready"] .motion-art__layer--open-eye {
-    animation: character-open-eye-blink 7.4s steps(1, end) var(--layer-delay, 0s) infinite;
+    animation: character-open-eye-blink 6.2s steps(1, end) var(--layer-delay, 0s) infinite;
   }
 
   .inspiration-card.is-motion-active[data-motion-pack="ready"] .motion-art {
@@ -2035,7 +1969,7 @@
   }
 
   .inspiration-card.is-motion-active[data-motion-pack="ready"] .motion-art__layer--earrings {
-    animation: earring-swing 4.8s ease-in-out var(--layer-delay, 0s) infinite;
+    animation: earring-swing 6s ease-in-out var(--layer-delay, 0s) infinite;
   }
 
   .inspiration-card.is-motion-active[data-motion-pack="ready"] .motion-art__layer--hair {
@@ -2062,27 +1996,6 @@
   .reveal-ready .event-card.is-visible {
     opacity: 1;
     transform: none;
-  }
-
-  html[data-motion-preference="paused"] .event-nav__link.is-active::before {
-    opacity: 0.48;
-    transform: scale(1);
-  }
-
-  html[data-motion-preference="paused"] .event-card__draw-border > span {
-    animation: none !important;
-    opacity: 0.84;
-    transform: none;
-  }
-
-  html[data-motion-preference="paused"] .reveal-ready .event-card {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  html[data-motion-preference="paused"] .motion-art__layers {
-    display: none;
   }
 
   @keyframes invitation-mote {
@@ -2171,28 +2084,30 @@
   }
 
   @keyframes character-blink {
-    0%, 43%, 46%, 100% { opacity: 0; }
-    44%, 45% { opacity: 1; }
+    0%, 9%, 14%, 59%, 64%, 100% { opacity: 0; }
+    10%, 13%, 60%, 63% { opacity: 1; }
   }
 
   @keyframes character-open-eye-blink {
-    0%, 43%, 46%, 100% { opacity: 1; }
-    44%, 45% { opacity: 0; }
+    0%, 9%, 14%, 59%, 64%, 100% { opacity: 1; }
+    10%, 13%, 60%, 63% { opacity: 0; }
   }
 
   @keyframes earring-swing {
-    0%, 100% { transform: rotate(-1.8deg); }
-    50% { transform: rotate(2.1deg); }
+    0%, 8%, 43%, 100% { transform: translateX(0) rotate(0); }
+    17% { transform: translateX(-0.035rem) rotate(-3.2deg); }
+    26% { transform: translateX(0.045rem) rotate(2.7deg); }
+    35% { transform: translateX(-0.012rem) rotate(-0.9deg); }
   }
 
   @keyframes hair-sway {
-    0%, 100% { transform: translateX(-0.025rem) rotate(-0.38deg); }
-    50% { transform: translateX(0.035rem) rotate(0.42deg); }
+    0%, 100% { transform: translateX(-0.04rem) rotate(-0.48deg); }
+    50% { transform: translateX(0.055rem) rotate(0.54deg); }
   }
 
   @keyframes fabric-sway {
-    0%, 100% { transform: translateX(-0.045rem) rotate(-0.28deg); }
-    50% { transform: translateX(0.065rem) rotate(0.31deg); }
+    0%, 100% { transform: translateX(-0.065rem) rotate(-0.34deg); }
+    50% { transform: translateX(0.09rem) rotate(0.4deg); }
   }
 
   @keyframes garment-shimmer {
@@ -2242,9 +2157,13 @@
   @media (min-width: 48rem) {
     .attire-panel {
       grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+      grid-template-areas: "art guidance";
       align-items: stretch;
       gap: 1rem;
     }
+
+    .look-stage { grid-area: art; }
+    .guidance-card { grid-area: guidance; }
 
     .look-stage,
     .guidance-card {
@@ -2336,10 +2255,6 @@
       padding-inline: 1rem;
     }
 
-    .motion-toggle {
-      right: 1.2rem;
-      bottom: 1.2rem;
-    }
   }
 
   @media (max-width: 25rem) {
@@ -2389,19 +2304,6 @@
       padding: 0.85rem;
     }
 
-    .motion-toggle {
-      width: 2.8rem;
-      padding-inline: 0;
-    }
-
-    .motion-toggle span {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      clip-path: inset(50%);
-    }
   }
 
   @media (max-width: 22rem) {
@@ -2428,8 +2330,7 @@
       width: min(56vw, 68dvh, 30rem);
     }
 
-    .invitation__hint,
-    .invitation__skip {
+    .invitation__hint {
       font-size: max(0.68rem, 11px);
     }
 

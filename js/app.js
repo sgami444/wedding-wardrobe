@@ -131,9 +131,6 @@
   const navRoot = document.querySelector("[data-event-nav]");
   const progressBar = document.querySelector("[data-event-progress]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const motionToggle = document.querySelector("[data-motion-toggle]");
-  const motionToggleLabel = document.querySelector("[data-motion-toggle-label]");
-  const motionStatus = document.querySelector("[data-motion-status]");
   const attireStatus = document.querySelector("[data-attire-status]");
 
   const lightbox = document.querySelector("[data-lightbox]");
@@ -145,14 +142,12 @@
   const lightboxClose = document.querySelector("[data-lightbox-close]");
 
   const attirePreferenceKey = "samarstory:attire-preference:v1";
-  const motionPreferenceKey = "samarstory:motion-preference:v1";
   const attireKeys = ["women", "men"];
   const attireSwitchers = [];
   const motionViewportState = new Map();
   const motionTargets = new Set();
 
   let selectedAttire = readSession(attirePreferenceKey) === "men" ? "men" : "women";
-  let userPausedMotion = readSession(motionPreferenceKey) === "paused";
   let lightboxState = null;
   let touchStartX = null;
   let activeEventId = "";
@@ -284,6 +279,7 @@
             width: Number.isFinite(layer.width) ? layer.width : 100,
             delay: Number.isFinite(layer.delay) ? layer.delay : 0,
             origin: typeof layer.origin === "string" ? layer.origin : "50% 50%",
+            aboveEyes: layer.aboveEyes === true,
             clip
           }];
         })
@@ -329,6 +325,7 @@
       const y = offsetY + (cropY / canvasHeight) * renderedHeight;
       const width = (cropWidth / canvasWidth) * renderedWidth;
       const height = (cropHeight / canvasHeight) * renderedHeight;
+      const phaseDelay = Math.min(1.6, Math.max(0, delay * 0.4 + index * 0.55));
       return [{
         src: new URL(eye.file, manifestUrl).href,
         type,
@@ -336,7 +333,7 @@
         y,
         width,
         height,
-        delay: delay + index * 0.83,
+        delay: phaseDelay,
         origin: `${x + width / 2}% ${y + height / 2}%`,
         clip: null,
         cropped: true
@@ -428,6 +425,7 @@
         img.setAttribute("aria-hidden", "true");
         img.className = `motion-art__layer motion-art__layer--${layer.type}`;
         if (layer.cropped) img.classList.add("motion-art__layer--crop");
+        if (layer.aboveEyes) img.classList.add("motion-art__layer--above-eyes");
         img.style.setProperty("--layer-x", `${layer.x}%`);
         img.style.setProperty("--layer-y", `${layer.y}%`);
         img.style.setProperty("--layer-width", `${layer.width}%`);
@@ -582,7 +580,7 @@
 
     const avoidPanel = renderAvoidList(avoid);
     if (avoidPanel) guidance.append(avoidPanel);
-    panel.append(panelHeading, artBlock, guidance);
+    panel.append(panelHeading, guidance, artBlock);
     return { panel, tabId, panelId };
   }
 
@@ -778,38 +776,15 @@
     const invitationState = document.documentElement.dataset.invitationState;
     return (
       !reducedMotion.matches &&
-      !userPausedMotion &&
       !document.hidden &&
       (invitationState === "opened" || !invitationState)
     );
   }
 
-  function updateMotionControl({ announce = false } = {}) {
-    const systemReduced = reducedMotion.matches;
-    const paused = systemReduced || userPausedMotion;
-    document.documentElement.dataset.motionPreference = systemReduced
+  function updateMotionPreference() {
+    document.documentElement.dataset.motionPreference = reducedMotion.matches
       ? "reduced"
-      : userPausedMotion
-        ? "paused"
-        : "playing";
-    if (motionToggle) {
-      motionToggle.disabled = systemReduced;
-      motionToggle.setAttribute("aria-pressed", String(paused));
-    }
-    if (motionToggleLabel) {
-      motionToggleLabel.textContent = systemReduced
-        ? "Motion reduced"
-        : userPausedMotion
-          ? "Resume motion"
-          : "Pause motion";
-    }
-    if (announce && motionStatus) {
-      motionStatus.textContent = systemReduced
-        ? "Motion is reduced by your device setting."
-        : userPausedMotion
-          ? "Decorative motion paused."
-          : "Decorative motion resumed.";
-    }
+      : "playing";
     refreshMotionState();
   }
 
@@ -824,15 +799,9 @@
     });
   }
 
-  function initialiseMotionControl() {
-    updateMotionControl();
-    motionToggle?.addEventListener("click", () => {
-      if (reducedMotion.matches) return;
-      userPausedMotion = !userPausedMotion;
-      writeSession(motionPreferenceKey, userPausedMotion ? "paused" : "playing");
-      updateMotionControl({ announce: true });
-    });
-    reducedMotion.addEventListener?.("change", () => updateMotionControl({ announce: true }));
+  function initialiseMotionSystem() {
+    updateMotionPreference();
+    reducedMotion.addEventListener?.("change", updateMotionPreference);
     document.addEventListener("visibilitychange", refreshMotionState);
     document.addEventListener("wardrobe:invitation-state", refreshMotionState);
   }
@@ -1043,7 +1012,7 @@
 
     renderNavigation(renderedEvents);
     initialiseLightbox();
-    initialiseMotionControl();
+    initialiseMotionSystem();
     requestAnimationFrame(() => {
       const articles = renderedEvents.map(({ article }) => article);
       activeEventId = "";

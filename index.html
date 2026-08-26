@@ -53,7 +53,7 @@
       </div>
 
       <div class="invitation__stage">
-        <h2 class="sr-only" id="invitation-title">Margee and Sahil's wedding invitation</h2>
+        <h2 class="sr-only" id="invitation-title" tabindex="-1">Margee and Sahil's wedding invitation</h2>
 
         <div class="kankotri" data-kankotri>
           <div class="kankotri__back" aria-hidden="true"></div>
@@ -92,9 +92,6 @@
         </div>
 
         <p class="invitation__hint" id="invitation-hint">Tap the monogram seal to open</p>
-        <button class="invitation__skip" type="button" data-invitation-skip>
-          Skip opening
-        </button>
       </div>
     </dialog>
 
@@ -170,19 +167,6 @@
         </div>
       </nav>
 
-      <button
-        class="motion-toggle"
-        type="button"
-        data-motion-toggle
-        aria-pressed="false"
-      >
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path class="motion-toggle__pause" d="M8 6v12M16 6v12"></path>
-          <path class="motion-toggle__play" d="m9 6 9 6-9 6Z"></path>
-        </svg>
-        <span data-motion-toggle-label>Pause motion</span>
-      </button>
-      <p class="sr-only" data-motion-status aria-live="polite"></p>
       <p class="sr-only" data-attire-status aria-live="polite"></p>
 
       <main id="events" tabindex="-1">
