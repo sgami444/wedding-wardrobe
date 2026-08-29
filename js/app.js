@@ -633,6 +633,8 @@
     });
 
     const header = element("header", "event-card__header");
+    const feather = element("span", "event-card__feather");
+    feather.setAttribute("aria-hidden", "true");
     const ornament = element("span", "event-card__ornament");
     ornament.setAttribute("aria-hidden", "true");
     const dateLine = element("p", "event-card__date");
@@ -645,7 +647,7 @@
     if (event.time) dateLine.append(element("span", "event-card__time", event.time));
     const title = element("h2", "", event.name || `Event ${index + 1}`);
     title.id = `${sectionId}-title`;
-    header.append(ornament, dateLine, title);
+    header.append(feather, ornament, dateLine, title);
     if (event.tagline) header.append(element("p", "event-card__tagline", event.tagline));
     if (event.description) header.append(element("p", "event-card__description", event.description));
 

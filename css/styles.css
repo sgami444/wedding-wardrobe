@@ -2393,13 +2393,13 @@
   .button--primary {
     border-color: var(--warm-gold);
     color: var(--ivory);
-    background: var(--deep-teal);
+    background: linear-gradient(135deg, var(--mahogany), var(--espresso));
     box-shadow: 0 0.55rem 1.4rem rgba(75, 48, 40, 0.16);
   }
 
   .button--primary:hover {
     border-color: #c8a039;
-    background: #644035;
+    background: linear-gradient(135deg, #845047, #5c3930);
     box-shadow: 0 0.75rem 1.7rem rgba(75, 48, 40, 0.2);
     filter: none;
     transform: translateY(-2px);
@@ -2663,16 +2663,50 @@
   }
 
   .event-nav__link {
+    --nav-accent: var(--espresso);
+    --nav-border: rgba(75, 48, 40, 0.28);
+    --nav-soft: rgba(75, 48, 40, 0.11);
+    --focus-color: var(--nav-accent);
     border-radius: var(--radius-md);
     color: #6f665b;
     transition: color 180ms ease, background-color 180ms ease;
   }
 
+  .event-nav__link[data-nav-event="sagai"] {
+    --nav-accent: #7b334b;
+    --nav-border: rgba(123, 51, 75, 0.36);
+    --nav-soft: rgba(123, 51, 75, 0.13);
+  }
+
+  .event-nav__link[data-nav-event="mandap"] {
+    --nav-accent: #6e351f;
+    --nav-border: rgba(110, 53, 31, 0.36);
+    --nav-soft: rgba(110, 53, 31, 0.13);
+  }
+
+  .event-nav__link[data-nav-event="carnival"] {
+    --nav-accent: #6a4930;
+    --nav-border: rgba(106, 73, 48, 0.36);
+    --nav-soft: rgba(106, 73, 48, 0.13);
+  }
+
+  .event-nav__link[data-nav-event="garba"] {
+    --nav-accent: #64392e;
+    --nav-border: rgba(100, 57, 46, 0.36);
+    --nav-soft: rgba(100, 57, 46, 0.13);
+  }
+
+  .event-nav__link[data-nav-event="wedding"] {
+    --nav-accent: #621f39;
+    --nav-border: rgba(98, 31, 57, 0.36);
+    --nav-soft: rgba(98, 31, 57, 0.13);
+  }
+
   .event-nav__link::before {
     inset: 0.42rem 0.18rem;
-    border-color: rgba(185, 149, 79, 0.28);
+    border-color: var(--nav-border);
     border-radius: var(--radius-md);
-    background: radial-gradient(ellipse, rgba(211, 185, 145, 0.2), transparent 72%);
+    background: radial-gradient(ellipse, var(--nav-soft), transparent 72%);
   }
 
   .event-nav__date {
@@ -2680,8 +2714,12 @@
   }
 
   .event-nav__link.is-active {
-    color: var(--deep-teal);
+    color: var(--nav-accent);
     text-shadow: none;
+  }
+
+  .event-nav__link:hover {
+    color: var(--nav-accent);
   }
 
   .event-nav__link.is-active .event-nav__name {
@@ -2705,11 +2743,40 @@
   }
 
   main::before {
-    background-image: none;
+    z-index: 0;
+    inset: auto -18rem auto auto;
+    top: 9rem;
+    width: 52rem;
+    height: auto;
+    aspect-ratio: 1672 / 941;
+    background: url("../assets/decor/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
+    content: "";
+    opacity: 0.09;
+    pointer-events: none;
+    transform: rotate(2deg);
+    transform-origin: 72% 88%;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 44%, rgba(0, 0, 0, 0.82) 58%, transparent 100%);
+    mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 44%, rgba(0, 0, 0, 0.82) 58%, transparent 100%);
   }
 
   main::after {
-    content: none;
+    position: absolute;
+    z-index: 0;
+    top: 63%;
+    left: -18rem;
+    width: 52rem;
+    height: auto;
+    aspect-ratio: 1672 / 941;
+    background: url("../assets/decor/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
+    content: "";
+    opacity: 0.075;
+    pointer-events: none;
+    transform: scaleX(-1) rotate(2deg);
+    transform-origin: 72% 88%;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 44%, rgba(0, 0, 0, 0.82) 58%, transparent 100%);
+    mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 44%, rgba(0, 0, 0, 0.82) 58%, transparent 100%);
   }
 
   .events-intro {
@@ -2748,31 +2815,56 @@
     --event-jewel: var(--deep-teal);
     --event-jewel-start: #644035;
     --event-bright: var(--antique-gold);
+    --event-button: #4b3028;
+    --event-button-hover: #644035;
+    --event-button-soft: rgba(75, 48, 40, 0.1);
+    --event-button-ring: #e8c56e;
+    --focus-color: var(--event-button);
   }
 
   .event-card[data-theme="romantic"] {
     --event-accent: #87564e;
     --event-soft: rgba(135, 86, 78, 0.08);
+    --event-button: #7b334b;
+    --event-button-hover: #925065;
+    --event-button-soft: rgba(123, 51, 75, 0.11);
+    --event-button-ring: #f0c7a2;
   }
 
   .event-card[data-theme="sacred"] {
     --event-accent: #806a37;
     --event-soft: rgba(185, 149, 79, 0.09);
+    --event-button: #6e351f;
+    --event-button-hover: #854d2d;
+    --event-button-soft: rgba(110, 53, 31, 0.11);
+    --event-button-ring: #f0c272;
   }
 
   .event-card[data-theme="daylight"] {
     --event-accent: #6a4738;
     --event-soft: rgba(211, 185, 145, 0.18);
+    --event-button: #6a4930;
+    --event-button-hover: #886445;
+    --event-button-soft: rgba(106, 73, 48, 0.11);
+    --event-button-ring: #f1cd7b;
   }
 
   .event-card[data-theme="festive"] {
     --event-accent: var(--emerald);
     --event-soft: rgba(211, 185, 145, 0.16);
+    --event-button: #64392e;
+    --event-button-hover: #815344;
+    --event-button-soft: rgba(100, 57, 46, 0.11);
+    --event-button-ring: #e8c56e;
   }
 
   .event-card[data-theme="ceremonial"] {
     --event-accent: var(--peacock-blue);
     --event-soft: rgba(115, 64, 56, 0.1);
+    --event-button: #621f39;
+    --event-button-hover: #84334d;
+    --event-button-soft: rgba(98, 31, 57, 0.11);
+    --event-button-ring: #f0d18a;
   }
 
   .event-card {
@@ -2795,11 +2887,33 @@
   }
 
   .event-card__header {
+    isolation: isolate;
     color: var(--warm-charcoal);
     background:
       radial-gradient(circle at 50% -60%, rgba(211, 185, 145, 0.14), transparent 58%),
       linear-gradient(180deg, var(--surface), rgba(234, 218, 191, 0.68));
     box-shadow: inset 0 -1px rgba(185, 149, 79, 0.32);
+  }
+
+  .event-card__feather {
+    position: absolute;
+    z-index: 0;
+    top: -4.5rem;
+    right: -10rem;
+    width: 34rem;
+    aspect-ratio: 1672 / 941;
+    background: url("../assets/decor/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
+    opacity: 0.075;
+    pointer-events: none;
+    transform: rotate(2deg);
+    mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(ellipse 72% 68% at 72% 42%, #000 0%, rgba(0, 0, 0, 0.88) 48%, transparent 100%);
+    mask-image: radial-gradient(ellipse 72% 68% at 72% 42%, #000 0%, rgba(0, 0, 0, 0.88) 48%, transparent 100%);
+  }
+
+  .event-card__header > :not(.event-card__feather) {
+    position: relative;
+    z-index: 1;
   }
 
   .event-card__header::before,
@@ -2827,7 +2941,7 @@
   }
 
   .event-card__header h2 {
-    color: var(--deep-teal);
+    color: var(--event-button);
     text-shadow: none;
   }
 
@@ -2859,15 +2973,15 @@
   }
 
   .attire-tab:hover:not([aria-selected="true"]) {
-    color: var(--deep-teal);
-    background: rgba(242, 233, 218, 0.72);
+    color: var(--event-button);
+    background: var(--event-button-soft);
   }
 
   .attire-tab[aria-selected="true"] {
     border-color: var(--warm-gold);
     color: var(--ivory);
-    background: var(--deep-teal);
-    box-shadow: 0 0.35rem 0.9rem rgba(75, 48, 40, 0.14);
+    background: linear-gradient(145deg, var(--event-button-hover), var(--event-button));
+    box-shadow: 0 0.35rem 0.9rem var(--event-button-soft);
   }
 
   .look-stage,
@@ -2921,13 +3035,13 @@
   .event-next__link {
     border-color: rgba(185, 149, 79, 0.34);
     color: var(--warm-charcoal);
-    background: rgba(242, 233, 218, 0.38);
+    background: linear-gradient(135deg, var(--event-button-soft), rgba(252, 248, 239, 0.86));
     transition: border-color 200ms ease, background-color 200ms ease, transform 200ms ease;
   }
 
   .event-next__link:hover {
-    border-color: var(--antique-gold);
-    background: rgba(242, 233, 218, 0.68);
+    border-color: var(--event-button);
+    background: linear-gradient(135deg, var(--event-button-soft), rgba(242, 233, 218, 0.78));
   }
 
   .event-next__eyebrow,
@@ -2936,9 +3050,9 @@
   }
 
   .event-next__arrow {
-    border-color: rgba(185, 149, 79, 0.5);
-    color: var(--deep-teal);
-    background: rgba(252, 248, 239, 0.74);
+    border-color: var(--event-button-hover);
+    color: var(--ivory);
+    background: linear-gradient(145deg, var(--event-button-hover), var(--event-button));
   }
 
   .footer {
@@ -2987,8 +3101,8 @@
   }
 
   .inspiration-card:hover {
-    border-color: var(--antique-gold);
-    box-shadow: 0 0.7rem 1.6rem rgba(64, 59, 54, 0.08);
+    border-color: var(--event-button);
+    box-shadow: 0 0.65rem 1.6rem var(--event-button-soft);
   }
 
   .inspiration-card__art,
@@ -3051,6 +3165,26 @@
   }
 
   @media (max-width: 30rem) {
+    main::before {
+      top: 7rem;
+      right: -22rem;
+      width: 46rem;
+      opacity: 0.075;
+    }
+
+    main::after {
+      left: -22rem;
+      width: 46rem;
+      opacity: 0.06;
+    }
+
+    .event-card__feather {
+      top: -3.5rem;
+      right: -11.5rem;
+      width: 31rem;
+      opacity: 0.065;
+    }
+
     .hero::before {
       top: -5rem;
       right: -28rem;
@@ -3082,6 +3216,26 @@
   }
 
   @media (min-width: 58rem) {
+    main::before {
+      top: 7rem;
+      right: -12rem;
+      width: 60rem;
+      opacity: 0.1;
+    }
+
+    main::after {
+      left: -12rem;
+      width: 60rem;
+      opacity: 0.085;
+    }
+
+    .event-card__feather {
+      top: -6rem;
+      right: -11rem;
+      width: 43rem;
+      opacity: 0.085;
+    }
+
     .hero__scenery,
     .invitation {
       background:
@@ -3116,7 +3270,7 @@
 
 @layer accessibility {
   :focus-visible {
-    outline: 3px solid var(--deep-teal);
+    outline: 3px solid var(--focus-color, var(--deep-teal));
     outline-offset: 4px;
     box-shadow: 0 0 0 2px var(--ivory);
   }
@@ -3137,6 +3291,10 @@
   .attire-tab:focus-visible,
   .inspiration-card:focus-visible {
     outline-offset: -4px;
+  }
+
+  .event-card .attire-tab[aria-selected="true"]:focus-visible {
+    outline-color: var(--event-button-ring);
   }
 
   @media (prefers-contrast: more) {
@@ -3163,6 +3321,12 @@
     .hero::before,
     .invitation::after {
       opacity: 0.15;
+    }
+
+    main::before,
+    main::after,
+    .event-card__feather {
+      opacity: 0.025;
     }
   }
 
@@ -3205,7 +3369,9 @@
     .event-card__draw-border,
     .hero::before,
     .invitation::after,
+    main::before,
     main::after,
+    .event-card__feather,
     .footer::before {
       display: none;
     }
