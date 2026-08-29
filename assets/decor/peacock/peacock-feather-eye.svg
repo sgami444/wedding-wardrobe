@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 87 89">
+  <defs>
+    <style>
+      .cls-1 {
+        isolation: isolate;
+      }
+
+      .cls-2, .cls-6 {
+        opacity: 0.5;
+        mix-blend-mode: multiply;
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-4 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-5 {
+        fill: url(#radial-gradient);
+      }
+
+      .cls-6 {
+        fill: #b3ab5f;
+      }
+
+      .cls-7 {
+        fill: url(#linear-gradient-3);
+      }
+
+      .cls-8 {
+        fill: url(#radial-gradient-2);
+      }
+
+      .cls-9 {
+        fill: url(#radial-gradient-3);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="-106.89" y1="676.64" x2="-93.9" y2="629.94" gradientTransform="matrix(-0.85, 0.53, 0.53, 0.85, -388.22, -466.22)" gradientUnits="userSpaceOnUse">
+      <stop offset="0"/>
+      <stop offset="0.22" stop-color="#2d2514"/>
+      <stop offset="0.46" stop-color="#574826"/>
+      <stop offset="0.68" stop-color="#766133"/>
+      <stop offset="0.86" stop-color="#88713b"/>
+      <stop offset="0.99" stop-color="#8f763e"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-106.06" y1="677.78" x2="-95.6" y2="631.19" gradientTransform="matrix(-0.85, 0.53, 0.53, 0.85, -388.22, -466.22)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffaf68"/>
+      <stop offset="0.08" stop-color="#ffb36b"/>
+      <stop offset="0.65" stop-color="#ffca7b"/>
+      <stop offset="1" stop-color="#ffd381"/>
+    </linearGradient>
+    <radialGradient id="radial-gradient" cx="-101.22" cy="655.83" r="13.99" gradientTransform="matrix(-0.79, 0.62, 0.93, 1.18, -647.72, -676.36)" gradientUnits="userSpaceOnUse">
+      <stop offset="0"/>
+      <stop offset="0.1" stop-color="#221a0b"/>
+      <stop offset="0.29" stop-color="#58421d"/>
+      <stop offset="0.46" stop-color="#82632b"/>
+      <stop offset="0.61" stop-color="#a17a36"/>
+      <stop offset="0.74" stop-color="#b3883c"/>
+      <stop offset="0.84" stop-color="#ba8d3e"/>
+      <stop offset="1" stop-color="#8f763e"/>
+    </radialGradient>
+    <linearGradient id="linear-gradient-3" x1="-98.64" y1="647.57" x2="-105.01" y2="672.78" gradientTransform="matrix(-0.85, 0.53, 0.53, 0.85, -388.22, -466.22)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#30725e"/>
+      <stop offset="0.32" stop-color="#2b6151"/>
+      <stop offset="1" stop-color="#224137"/>
+    </linearGradient>
+    <radialGradient id="radial-gradient-2" cx="-101.81" cy="659.71" r="13.4" gradientTransform="matrix(-0.85, 0.53, 0.55, 0.88, -402.56, -489.32)" gradientUnits="userSpaceOnUse">
+      <stop offset="0.2" stop-color="#309864"/>
+      <stop offset="0.48" stop-color="#1fbf78"/>
+      <stop offset="0.68" stop-color="#14d885"/>
+      <stop offset="0.74" stop-color="#15d386"/>
+      <stop offset="0.81" stop-color="#17c488"/>
+      <stop offset="0.88" stop-color="#1aac8b"/>
+      <stop offset="0.95" stop-color="#1f8b90"/>
+      <stop offset="1" stop-color="#227294"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-3" cx="-102.44" cy="663.98" r="13.63" gradientTransform="matrix(-0.85, 0.53, 0.53, 0.85, -388.22, -466.22)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#004f98"/>
+      <stop offset="0.17" stop-color="#034b91"/>
+      <stop offset="0.42" stop-color="#0a3f7d"/>
+      <stop offset="0.72" stop-color="#162c5c"/>
+      <stop offset="1" stop-color="#241637"/>
+    </radialGradient>
+  </defs>
+  <title>Asset 3</title>
+  <g class="cls-1">
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="OBJECTS">
+        <g>
+          <image class="cls-2" width="87" height="89" xlink:href="data:image/png;base64,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"/>
+          <g>
+            <path class="cls-3" d="M29,20.35c4.33-3.21,16.64-.05,24,5.41C62.68,33.08,63,48,56.78,53.07,49.15,59.28,38.37,54,34,49.45,25.85,40.91,24.54,23.63,29,20.35Z"/>
+            <path class="cls-4" d="M29.75,21.25c4.08-3,15.78.05,22.75,5.31,9.33,7,9.75,21.25,3.85,26.09-7.21,5.89-17.47.77-21.62-3.58C26.92,40.86,25.57,24.35,29.75,21.25Z"/>
+            <path class="cls-5" d="M30.55,22.16c3.85-2.86,14.86.05,21.42,5,8.78,6.63,9.18,20,3.62,24.55-6.78,5.55-16.45.73-20.35-3.37C27.89,40.62,26.62,25.08,30.55,22.16Z"/>
+            <path class="cls-6" d="M31.06,22.82c9.05,11.86,15.66,19.93,24.28,28.52A248.18,248.18,0,0,0,31.06,22.82Z"/>
+            <path class="cls-6" d="M30.6,25.52C39.66,37.3,46.5,46.18,54.69,52,46.92,44.6,40.66,36.44,30.6,25.52Z"/>
+            <path class="cls-6" d="M33,22.38C42.68,33.6,50,42.06,54.46,50.8,48.55,42,41.81,34.21,33,22.38Z"/>
+            <path class="cls-6" d="M35.17,22.42c8.9,11.88,15.6,20.85,19.41,29.89C49.32,43.07,43.15,34.85,35.17,22.42Z"/>
+            <path class="cls-6" d="M38.54,22.88C47,33.28,53.33,41.12,56.91,49.3,51.94,41.07,46.09,33.88,38.54,22.88Z"/>
+            <path class="cls-6" d="M40.88,23.18c7.58,9,13.28,15.81,16.37,23.16C52.86,39.06,47.61,32.83,40.88,23.18Z"/>
+            <path class="cls-6" d="M44.42,23.93c6.17,7.57,10.82,13.28,13,19.72C54,37.39,49.75,32.15,44.42,23.93Z"/>
+            <path class="cls-6" d="M47.77,26c5.13,6.49,9,11.38,10.52,17.14C55.63,37.64,52.07,33.15,47.77,26Z"/>
+            <path class="cls-6" d="M50.46,26.77c4,6.07,7,10.65,8,15.74C56.48,37.53,53.71,33.33,50.46,26.77Z"/>
+            <path class="cls-6" d="M52.9,28.9c3,4.86,5.25,8.52,5.32,13.13C57.13,37.75,55.05,34.39,52.9,28.9Z"/>
+            <path class="cls-6" d="M42.49,23.68c7.06,8.49,12.39,14.9,15.15,21.91C53.61,38.68,48.71,32.81,42.49,23.68Z"/>
+            <path class="cls-6" d="M36.06,22.43c9.14,10.78,16,18.9,20.1,27.35C50.67,41.27,44.33,33.82,36.06,22.43Z"/>
+            <path class="cls-6" d="M29.42,25.71c9.08,11.8,15.93,20.7,24.13,26.53C45.77,44.83,39.5,36.65,29.42,25.71Z"/>
+            <path class="cls-6" d="M29.55,29.55c7.81,10.67,13.7,18.72,21,24C43.72,46.84,38.32,39.44,29.55,29.55Z"/>
+            <path class="cls-6" d="M29.31,30.77c8.13,9.71,14.27,17,21.2,21.85C43.78,46.51,38.15,39.78,29.31,30.77Z"/>
+            <path class="cls-6" d="M30.13,34.33c7,8.42,12.26,14.78,18.1,19.05C42.51,48,37.67,42.19,30.13,34.33Z"/>
+            <path class="cls-6" d="M32.28,31.24c7.1,8.58,12.46,15,18.37,19.41C44.85,45.19,39.94,39.25,32.28,31.24Z"/>
+            <path class="cls-6" d="M30.2,36.69c6,7.27,10.6,12.76,15.66,16.43C40.91,48.51,36.73,43.46,30.2,36.69Z"/>
+            <path class="cls-6" d="M31.68,40c4.83,5.72,8.47,10,12.63,12.82C40.29,49.2,37,45.24,31.68,40Z"/>
+            <path class="cls-6" d="M32.22,43c4.67,4.74,8.2,8.31,12.83,10C40.82,50.36,37.59,47.07,32.22,43Z"/>
+            <path class="cls-7" d="M39.44,32.43c5.61-4.35,11.61-3.7,14.76.26,4.89,6.18,5.09,14.66.54,18.2C50.79,54,44,54.13,37.85,48.48,32.73,43.75,34,36.67,39.44,32.43Z"/>
+            <path class="cls-8" d="M39.92,33.12c5.41-4.18,11.15-3.61,14.14.14,4.65,5.83,4.77,13.9.38,17.3-3.8,2.95-10.35,3.16-16.17-2.17C33.4,43.93,34.64,37.19,39.92,33.12Z"/>
+            <path class="cls-9" d="M41.23,34.85c4.3-3.3,8.83-2.89,11.17,0,3,3.73,3.56,8.66,1.74,11.8-.39.68-5-4-5.6-3.49s2.92,6,2.26,6.29c-3,1.23-7.2.76-10.95-2.64S37,38.08,41.23,34.85Z"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
