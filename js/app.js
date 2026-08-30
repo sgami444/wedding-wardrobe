@@ -152,6 +152,7 @@
   let touchStartX = null;
   let activeEventId = "";
   let motionSequence = 0;
+  let refreshParallax = () => {};
 
   const icons = {
     hanger:
@@ -799,6 +800,7 @@
       target.classList.toggle("is-motion-active", active);
       if (active && target.matches("[data-motion-art]")) hydrateMotionPack(target);
     });
+    refreshParallax();
   }
 
   function initialiseMotionSystem() {
@@ -844,7 +846,8 @@
       document.querySelector(".hero"),
       document.querySelector(".event-nav"),
       ...articles,
-      ...document.querySelectorAll("[data-motion-art]")
+      ...document.querySelectorAll("[data-motion-art]"),
+      ...document.querySelectorAll("[data-parallax-layer]")
     ].filter(Boolean);
     targets.forEach((target) => motionTargets.add(target));
 
@@ -864,6 +867,81 @@
       { rootMargin: "10% 0px 10%", threshold: [0, 0.08] }
     );
     targets.forEach((target) => observer.observe(target));
+  }
+
+  function initialiseFeatherParallax() {
+    const main = document.querySelector("main");
+    const layers = [...document.querySelectorAll("[data-parallax-layer]")];
+    if (!main || !layers.length) return;
+
+    let animationFrame = 0;
+    let metrics = [];
+
+    const clamp = (value, minimum, maximum) =>
+      Math.min(maximum, Math.max(minimum, value));
+
+    function measure() {
+      metrics = layers.map((layer) => {
+        const styles = window.getComputedStyle(layer);
+        const cssLimit = Number.parseFloat(styles.getPropertyValue("--parallax-limit"));
+        const dataLimit = Number.parseFloat(layer.dataset.parallaxLimit || "0");
+        const dataSpeed = Number.parseFloat(layer.dataset.parallaxSpeed || "0");
+        const dataDrift = Number.parseFloat(layer.dataset.parallaxDrift || "0");
+        return {
+          layer,
+          center: layer.offsetTop + layer.offsetHeight / 2,
+          speed: Number.isFinite(dataSpeed) ? dataSpeed : 0,
+          drift: Number.isFinite(dataDrift) ? dataDrift : 0,
+          limit: Math.max(0, Number.isFinite(cssLimit) ? cssLimit : dataLimit || 0)
+        };
+      });
+    }
+
+    function update() {
+      animationFrame = 0;
+      const allowed = motionIsAllowed();
+      const viewportHeight = window.visualViewport?.height || window.innerHeight;
+      const mainTop = main.getBoundingClientRect().top;
+      const writes = metrics.map((metric) => {
+        const active =
+          allowed &&
+          motionViewportState.get(metric.layer) === true &&
+          !metric.layer.closest("[hidden]");
+        const distance = viewportHeight / 2 - (mainTop + metric.center);
+        const y = active
+          ? clamp(distance * metric.speed, -metric.limit, metric.limit)
+          : 0;
+        const x = active ? y * metric.drift : 0;
+        return [metric.layer, `${x.toFixed(2)}px`, `${y.toFixed(2)}px`];
+      });
+      writes.forEach(([layer, x, y]) => {
+        layer.style.setProperty("--parallax-x", x);
+        layer.style.setProperty("--parallax-y", y);
+      });
+    }
+
+    function requestUpdate() {
+      if (animationFrame) return;
+      animationFrame = window.requestAnimationFrame(update);
+    }
+
+    function measureAndUpdate() {
+      measure();
+      requestUpdate();
+    }
+
+    refreshParallax = requestUpdate;
+    measure();
+    window.addEventListener("scroll", () => {
+      if (motionIsAllowed()) requestUpdate();
+    }, { passive: true });
+    window.addEventListener("resize", measureAndUpdate, { passive: true });
+    window.visualViewport?.addEventListener("resize", measureAndUpdate, { passive: true });
+    if ("ResizeObserver" in window) {
+      const resizeObserver = new ResizeObserver(measureAndUpdate);
+      resizeObserver.observe(main);
+    }
+    requestUpdate();
   }
 
   function isLightboxOpen() {
@@ -1021,6 +1099,7 @@
       setActiveNavigation(renderedEvents[0].eventId);
       initialiseObservers(articles);
       initialiseAmbientMotion(articles);
+      initialiseFeatherParallax();
       honourInitialHash();
     });
   }

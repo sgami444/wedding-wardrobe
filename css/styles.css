@@ -2414,7 +2414,7 @@
     width: 10.5rem;
     height: auto;
     aspect-ratio: 140 / 152;
-    background: url("../assets/decor/peacock/peacock-feather-eye-spray.svg") center / contain no-repeat;
+    background: url("../assets/decor/peacock/peacock-feather-eye-spray-warm.svg") center / contain no-repeat;
     content: "";
     filter: drop-shadow(0 0.22rem 0.3rem rgba(18, 12, 8, 0.34));
     opacity: 0.42;
@@ -2477,17 +2477,17 @@
     position: absolute;
     z-index: 0;
     top: -1rem;
-    right: -17rem;
+    right: -24rem;
     bottom: auto;
     left: auto;
-    width: 38rem;
+    width: 64rem;
     height: auto;
-    aspect-ratio: 1781 / 1333;
-    background: url("../assets/decor/peacock/peacock-feather-cluster-v3.png") center / contain no-repeat;
+    aspect-ratio: 1672 / 941;
+    background: url("../assets/decor/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
     content: "";
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.38) 10%, #000 24%);
-    mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.38) 10%, #000 24%);
-    opacity: 0.34;
+    -webkit-mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 48%, rgba(0, 0, 0, 0.9) 60%, transparent 100%);
+    mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 48%, rgba(0, 0, 0, 0.9) 60%, transparent 100%);
+    opacity: 0.62;
     pointer-events: none;
     transform: rotate(0.6deg);
     transform-origin: 70% 88%;
@@ -2589,15 +2589,15 @@
     position: absolute;
     z-index: 0;
     top: -1.5rem;
-    right: -16rem;
-    width: 36rem;
+    right: -24rem;
+    width: 64rem;
     height: auto;
-    aspect-ratio: 1781 / 1333;
-    background: url("../assets/decor/peacock/peacock-feather-cluster-v3.png") center / contain no-repeat;
+    aspect-ratio: 1672 / 941;
+    background: url("../assets/decor/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
     content: "";
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.38) 10%, #000 24%);
-    mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.38) 10%, #000 24%);
-    opacity: 0.37;
+    -webkit-mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 48%, rgba(0, 0, 0, 0.9) 60%, transparent 100%);
+    mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 48%, rgba(0, 0, 0, 0.9) 60%, transparent 100%);
+    opacity: 0.72;
     pointer-events: none;
     transform: rotate(0.6deg);
     transform-origin: 72% 88%;
@@ -2782,37 +2782,93 @@
       linear-gradient(180deg, var(--ivory), var(--surface) 48%, var(--ivory));
   }
 
-  main::before {
-    z-index: 0;
-    inset: auto -15rem auto auto;
-    top: 9rem;
-    width: 32rem;
-    height: auto;
-    aspect-ratio: 1781 / 1333;
-    background: url("../assets/decor/peacock/peacock-feather-cluster-v3.png") center / contain no-repeat;
-    content: "";
-    opacity: 0.1;
-    pointer-events: none;
-    transform: rotate(2deg);
-    transform-origin: 72% 88%;
-    mix-blend-mode: multiply;
+  main::before,
+  main::after {
+    display: none;
   }
 
-  main::after {
+  .peacock-parallax {
     position: absolute;
     z-index: 0;
-    top: 63%;
-    left: -15rem;
-    width: 32rem;
-    height: auto;
-    aspect-ratio: 1781 / 1333;
-    background: url("../assets/decor/peacock/peacock-feather-cluster-v3.png") center / contain no-repeat;
-    content: "";
-    opacity: 0.08;
+    inset: 0;
+    overflow: hidden;
     pointer-events: none;
-    transform: scaleX(-1) rotate(2deg);
-    transform-origin: 72% 88%;
+    contain: paint;
+  }
+
+  .peacock-parallax__layer {
+    --parallax-x: 0px;
+    --parallax-y: 0px;
+    --parallax-limit: 48;
+    position: absolute;
+    display: block;
+    transform: translate3d(var(--parallax-x), var(--parallax-y), 0);
+  }
+
+  .peacock-parallax__layer.is-motion-active {
+    will-change: transform;
+  }
+
+  .peacock-parallax__art {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
     mix-blend-mode: multiply;
+    transform: var(--feather-rest-transform);
+    transform-origin: 72% 88%;
+  }
+
+  .peacock-parallax__layer--top {
+    --parallax-limit: 48;
+    top: 7rem;
+    right: -22rem;
+    width: 46rem;
+    aspect-ratio: 1672 / 941;
+    opacity: 0.1;
+  }
+
+  .peacock-parallax__layer--top .peacock-parallax__art,
+  .peacock-parallax__layer--middle .peacock-parallax__art {
+    background-image: url("../assets/decor/peacock-feather-cluster-bg-v4.png");
+    -webkit-mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 44%, rgba(0, 0, 0, 0.82) 58%, transparent 100%);
+    mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 44%, rgba(0, 0, 0, 0.82) 58%, transparent 100%);
+  }
+
+  .peacock-parallax__layer--top .peacock-parallax__art {
+    --feather-rest-transform: rotate(2deg);
+  }
+
+  .peacock-parallax__layer--middle {
+    --parallax-limit: 64;
+    top: 42%;
+    left: -22rem;
+    width: 46rem;
+    aspect-ratio: 1672 / 941;
+    opacity: 0.075;
+  }
+
+  .peacock-parallax__layer--middle .peacock-parallax__art {
+    --feather-rest-transform: scaleX(-1) rotate(2deg);
+  }
+
+  .peacock-parallax__layer--lower {
+    --parallax-limit: 78;
+    top: 76%;
+    right: -18rem;
+    width: 34rem;
+    aspect-ratio: 1672 / 941;
+    opacity: 0.06;
+  }
+
+  .peacock-parallax__layer--lower .peacock-parallax__art {
+    --feather-rest-transform: rotate(-2deg);
+    background-image: url("../assets/decor/peacock-feather-cluster-bg-v4.png");
+    transform-origin: 76% 92%;
+    -webkit-mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 42%, rgba(0, 0, 0, 0.78) 57%, transparent 100%);
+    mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 42%, rgba(0, 0, 0, 0.78) 57%, transparent 100%);
   }
 
   .events-intro {
@@ -2935,14 +2991,16 @@
     position: absolute;
     z-index: 0;
     top: -4.5rem;
-    right: -3.5rem;
-    width: 15rem;
-    aspect-ratio: 224 / 277;
-    background: url("../assets/decor/peacock/peacock-feather-full.svg") center / contain no-repeat;
-    opacity: 0.18;
+    right: -10rem;
+    width: 34rem;
+    aspect-ratio: 1672 / 941;
+    background: url("../assets/decor/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
+    opacity: 0.075;
     pointer-events: none;
-    transform: rotate(15deg);
+    transform: rotate(2deg);
     mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(ellipse 72% 68% at 72% 42%, #000 0%, rgba(0, 0, 0, 0.88) 48%, transparent 100%);
+    mask-image: radial-gradient(ellipse 72% 68% at 72% 42%, #000 0%, rgba(0, 0, 0, 0.88) 48%, transparent 100%);
   }
 
   .event-card__header > :not(.event-card__feather) {
@@ -3022,7 +3080,7 @@
     width: 6.25rem;
     height: auto;
     aspect-ratio: 140 / 152;
-    background: url("../assets/decor/peacock/peacock-feather-eye-spray.svg") center / contain no-repeat;
+    background: url("../assets/decor/peacock/peacock-feather-eye-spray-warm.svg") center / contain no-repeat;
     content: "";
     filter: drop-shadow(0 0.12rem 0.18rem rgba(20, 12, 8, 0.3));
     opacity: 0.33;
@@ -3126,7 +3184,7 @@
     right: 3.2rem;
     width: 6rem;
     height: 7.5rem;
-    background: url("../assets/decor/peacock/peacock-feather-full.svg") center / contain no-repeat;
+    background: url("../assets/decor/peacock/peacock-feather-full-warm.svg") center / contain no-repeat;
     content: "";
     opacity: 0.16;
     pointer-events: none;
@@ -3278,6 +3336,20 @@
     animation-duration: 8.6s;
   }
 
+  .peacock-parallax__layer.is-motion-active .peacock-parallax__art {
+    animation: peacock-parallax-breathe 11.5s ease-in-out infinite alternate;
+  }
+
+  .peacock-parallax__layer--middle.is-motion-active .peacock-parallax__art {
+    animation-delay: -4.1s;
+    animation-duration: 13.2s;
+  }
+
+  .peacock-parallax__layer--lower.is-motion-active .peacock-parallax__art {
+    animation-delay: -7.3s;
+    animation-duration: 10.4s;
+  }
+
   @keyframes peacock-feather-sway {
     from { transform: rotate(0.15deg) translate3d(-1px, 1px, 0); }
     to { transform: rotate(1.05deg) translate3d(3px, -2px, 0); }
@@ -3292,37 +3364,32 @@
     }
   }
 
+  @keyframes peacock-parallax-breathe {
+    from {
+      transform: var(--feather-rest-transform) translate3d(-1px, 1px, 0) rotate(-0.25deg) scale(0.995);
+    }
+    to {
+      transform: var(--feather-rest-transform) translate3d(2px, -2px, 0) rotate(0.35deg) scale(1.006);
+    }
+  }
+
   @media (max-width: 30rem) {
-    main::before {
-      top: 7rem;
-      right: -15rem;
-      width: 32rem;
-      opacity: 0.08;
-    }
-
-    main::after {
-      left: -15rem;
-      width: 32rem;
-      opacity: 0.07;
-    }
-
     .event-card__feather {
-      top: -3rem;
-      right: -2.5rem;
-      width: 10rem;
-      opacity: 0.14;
+      top: -3.5rem;
+      right: -11.5rem;
+      width: 31rem;
+      opacity: 0.065;
     }
 
     .hero::before {
-      top: -1.5rem;
-      right: -16rem;
-      opacity: 0.35;
+      top: -5rem;
+      right: -28rem;
+      opacity: 0.55;
     }
 
     .invitation::after {
-      top: -1rem;
-      right: -17rem;
-      opacity: 0.32;
+      top: -0.5rem;
+      opacity: 0.58;
     }
 
     .events {
@@ -3355,27 +3422,62 @@
     .events {
       width: min(calc(100% - 2.5rem), var(--page-width));
     }
+
+    .peacock-parallax__layer--top,
+    .peacock-parallax__layer--middle {
+      width: 52rem;
+    }
+
+    .peacock-parallax__layer--top {
+      --parallax-limit: 60;
+      right: -18rem;
+      opacity: 0.12;
+    }
+
+    .peacock-parallax__layer--middle {
+      --parallax-limit: 78;
+      left: -18rem;
+      opacity: 0.09;
+    }
+
+    .peacock-parallax__layer--lower {
+      --parallax-limit: 92;
+      right: -16rem;
+      width: 40rem;
+      opacity: 0.07;
+    }
   }
 
   @media (min-width: 58rem) {
-    main::before {
-      top: 7rem;
-      right: -10rem;
-      width: 40rem;
-      opacity: 0.13;
+    .peacock-parallax__layer--top,
+    .peacock-parallax__layer--middle {
+      width: 60rem;
     }
 
-    main::after {
-      left: -10rem;
-      width: 40rem;
+    .peacock-parallax__layer--top {
+      --parallax-limit: 74;
+      right: -12rem;
+      opacity: 0.14;
+    }
+
+    .peacock-parallax__layer--middle {
+      --parallax-limit: 94;
+      left: -12rem;
       opacity: 0.11;
     }
 
+    .peacock-parallax__layer--lower {
+      --parallax-limit: 112;
+      right: -12rem;
+      width: 46rem;
+      opacity: 0.085;
+    }
+
     .event-card__feather {
-      top: -5rem;
-      right: -2.5rem;
-      width: 18rem;
-      opacity: 0.21;
+      top: -6rem;
+      right: -11rem;
+      width: 43rem;
+      opacity: 0.085;
     }
 
     .hero__scenery,
@@ -3386,18 +3488,18 @@
     }
 
     .invitation::after {
-      top: -3rem;
-      right: -14rem;
+      top: -1.5rem;
+      right: -10rem;
       left: auto;
-      width: 56rem;
+      width: 76rem;
       height: auto;
       transform: rotate(0.6deg);
     }
 
     .hero::before {
-      top: -2rem;
-      right: -14rem;
-      width: 54rem;
+      top: -2.25rem;
+      right: -10rem;
+      width: 76rem;
       height: auto;
     }
   }
@@ -3405,7 +3507,7 @@
   @media (max-height: 30rem) and (min-width: 40rem) {
     .hero::before,
     .invitation::after {
-      right: -14rem;
+      right: -23rem;
     }
   }
 }
@@ -3465,8 +3567,7 @@
       opacity: 0.15;
     }
 
-    main::before,
-    main::after,
+    .peacock-parallax,
     .event-card__feather {
       opacity: 0.025;
     }
@@ -3501,6 +3602,17 @@
     .motion-art__layers {
       display: none;
     }
+
+    .peacock-parallax__layer {
+      --parallax-x: 0px !important;
+      --parallax-y: 0px !important;
+      transform: translate3d(0, 0, 0) !important;
+    }
+
+    .peacock-parallax__art {
+      animation: none !important;
+      transform: var(--feather-rest-transform) !important;
+    }
   }
 
   @media (forced-colors: active) {
@@ -3511,8 +3623,7 @@
     .event-card__draw-border,
     .hero::before,
     .invitation::after,
-    main::before,
-    main::after,
+    .peacock-parallax,
     .event-card__feather,
     .button--primary::before,
     .attire-tab::after,
