@@ -1500,10 +1500,18 @@
     list-style: none;
   }
 
-  .avoid-list li:not(:last-child)::after {
-    margin-left: 0.65rem;
-    color: rgba(123, 38, 56, 0.42);
-    content: "•";
+  .avoid-list li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+  }
+
+  .avoid-list li::before {
+    color: var(--danger-700);
+    content: "\00D7";
+    font-size: 1.05em;
+    font-weight: 800;
+    line-height: 1;
   }
 
   .event-next {
@@ -3157,8 +3165,8 @@
     color: #62594f;
   }
 
-  .avoid-list li:not(:last-child)::after {
-    color: rgba(141, 127, 110, 0.55);
+  .avoid-list li::before {
+    color: var(--danger-700);
   }
 
   .event-next {
