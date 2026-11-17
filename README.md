@@ -5,13 +5,23 @@ directly in a browser or publish this folder to any static host.
 
 ## Shareable guides
 
-- Friends: <https://thesamarstory.com/wardrobe/> (Sagai is omitted.)
+- Complete guide: <https://thesamarstory.com/wardrobe/> (All events.)
 - Family: <https://thesamarstory.com/attire/> (Carnival is omitted.)
-- Complete guide: <https://thesamarstory.com/> (All events are shown.)
+- Engagement: <https://thesamarstory.com/wardrobe/engagement/> (Only Sagai.)
+- Garba: <https://thesamarstory.com/wardrobe/garba/> (Only Garba.)
 
-The two audience views are configured in the `routes` object in
-`js/events.js`. Each route lists the event IDs it should exclude, while event
-content still lives in one shared `events` array.
+All four guides open directly without the invitation animation, including on
+a first visit. The main page at <https://thesamarstory.com/> keeps the original
+invitation opening experience. The footer replay button remains available.
+
+The views are configured in the `routes` object in `js/events.js`. Routes can
+list event IDs in `includeEvents` or `excludeEvents`, while event content still
+lives in one shared `events` array. The GitHub Pages workflow generates each
+route directory with its HTML and assets, so direct links and refreshes work.
+
+Run the route and invitation regression checks with
+`node --test tests/routes.test.cjs` (Node.js 18 or newer). The deployment workflow
+also runs these checks before preparing the site.
 
 These are tailored public views, not password-protected pages. Because GitHub
 Pages and this repository are public, someone who knows another URL can still

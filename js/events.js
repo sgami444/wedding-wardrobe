@@ -22,9 +22,11 @@
  *   and update its content. Navigation and page sections are created for you.
  *
  * AUDIENCE ROUTES
- * - `/wardrobe/` is the friends guide and excludes Sagai.
+ * - `/wardrobe/` is the complete guide with every event.
  * - `/attire/` is the family guide and excludes Carnival.
- * - Add or remove event IDs in `excludeEvents` to adjust either guide.
+ * - `/wardrobe/engagement/` shows only Sagai.
+ * - `/wardrobe/garba/` shows only Garba.
+ * - Use `includeEvents` or `excludeEvents` to adjust a guide.
  */
 
 window.WEDDING_WARDROBE = {
@@ -44,16 +46,30 @@ window.WEDDING_WARDROBE = {
 
   routes: {
     wardrobe: {
-      excludeEvents: ["sagai"],
       site: {
-        canonicalUrl: "https://thesamarstory.com/wardrobe/",
-        footerDates: "February 8–10, 2027"
+        canonicalUrl: "https://thesamarstory.com/wardrobe/"
       }
     },
     attire: {
       excludeEvents: ["carnival"],
       site: {
         canonicalUrl: "https://thesamarstory.com/attire/"
+      }
+    },
+    "wardrobe/engagement": {
+      includeEvents: ["sagai"],
+      site: {
+        canonicalUrl: "https://thesamarstory.com/wardrobe/engagement/",
+        guideLabel: "Sagai celebration guide",
+        footerDates: "January 21, 2027"
+      }
+    },
+    "wardrobe/garba": {
+      includeEvents: ["garba"],
+      site: {
+        canonicalUrl: "https://thesamarstory.com/wardrobe/garba/",
+        guideLabel: "Garba celebration guide",
+        footerDates: "February 9, 2027"
       }
     }
   },

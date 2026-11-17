@@ -49,9 +49,8 @@
         }
       });
 
-    let routeKey = segments.pop() || "";
-    if (/^index\.html?$/i.test(routeKey)) routeKey = segments.pop() || "";
-    return routeKey.toLowerCase();
+    if (/^index\.html?$/i.test(segments.at(-1) || "")) segments.pop();
+    return segments.join("/").toLowerCase();
   }
 
   function safeId(value, fallback) {
@@ -79,6 +78,9 @@
         .map((eventId) => safeId(eventId, ""))
         .filter(Boolean)
     );
+    const includedEventIds = Array.isArray(route?.includeEvents)
+      ? new Set(normaliseList(route.includeEvents).map((eventId) => safeId(eventId, "")))
+      : null;
     const site = {
       ...(source.site && typeof source.site === "object" ? source.site : {}),
       ...(route?.site && typeof route.site === "object" ? route.site : {})
@@ -86,7 +88,8 @@
     const events = Array.isArray(source.events)
       ? source.events.filter((event) => {
           const eventId = safeId(event?.id, "");
-          return !eventId || !excludedEventIds.has(eventId);
+          return (!includedEventIds || includedEventIds.has(eventId)) &&
+            !excludedEventIds.has(eventId);
         })
       : [];
 
@@ -219,7 +222,7 @@
     if (typeof site?.guideLabel === "string" && site.guideLabel.trim()) {
       return site.guideLabel.trim();
     }
-    if (routeKey === "wardrobe") return "Friends' celebration guide";
+    if (routeKey === "wardrobe") return "Complete celebration guide";
     if (routeKey === "attire") return "Family celebration guide";
     return "Complete celebration guide";
   }

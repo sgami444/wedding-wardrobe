@@ -20,6 +20,11 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const storageKey = "samarstory:kankotri:v2";
   const timelineDuration = 3700;
+  const routeView = window.WardrobeApp.resolveRouteView(
+    window.WEDDING_WARDROBE,
+    window.location.pathname
+  );
+  const isDirectGuide = Boolean(routeView.key);
 
   if (!dialog || !siteShell || !openButton || !kankotri) return;
 
@@ -485,25 +490,16 @@
     if (!targetId.startsWith("event-")) return false;
 
     const eventId = targetId.slice("event-".length);
-    const events = window.WEDDING_WARDROBE?.events;
+    const events = routeView.events;
     if (!Array.isArray(events) || !events.some((event) => event?.id === eventId)) {
       return false;
     }
 
-    const route = window.location.pathname
-      .replace(/\/index\.html$/i, "")
-      .replace(/\/+$/, "")
-      .split("/")
-      .filter(Boolean)
-      .at(-1);
-
-    if (route === "wardrobe" && eventId === "sagai") return false;
-    if (route === "attire" && eventId === "carnival") return false;
     return true;
   }
 
   function shouldBypassOpening() {
-    return isValidDirectHash() || readSeenState();
+    return isDirectGuide || isValidDirectHash() || readSeenState();
   }
 
   openButton.addEventListener("click", beginOpening);
@@ -531,7 +527,8 @@
   if (replayButton) replayButton.hidden = false;
 
   if (shouldBypassOpening()) {
-    rememberOpenedState();
+    // A direct guide visit should not count as opening the main invitation.
+    if (!isDirectGuide) rememberOpenedState();
     setState("opened");
     dialog.hidden = true;
   } else {
