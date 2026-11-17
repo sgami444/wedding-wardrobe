@@ -1084,11 +1084,11 @@
   }
 
   .event-card {
-    --event-accent: #77541c;
-    --event-soft: rgba(119, 84, 28, 0.1);
-    --event-jewel: #481229;
-    --event-jewel-start: #701a3b;
-    --event-bright: #efcf85;
+    --event-accent: #654416;
+    --event-soft: rgba(101, 68, 22, 0.1);
+    --event-jewel: #401024;
+    --event-jewel-start: #731a3c;
+    --event-bright: #f0d18a;
     position: relative;
     scroll-margin-top: 0.65rem;
     overflow: hidden;
@@ -1099,46 +1099,6 @@
       inset 0 0 0 4px rgba(255, 255, 255, 0.58),
       inset 0 0 0 5px rgba(184, 137, 50, 0.18),
       var(--shadow-rich);
-  }
-
-  .event-card[data-theme="romantic"] {
-    --event-accent: #813650;
-    --event-soft: rgba(129, 54, 80, 0.1);
-    --event-jewel: #57162f;
-    --event-jewel-start: #852948;
-    --event-bright: #f0c7a2;
-  }
-
-  .event-card[data-theme="sacred"] {
-    --event-accent: #814622;
-    --event-soft: rgba(129, 70, 34, 0.1);
-    --event-jewel: #4f2017;
-    --event-jewel-start: #803821;
-    --event-bright: #f0c272;
-  }
-
-  .event-card[data-theme="daylight"] {
-    --event-accent: #765b1d;
-    --event-soft: rgba(118, 91, 29, 0.1);
-    --event-jewel: #4b361c;
-    --event-jewel-start: #77552b;
-    --event-bright: #f1cd7b;
-  }
-
-  .event-card[data-theme="festive"] {
-    --event-accent: #6a4134;
-    --event-soft: rgba(106, 65, 52, 0.1);
-    --event-jewel: #251611;
-    --event-jewel-start: #644035;
-    --event-bright: #e8c56e;
-  }
-
-  .event-card[data-theme="ceremonial"] {
-    --event-accent: #654416;
-    --event-soft: rgba(101, 68, 22, 0.1);
-    --event-jewel: #401024;
-    --event-jewel-start: #731a3c;
-    --event-bright: #f0d18a;
   }
 
   .event-card__draw-border {
@@ -2566,19 +2526,21 @@
   }
 
   .kankotri__seal {
-    border-color: rgba(242, 223, 169, 0.92);
+    padding: 0;
+    border: 0;
     color: var(--ivory);
-    background: radial-gradient(circle at 35% 28%, #75483c, var(--deep-teal) 48%, #251611 78%);
-    box-shadow:
-      0 0 0 0.28rem rgba(75, 48, 40, 0.66),
-      0 0 0 0.36rem rgba(212, 175, 55, 0.52),
-      0 0.7rem 1.5rem rgba(75, 48, 40, 0.22);
+    background: transparent;
+    box-shadow: none;
     animation: none;
   }
 
-  .kankotri__seal::before {
-    border-top-color: rgba(242, 223, 169, 0.96);
-    border-right-color: rgba(211, 185, 145, 0.68);
+  .kankotri__seal::before,
+  .kankotri__seal::after {
+    display: none;
+  }
+
+  .kankotri__seal img {
+    width: 100%;
   }
 
   .invitation__hint {
@@ -2639,12 +2601,11 @@
   }
 
   .monogram {
-    border-color: rgba(212, 175, 55, 0.78);
-    background: radial-gradient(circle at 38% 30%, #75483c, var(--deep-teal) 64%, #251611);
-    box-shadow:
-      0 0 0 0.2rem rgba(252, 248, 239, 0.94),
-      0 0 0 0.28rem rgba(185, 149, 79, 0.45),
-      0 0.75rem 1.8rem rgba(75, 48, 40, 0.16);
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   .hero__audience {
@@ -2910,61 +2871,17 @@
 
   .event-card,
   .event-card[data-theme] {
-    --event-accent: var(--deep-teal);
-    --event-soft: rgba(75, 48, 40, 0.075);
+    /* Every celebration uses the Wedding section's palette. */
+    --event-accent: var(--peacock-blue);
+    --event-soft: rgba(115, 64, 56, 0.1);
     --event-jewel: var(--deep-teal);
     --event-jewel-start: #644035;
     --event-bright: var(--antique-gold);
-    --event-button: #4b3028;
-    --event-button-hover: #644035;
-    --event-button-soft: rgba(75, 48, 40, 0.1);
-    --event-button-ring: #e8c56e;
-    --focus-color: var(--event-button);
-  }
-
-  .event-card[data-theme="romantic"] {
-    --event-accent: #87564e;
-    --event-soft: rgba(135, 86, 78, 0.08);
-    --event-button: #7b334b;
-    --event-button-hover: #925065;
-    --event-button-soft: rgba(123, 51, 75, 0.11);
-    --event-button-ring: #f0c7a2;
-  }
-
-  .event-card[data-theme="sacred"] {
-    --event-accent: #806a37;
-    --event-soft: rgba(185, 149, 79, 0.09);
-    --event-button: #6e351f;
-    --event-button-hover: #854d2d;
-    --event-button-soft: rgba(110, 53, 31, 0.11);
-    --event-button-ring: #f0c272;
-  }
-
-  .event-card[data-theme="daylight"] {
-    --event-accent: #6a4738;
-    --event-soft: rgba(211, 185, 145, 0.18);
-    --event-button: #6a4930;
-    --event-button-hover: #886445;
-    --event-button-soft: rgba(106, 73, 48, 0.11);
-    --event-button-ring: #f1cd7b;
-  }
-
-  .event-card[data-theme="festive"] {
-    --event-accent: var(--emerald);
-    --event-soft: rgba(211, 185, 145, 0.16);
-    --event-button: #64392e;
-    --event-button-hover: #815344;
-    --event-button-soft: rgba(100, 57, 46, 0.11);
-    --event-button-ring: #e8c56e;
-  }
-
-  .event-card[data-theme="ceremonial"] {
-    --event-accent: var(--peacock-blue);
-    --event-soft: rgba(115, 64, 56, 0.1);
     --event-button: #621f39;
     --event-button-hover: #84334d;
     --event-button-soft: rgba(98, 31, 57, 0.11);
     --event-button-ring: #f0d18a;
+    --focus-color: var(--event-button);
   }
 
   .event-card {
