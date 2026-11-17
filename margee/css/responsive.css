@@ -1,0 +1,208 @@
+/* Full-width invitation with the wardrobe's original feather artwork. */
+html {
+  overflow-x: clip;
+}
+
+body {
+  min-width: 0;
+  overflow-x: clip;
+}
+
+main,
+.section,
+.hero,
+.footer {
+  width: 100%;
+  min-width: 0;
+}
+
+.page-width {
+  width: min(1120px, calc(100% - clamp(32px, 6vw, 72px)));
+}
+
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: clamp(88px, 10vh, 116px) clamp(20px, 5vw, 72px) clamp(48px, 7vh, 80px);
+  overflow: clip;
+  background:
+    radial-gradient(circle at 14% 8%, rgba(211, 185, 145, .16), transparent 30rem),
+    #f8efe3;
+}
+
+.hero__background {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: none;
+  opacity: 1;
+}
+
+.hero__background::before,
+.hero__background::after,
+.event::before,
+.chapters::before,
+.logistics::before {
+  position: absolute;
+  width: clamp(40rem, 78vw, 90rem);
+  aspect-ratio: 1672 / 941;
+  background: url("../images/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
+  -webkit-mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 44%, rgba(0, 0, 0, .82) 58%, transparent 100%);
+  mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 44%, rgba(0, 0, 0, .82) 58%, transparent 100%);
+  pointer-events: none;
+  content: "";
+  transform-origin: 72% 88%;
+  animation: invitation-feather-sway 8s ease-in-out -2.4s infinite alternate paused;
+}
+
+.hero__background::before {
+  top: -2rem;
+  right: clamp(-30rem, -30vw, -17rem);
+  opacity: .6;
+}
+
+.hero__background::after {
+  --feather-direction: -1;
+  bottom: -5rem;
+  left: clamp(-36rem, -35vw, -23rem);
+  opacity: .15;
+  animation-duration: 11.5s;
+  animation-delay: -4.1s;
+}
+
+.event::before,
+.chapters::before,
+.logistics::before {
+  z-index: -1;
+  top: 0;
+  right: -24rem;
+  opacity: .085;
+  animation-duration: 11.5s;
+}
+
+.hero.is-motion-active .hero__background::before,
+.hero.is-motion-active .hero__background::after,
+.is-motion-active.event::before,
+.is-motion-active.chapters::before,
+.is-motion-active.logistics::before {
+  animation-play-state: running;
+}
+
+html[data-motion-paused] .hero__background::before,
+html[data-motion-paused] .hero__background::after,
+html[data-motion-paused] .section::before {
+  animation-play-state: paused;
+}
+
+@keyframes invitation-feather-sway {
+  from { transform: scaleX(var(--feather-direction, 1)) rotate(.15deg) translate3d(-1px, 1px, 0); }
+  to { transform: scaleX(var(--feather-direction, 1)) rotate(1.05deg) translate3d(3px, -2px, 0); }
+}
+
+.section,
+.footer {
+  overflow: clip;
+}
+
+.hero::before {
+  inset: clamp(12px, 2vw, 25px);
+}
+
+.hero__content,
+.event__copy,
+.info-card,
+.intro__names > * {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.monogram {
+  padding: 0;
+}
+
+.event__copy {
+  width: 100%;
+}
+
+.event__schedule,
+.cta {
+  max-width: 100%;
+}
+
+.cta,
+.site-top__right a {
+  min-height: 44px;
+}
+
+.site-top__right a {
+  display: inline-flex;
+  align-items: center;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--wine);
+  outline-offset: 5px;
+}
+
+.footer a:focus-visible {
+  outline-color: var(--gold-light);
+}
+
+@media (max-width: 800px) {
+  .event {
+    padding-block: clamp(56px, 10vw, 85px);
+  }
+
+  .event__layout {
+    gap: clamp(44px, 8vw, 64px);
+  }
+
+  .event__art {
+    width: min(480px, 92%);
+  }
+
+  .event h3 {
+    font-size: clamp(40px, 12vw, 82px);
+    line-height: 1;
+  }
+
+  .section__heading {
+    font-size: clamp(38px, 10vw, 64px);
+  }
+
+  .hero__background::before {
+    right: -24rem;
+    opacity: .42;
+  }
+
+  .footer__names {
+    font-size: clamp(48px, 12vw, 80px);
+  }
+
+  .footer__hash {
+    font-size: clamp(11px, 3vw, 15px);
+    letter-spacing: .16em;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero h1 {
+    font-size: clamp(48px, 17vw, 62px);
+  }
+
+  .info-card {
+    padding-inline: 20px;
+  }
+
+  .time-row {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__background::before,
+  .hero__background::after,
+  .section::before {
+    animation: none;
+  }
+}

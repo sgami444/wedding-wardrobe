@@ -5,6 +5,12 @@ directly in a browser or publish this folder to any static host.
 
 ## Shareable guides
 
+The separate family invitation is hosted at <https://thesamarstory.com/margee/>.
+Its HTML, scripts and artwork live in `margee/`, imported from the supplied
+`margee-sahil-version1-final` folder. Its additional `css/responsive.css` fixes
+full-width backgrounds and responsive layouts, and uses the wardrobe feather
+artwork with gentle motion that respects reduced-motion preferences.
+
 - Complete guide: <https://thesamarstory.com/wardrobe/> (All events.)
 - Family: <https://thesamarstory.com/attire/> (Carnival is omitted.)
 - Engagement: <https://thesamarstory.com/wardrobe/engagement/> (Only Sagai.)
