@@ -80,6 +80,15 @@ main,
   animation-duration: 11.5s;
 }
 
+.event--mandap::before,
+.event--garba::before {
+  --feather-direction: -1;
+  right: auto;
+  left: -24rem;
+  transform: scaleX(-1);
+  transform-origin: 50% 88%;
+}
+
 .hero.is-motion-active .hero__background::before,
 .hero.is-motion-active .hero__background::after,
 .is-motion-active.event::before,
