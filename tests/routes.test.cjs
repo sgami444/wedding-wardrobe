@@ -15,7 +15,7 @@ function loadGuide() {
 }
 
 const guides = [
-  ["/wardrobe", ["sagai", "mandap", "carnival", "garba", "wedding"]],
+  ["/wardrobe", ["mandap", "carnival", "garba", "wedding"]],
   ["/attire", ["sagai", "mandap", "garba", "wedding"]],
   ["/wardrobe/engagement", ["sagai"]],
   ["/wardrobe/garba", ["garba"]]

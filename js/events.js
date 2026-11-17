@@ -22,7 +22,7 @@
  *   and update its content. Navigation and page sections are created for you.
  *
  * AUDIENCE ROUTES
- * - `/wardrobe/` is the complete guide with every event.
+ * - `/wardrobe/` shows the February celebrations and excludes Sagai.
  * - `/attire/` is the family guide and excludes Carnival.
  * - `/wardrobe/engagement/` shows only Sagai.
  * - `/wardrobe/garba/` shows only Garba.
@@ -46,8 +46,11 @@ window.WEDDING_WARDROBE = {
 
   routes: {
     wardrobe: {
+      excludeEvents: ["sagai"],
       site: {
-        canonicalUrl: "https://thesamarstory.com/wardrobe/"
+        canonicalUrl: "https://thesamarstory.com/wardrobe/",
+        guideLabel: "Wedding celebration guide",
+        footerDates: "February 8–10, 2027"
       }
     },
     attire: {
