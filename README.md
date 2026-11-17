@@ -11,6 +11,10 @@ Its HTML, scripts and artwork live in `margee/`, imported from the supplied
 full-width backgrounds and responsive layouts, and uses the wardrobe feather
 artwork with gentle motion that respects reduced-motion preferences.
 
+The groom's family invitation is hosted at <https://thesamarstory.com/sahil/>.
+Its own Version 2 content and assets come from `margee-sahil-version2-final`
+and live in `sahil/`, with the same responsive layout and feather motion fixes.
+
 - Wedding guide: <https://thesamarstory.com/wardrobe/> (Sagai is omitted.)
 - Family: <https://thesamarstory.com/attire/> (Carnival is omitted.)
 - Engagement: <https://thesamarstory.com/wardrobe/engagement/> (Only Sagai.)
