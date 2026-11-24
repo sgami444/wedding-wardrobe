@@ -15,6 +15,12 @@ The groom's family invitation is hosted at <https://thesamarstory.com/sahil/>.
 Its own Version 2 content and assets come from `margee-sahil-version2-final`
 and live in `sahil/`, with the same responsive layout and feather motion fixes.
 
+The relatives' invitation is at <https://thesamarstory.com/margee/relatives/>.
+Its Version 4 content and assets come from `Margee_Sahil_Wedding_Version4_FINAL`
+and live in `margee/relatives/`. It includes Mandap, Grand Garba and Wedding,
+with the responsive layout and feather backdrop. The existing deployment step
+copies this nested route along with the rest of `margee/`.
+
 - Wedding guide: <https://thesamarstory.com/wardrobe/> (Sagai is omitted.)
 - Family: <https://thesamarstory.com/attire/> (Carnival is omitted.)
 - Engagement: <https://thesamarstory.com/wardrobe/engagement/> (Only Sagai.)
