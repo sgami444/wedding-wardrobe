@@ -820,3 +820,71 @@ html[data-invitation-state="opening"] .invitation--ivory .kankotri {
   25%, 80% { opacity: 1; transform: translateY(0) scale(1); }
   100% { opacity: 0; transform: translateY(-2.5vh) scale(1.018); }
 }
+
+/* Keep touch-device motion on flat composited layers with fixed scene geometry. */
+.invitation--ivory[data-mobile-motion="true"] { align-items: start; }
+.invitation--ivory[data-mobile-motion="true"] .invitation__stage {
+  --envelope-width: var(--mobile-envelope-width);
+  height: var(--mobile-stage-height);
+  max-height: none;
+  align-content: center;
+  perspective: none;
+}
+
+.invitation--ivory[data-mobile-motion="true"] .kankotri {
+  width: var(--mobile-envelope-width);
+  transform-style: flat;
+}
+
+.invitation--ivory[data-mobile-motion="true"] .kankotri__back {
+  top: 54%;
+  transition: none;
+}
+
+.invitation--ivory[data-mobile-motion="true"] .kankotri__flap {
+  z-index: 5;
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+  will-change: transform, opacity;
+}
+
+html[data-invitation-state="opening"] .invitation--ivory[data-mobile-motion="true"] .kankotri__flap {
+  animation: mobile-flap-open 650ms linear 120ms both;
+}
+
+html[data-invitation-state="opening"] .invitation--ivory[data-mobile-motion="true"] .kankotri__card {
+  animation: mobile-card-open 1350ms linear 280ms both;
+}
+
+html[data-invitation-state="opening"] .invitation--ivory[data-mobile-motion="true"] .kankotri {
+  animation: mobile-envelope-open 3580ms linear both;
+}
+
+@keyframes mobile-flap-open {
+  0% { opacity: 1; transform: scaleY(1); animation-timing-function: ease-in-out; }
+  75% { opacity: .3; transform: scaleY(.18); }
+  100% { opacity: 0; transform: scaleY(0); }
+}
+
+@keyframes mobile-card-open {
+  0% { opacity: 0; transform: translateY(28%); animation-timing-function: ease-out; }
+  55% { opacity: 1; transform: translateY(7%); animation-timing-function: ease-out; }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes mobile-envelope-open {
+  0% { opacity: 1; transform: translateY(-27%); animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
+  36%, 86% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+@media (max-width: 800px), (pointer: coarse) {
+  html[data-invitation-state="closed"] .invitation-page-shell *,
+  html[data-invitation-state="closed"] .invitation-page-shell *::before,
+  html[data-invitation-state="closed"] .invitation-page-shell *::after,
+  html[data-invitation-state="opening"] .invitation-page-shell *,
+  html[data-invitation-state="opening"] .invitation-page-shell *::before,
+  html[data-invitation-state="opening"] .invitation-page-shell *::after {
+    animation-play-state: paused !important;
+  }
+}

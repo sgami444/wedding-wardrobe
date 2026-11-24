@@ -48,6 +48,31 @@
   let state = "opened";
   let activeTimeline = null;
   let inlineStyleSnapshot = null;
+  let mobileViewportWidth = null;
+
+  function configureMobileMotion() {
+    if (!ivoryEnvelope) return;
+    const mobile = window.matchMedia("(max-width: 800px)").matches ||
+      window.matchMedia("(pointer: coarse)").matches;
+    if (!mobile) return;
+
+    // Freeze the scene before opening so browser toolbar changes cannot resize
+    // the card or move its centre in the middle of an animation.
+    const width = kankotri.getBoundingClientRect().width;
+    const height = dialog.getBoundingClientRect().height;
+    dialog.style.setProperty("--mobile-envelope-width", `${width}px`);
+    dialog.style.setProperty("--mobile-stage-height", `${height}px`);
+    dialog.dataset.mobileMotion = "true";
+    mobileViewportWidth = window.innerWidth;
+  }
+
+  function releaseMobileLayout() {
+    if (!ivoryEnvelope) return;
+    dialog.removeAttribute("data-mobile-motion");
+    dialog.style.removeProperty("--mobile-envelope-width");
+    dialog.style.removeProperty("--mobile-stage-height");
+    mobileViewportWidth = null;
+  }
 
   function readSeenState() {
     try {
@@ -149,6 +174,8 @@
     setState("opened");
     restoreInlineAnimationStyles();
 
+    releaseMobileLayout();
+
     rememberOpenedState();
     dialog.removeAttribute("aria-busy");
     document.body.classList.remove("is-invitation-open");
@@ -217,6 +244,10 @@
 
   function createWaapiTimeline() {
     const animations = [];
+    const mobileMotion = dialog.dataset.mobileMotion === "true";
+    const hintTransform = mobileMotion && invitationHint
+      ? window.getComputedStyle(invitationHint).transform
+      : "none";
 
     function add(element, keyframes, timing) {
       if (!element) return null;
@@ -231,7 +262,10 @@
 
     add(
       openButton,
-      [
+      mobileMotion ? [
+        { opacity: 1, transform: "translate(-50%, -50%)" },
+        { opacity: 0, transform: "translate(-50%, -62%)" }
+      ] : [
         { opacity: 1, transform: "translate(-50%, -50%) scale(1) rotate(0deg)" },
         {
           opacity: 1,
@@ -240,12 +274,15 @@
         },
         { opacity: 0, transform: "translate(-50%, -68%) scale(0.68) rotate(9deg)" }
       ],
-      { duration: 480, easing: "cubic-bezier(0.22, 0.72, 0.2, 1)" }
+      { duration: mobileMotion ? 280 : 480, easing: "cubic-bezier(0.22, 0.72, 0.2, 1)" }
     );
 
     add(
       invitationHint,
-      ivoryEnvelope ? [
+      mobileMotion ? [
+        { opacity: 1, transform: hintTransform },
+        { opacity: 0, transform: hintTransform }
+      ] : ivoryEnvelope ? [
         { opacity: 1, transform: "translateY(var(--envelope-closed-shift))" },
         { opacity: 0, transform: "translateY(calc(var(--envelope-closed-shift) + .35rem))" }
       ] : [
@@ -257,22 +294,30 @@
 
     add(
       envelopeFlap,
-      [
+      mobileMotion ? [
+        { opacity: 1, transform: "scaleY(1)", easing: "ease-in-out" },
+        { opacity: 0.3, offset: 0.75, transform: "scaleY(.18)" },
+        { opacity: 0, transform: "scaleY(0)" }
+      ] : [
         { zIndex: 5, transform: "rotateX(0deg)" },
         { zIndex: 5, offset: 0.48, transform: "rotateX(88deg)" },
         { zIndex: 1, offset: 0.5, transform: "rotateX(94deg)" },
         { zIndex: 1, transform: "rotateX(178deg)" }
       ],
       {
-        delay: 150,
-        duration: 940,
-        easing: "cubic-bezier(0.18, 0.74, 0.18, 1)"
+        delay: mobileMotion ? 120 : 150,
+        duration: mobileMotion ? 650 : 940,
+        easing: mobileMotion ? "linear" : "cubic-bezier(0.18, 0.74, 0.18, 1)"
       }
     );
 
     add(
       invitationCard,
-      ivoryEnvelope ? [
+      mobileMotion ? [
+        { opacity: 0, transform: "translateY(28%)", easing: "ease-out" },
+        { opacity: 1, offset: 0.55, transform: "translateY(7%)", easing: "ease-out" },
+        { opacity: 1, transform: "translateY(0)" }
+      ] : ivoryEnvelope ? [
         { opacity: 0, transform: "translateY(42%) scale(.94)" },
         { opacity: 1, offset: 0.18, transform: "translateY(12%) scale(.98)" },
         { opacity: 1, offset: 0.75, transform: "translateY(0) scale(1.005)" },
@@ -292,13 +337,13 @@
         { opacity: 1, transform: "translateY(-46%) scale(0.995)" }
       ],
       {
-        delay: 610,
-        duration: 1570,
-        easing: "cubic-bezier(0.16, 0.76, 0.18, 1)"
+        delay: mobileMotion ? 280 : 610,
+        duration: mobileMotion ? 1350 : 1570,
+        easing: mobileMotion ? "linear" : "cubic-bezier(0.16, 0.76, 0.18, 1)"
       }
     );
 
-    cardContents.forEach((element, index) => {
+    if (!mobileMotion) cardContents.forEach((element, index) => {
       add(
         element,
         [
@@ -316,7 +361,10 @@
     [envelopeBack, envelopePocket].forEach((element) => {
       add(
         element,
-        [
+        mobileMotion ? [
+          { opacity: 1, transform: "translateY(0)" },
+          { opacity: 0.14, transform: "translateY(8%)" }
+        ] : [
           { opacity: 1, transform: "translateY(0) scale(1)" },
           { opacity: 0.14, transform: "translateY(24%) scale(0.92)" }
         ],
@@ -330,7 +378,12 @@
 
     add(
       kankotri,
-      ivoryEnvelope ? [
+      mobileMotion ? [
+        { opacity: 1, transform: "translateY(-27%)", easing: "cubic-bezier(.4, 0, .2, 1)" },
+        { opacity: 1, offset: 0.36, transform: "translateY(0)" },
+        { opacity: 1, offset: 0.86, transform: "translateY(0)" },
+        { opacity: 0, transform: "translateY(0)" }
+      ] : ivoryEnvelope ? [
         { opacity: 1, transform: "translateY(-27%) scale(1)" },
         { opacity: 1, offset: 0.25, transform: "translateY(0) scale(1)" },
         { opacity: 1, offset: 0.80, transform: "translateY(0) scale(1)" },
@@ -342,11 +395,11 @@
       {
         delay: ivoryEnvelope ? 0 : 2880,
         duration: ivoryEnvelope ? 3580 : 700,
-        easing: "cubic-bezier(0.4, 0, 0.2, 1)"
+        easing: mobileMotion ? "linear" : "cubic-bezier(0.4, 0, 0.2, 1)"
       }
     );
 
-    add(
+    if (!mobileMotion) add(
       siteShell,
       [
         { opacity: 0.9, transform: "scale(1.008)" },
@@ -419,6 +472,8 @@
   function beginOpening() {
     if (state !== "closed") return;
 
+    configureMobileMotion();
+
     openButton.disabled = true;
     dialog.setAttribute("aria-busy", "true");
     rememberOpenedState();
@@ -463,6 +518,7 @@
     // Return to the closed state before restoring CSS animation declarations, so
     // an interrupted opening cannot restart for a frame during Replay.
     stopActiveTimeline({ restoreStyles: false });
+    releaseMobileLayout();
     setState("closed");
     restoreInlineAnimationStyles();
 
@@ -538,6 +594,13 @@
 
   window.addEventListener("pagehide", () => {
     if (state === "opening") finishOpening({ focus: false });
+  });
+
+  window.addEventListener("resize", () => {
+    if (state === "opening" && mobileViewportWidth !== null &&
+        Math.abs(window.innerWidth - mobileViewportWidth) > 32) {
+      finishOpening({ focus: false });
+    }
   });
 
   if (replayButton) replayButton.hidden = false;
