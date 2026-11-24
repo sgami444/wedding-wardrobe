@@ -91,7 +91,7 @@ test("direct guides still bypass the invitation with storage blocked and an irre
   }
 });
 
-test("the main page keeps every event and schedules the invitation for a new visitor", () => {
+test("the preserved wardrobe template supports the original root invitation", () => {
   const result = loadInvitation("/");
   const { WardrobeApp, WEDDING_WARDROBE } = result.context.window;
   const view = WardrobeApp.resolveRouteView(WEDDING_WARDROBE, "/");
@@ -100,7 +100,7 @@ test("the main page keeps every event and schedules the invitation for a new vis
   assert.equal(typeof result.context.window.WardrobeInvitation.replay, "function");
 });
 
-test("the main page preserves its returning-visitor and direct-event hash bypass", () => {
+test("the preserved invitation controller retains its returning-visitor and hash bypass", () => {
   for (const options of [{ seen: true }, { hash: "#event-sagai" }]) {
     const result = loadInvitation("/", options);
     assert.equal(result.frames.length, 0);
@@ -119,7 +119,7 @@ test("unrelated paths do not accidentally select a single-event guide", () => {
 });
 
 test("the shared routing API loads before the invitation script", () => {
-  const html = source("index.html");
+  const html = source("wardrobe.html");
   assert.ok(html.indexOf('src="js/app.js"') < html.indexOf('src="js/invitation.js"'));
 });
 

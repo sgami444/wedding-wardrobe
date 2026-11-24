@@ -1,7 +1,9 @@
 # Margee & Sahil's Wedding Wardrobe
 
-A mobile-first, framework-free wedding wardrobe guide. Open `index.html`
-directly in a browser or publish this folder to any static host.
+A framework-free wedding website. The home page (`index.html`) asks whose
+guest the visitor is, with links to each family's relatives invitation.
+The wardrobe template lives in `wardrobe.html`; the deployment workflow
+publishes it at the four wardrobe guide URLs.
 
 ## Shareable guides
 
@@ -21,6 +23,10 @@ and live in `margee/relatives/`. It includes Mandap, Grand Garba and Wedding,
 with the responsive layout and feather backdrop. The existing deployment step
 copies this nested route along with the rest of `margee/`.
 
+Sahil's relatives invitation is at <https://thesamarstory.com/sahil/relatives/>.
+It retains the Gami family content from `/sahil/`, shares its assets, and
+includes Mandap, Grand Garba and Wedding without Carnival.
+
 The Gujarati invitation is at <https://thesamarstory.com/margee/gujarati/>.
 Its own content, artwork and local Gujarati fonts (including licenses) come
 from `Margee_Sahil_Gujarati_Wedding_Version3_FINAL` and live in `margee/gujarati/`,
@@ -32,8 +38,9 @@ with the same responsive feather backdrop.
 - Garba: <https://thesamarstory.com/wardrobe/garba/> (Only Garba.)
 
 All four guides open directly without the invitation animation, including on
-a first visit. The main page at <https://thesamarstory.com/> keeps the original
-invitation opening experience. The footer replay button remains available.
+a first visit. The home page at <https://thesamarstory.com/> offers Margee and
+Sahil guest choices. Both relatives invitations begin with the invitation
+opening animation. The footer replay button remains available.
 
 Every invitation page under `/margee` and `/sahil` shows the envelope on page
 load, including nested and language-specific invitations. They share

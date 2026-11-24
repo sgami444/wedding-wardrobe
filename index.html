@@ -1,232 +1,28 @@
 <!doctype html>
-<html lang="en" data-motion-preference="playing">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta
-      name="description"
-      content="Margee and Sahil's wedding wardrobe guide for every celebration."
-    >
-    <meta name="theme-color" content="#4b3028">
-    <meta name="color-scheme" content="light">
-    <title>Margee &amp; Sahil's Wedding Wardrobe</title>
-    <link rel="canonical" href="https://thesamarstory.com/" data-site-canonical>
-    <link rel="icon" type="image/png" href="assets/logo/ms-monogram-burgundy.png">
-    <link rel="preload" as="image" href="assets/decor/peacock-feather-cluster-bg-v4.png" fetchpriority="high">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Italianno&amp;family=Lato:wght@300;400;700&amp;family=Playfair+Display:wght@400;500;600&amp;display=swap"
-    >
-    <link rel="stylesheet" href="css/styles.css?v=20261117-1">
-    <script src="js/events.js?v=20261117-1" defer></script>
-    <script src="js/motion-packs.js" defer></script>
-    <script src="js/app.js" defer></script>
-    <script src="js/invitation.js" defer></script>
-  </head>
-  <body>
-    <dialog
-      class="invitation"
-      data-invitation
-      aria-labelledby="invitation-title"
-      aria-describedby="invitation-hint"
-      hidden
-    >
-      <div class="invitation__atmosphere" aria-hidden="true">
-        <span></span><span></span><span></span><span></span><span></span>
-      </div>
-
-      <div class="invitation__stage">
-        <h2 class="sr-only" id="invitation-title" tabindex="-1">Margee and Sahil's wedding invitation</h2>
-
-        <div class="kankotri" data-kankotri>
-          <div class="kankotri__back" aria-hidden="true"></div>
-
-          <div class="kankotri__card" aria-hidden="true">
-            <img
-              class="kankotri__monogram"
-              src="assets/logo/ms-monogram-burgundy.png"
-              alt=""
-              width="2000"
-              height="2000"
-              decoding="async"
-            >
-            <p>Margee &amp; Sahil's</p>
-            <strong>Wedding</strong>
-            <span>Wardrobe</span>
-          </div>
-
-          <div class="kankotri__flap" aria-hidden="true"></div>
-          <div class="kankotri__pocket" aria-hidden="true"></div>
-
-          <button
-            class="kankotri__seal"
-            type="button"
-            data-invitation-open
-            aria-label="Open Margee and Sahil's wedding invitation"
-          >
-            <img
-              src="assets/logo/ms-monogram-burgundy.png"
-              alt=""
-              width="2000"
-              height="2000"
-            >
-            <span>Open invitation</span>
-          </button>
-        </div>
-
-        <p class="invitation__hint" id="invitation-hint">Tap the monogram seal to open</p>
-      </div>
-    </dialog>
-
-    <div class="site-shell" data-site-shell>
-      <a class="skip-link" href="#events">Skip to the wardrobe</a>
-
-      <header class="hero" id="top">
-        <div class="hero__scenery" aria-hidden="true"></div>
-        <div class="hero__veil" aria-hidden="true"></div>
-        <div class="hero__frame" aria-hidden="true"></div>
-        <div class="hero__ambience" aria-hidden="true">
-          <span></span><span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="hero__content">
-          <img
-            class="monogram"
-            src="assets/logo/ms-monogram-burgundy.png"
-            alt="M and S monogram"
-            width="2000"
-            height="2000"
-            decoding="async"
-            fetchpriority="high"
-          >
-          <p class="hero__audience" data-audience-badge>Complete celebration guide</p>
-          <p class="eyebrow" data-site-kicker>You're invited to celebrate</p>
-          <h1 data-site-title tabindex="-1">
-            <span class="hero__title-lead">Margee &amp; Sahil's</span>
-            <span class="hero__title-main">Wedding</span>
-            <span class="hero__title-script">Wardrobe</span>
-          </h1>
-          <div class="title-flourish" aria-hidden="true"><span></span></div>
-          <p class="hero__intro" data-site-intro>
-            We're so excited to celebrate with you. To make getting ready a
-            little easier, we've put together a wardrobe guide for each celebration.
-          </p>
-          <p class="hero__note" data-site-note>
-            Come dressed, celebrate, dance and make memories with us.
-          </p>
-          <a class="button button--primary" href="#events">
-            Explore the celebrations
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 5v14M6.5 13.5 12 19l5.5-5.5"></path>
-            </svg>
-          </a>
-        </div>
-
-        <a class="hero__scroll" href="#event-navigation" aria-label="Scroll to event navigation">
-          <span></span>
-        </a>
-      </header>
-
-      <nav class="event-nav" id="event-navigation" aria-label="Wedding events">
-        <div class="event-nav__viewport">
-          <div class="event-nav__inner" data-event-nav></div>
-        </div>
-        <div class="event-nav__progress" aria-hidden="true">
-          <span data-event-progress></span>
-        </div>
-      </nav>
-
-      <p class="sr-only" data-attire-status aria-live="polite"></p>
-
-      <main id="events" tabindex="-1">
-        <div class="peacock-parallax" data-feather-parallax aria-hidden="true">
-          <span
-            class="peacock-parallax__layer peacock-parallax__layer--top"
-            data-parallax-layer
-            data-parallax-speed="0.06"
-            data-parallax-limit="48"
-            data-parallax-drift="-0.14"
-          ><i class="peacock-parallax__art"></i></span>
-          <span
-            class="peacock-parallax__layer peacock-parallax__layer--middle"
-            data-parallax-layer
-            data-parallax-speed="0.105"
-            data-parallax-limit="64"
-            data-parallax-drift="0.12"
-          ><i class="peacock-parallax__art"></i></span>
-          <span
-            class="peacock-parallax__layer peacock-parallax__layer--lower"
-            data-parallax-layer
-            data-parallax-speed="0.155"
-            data-parallax-limit="78"
-            data-parallax-drift="-0.18"
-          ><i class="peacock-parallax__art"></i></span>
-        </div>
-
-        <div class="events-intro">
-          <p class="eyebrow" data-events-kicker>Five celebrations</p>
-          <h2>A wardrobe for every moment</h2>
-          <p>
-            Choose who you are dressing for, then step through each celebration for
-            outfit inspiration and the few styles or colours to save for another day.
-          </p>
-        </div>
-
-        <div class="events" data-events-root>
-          <noscript>
-            <p class="empty-state">
-              Please enable JavaScript to view the wedding wardrobe guide.
-            </p>
-          </noscript>
-        </div>
-      </main>
-
-      <footer class="footer">
-        <img
-          class="footer__monogram"
-          src="assets/logo/ms-monogram-burgundy.png"
-          alt=""
-          width="2000"
-          height="2000"
-          loading="lazy"
-          decoding="async"
-        >
-        <p class="footer__names" data-footer-names>Margee &amp; Sahil</p>
-        <p data-footer-dates>January 21 &amp; February 8–10, 2027</p>
-        <div class="title-flourish title-flourish--small" aria-hidden="true"><span></span></div>
-        <p class="footer__thanks" data-footer-message>
-          Thank you for dressing up and celebrating with us.
-        </p>
-        <button class="footer__replay" type="button" data-invitation-replay hidden>
-          Replay invitation
-        </button>
-        <a href="#top" class="footer__top">Back to top <span aria-hidden="true">↑</span></a>
-      </footer>
-
-      <dialog class="lightbox" data-lightbox aria-label="Outfit image viewer">
-        <button class="lightbox__close" type="button" data-lightbox-close aria-label="Close image viewer">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m6 6 12 12M18 6 6 18"></path>
-          </svg>
-        </button>
-        <button class="lightbox__nav lightbox__nav--previous" type="button" data-lightbox-previous aria-label="Previous image">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
-        </button>
-        <figure class="lightbox__figure">
-          <div class="lightbox__image-wrap">
-            <img data-lightbox-image alt="">
-          </div>
-          <figcaption>
-            <span data-lightbox-caption></span>
-            <span class="lightbox__counter" data-lightbox-counter></span>
-          </figcaption>
-        </figure>
-        <button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label="Next image">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"></path></svg>
-        </button>
-      </dialog>
-    </div>
-  </body>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f8efe3">
+<meta name="description" content="Welcome to Margee and Sahil's wedding. Choose whose guest you are to open your invitation.">
+<title>Margee &amp; Sahil | The SaMar Wedding</title>
+<link rel="canonical" href="https://thesamarstory.com/">
+<link rel="icon" type="image/png" href="/assets/logo/ms-monogram-burgundy.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&amp;family=DM+Sans:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="/css/guest-landing.css?v=20261124-1">
+</head>
+<body>
+<main class="guest-welcome">
+<img class="guest-welcome__logo" src="/assets/logo/ms-monogram-burgundy.png" alt="Margee and Sahil wedding monogram" width="2000" height="2000" fetchpriority="high">
+<p class="guest-welcome__names">Margee <span>&amp;</span> Sahil</p>
+<svg class="guest-welcome__flourish" viewBox="0 0 260 36" aria-hidden="true"><path d="M0 18h90c13 0 22-12 40-12s27 12 40 12h90M0 19h88c14 0 27 11 42 11s28-11 42-11h88" fill="none" stroke="currentColor" opacity=".7"/><path d="m130 8 9 10-9 10-9-10Z" fill="none" stroke="currentColor"/><circle cx="130" cy="18" r="3" fill="currentColor"/></svg>
+<h1 id="guest-heading">Guest of</h1>
+<nav class="guest-choices" aria-labelledby="guest-heading">
+<a href="/margee/relatives/">Margee</a>
+<a href="/sahil/relatives/">Sahil</a>
+</nav>
+</main>
+</body>
 </html>

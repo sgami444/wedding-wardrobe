@@ -41,7 +41,7 @@ jobs:
 
           for route in wardrobe attire wardrobe/engagement wardrobe/garba; do
             mkdir -p "_site/$route"
-            cp index.html "_site/$route/index.html"
+            cp wardrobe.html "_site/$route/index.html"
             cp -R assets css js "_site/$route/"
           done
 
