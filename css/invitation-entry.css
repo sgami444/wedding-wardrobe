@@ -514,7 +514,8 @@ body.is-invitation-open { overflow: hidden; }
   }
 
 
-.kankotri__seal:focus-visible { outline: 3px solid #b68a49; outline-offset: 5px; }
+.kankotri__seal:focus-visible { outline: none; }
+.kankotri__seal:focus-visible img { filter: drop-shadow(0 0 2px #9e742f); }
 html[data-invitation-state="closed"] .invitation::after {
   animation: envelope-feather-sway 7.1s ease-in-out -1.8s infinite alternate;
 }
@@ -729,7 +730,7 @@ html[lang="gu"] .invitation--ivory .kankotri__card [data-envelope-invitation] {
 .invitation--ivory .kankotri__seal {
   top: 72%;
   left: 50%;
-  width: 17.5%;
+  width: 20%;
   height: auto;
   min-width: 44px;
   min-height: 44px;
@@ -737,7 +738,11 @@ html[lang="gu"] .invitation--ivory .kankotri__card [data-envelope-invitation] {
   border-radius: 50%;
 }
 
-.invitation--ivory .kankotri__seal img { opacity: 1; }
+.invitation--ivory .kankotri__seal img {
+  width: 112%;
+  max-width: none;
+  opacity: 1;
+}
 .invitation--ivory .invitation__hint { margin-top: 1.5rem; color: #927652; font-size: .9rem; }
 
 html[data-invitation-state="opening"] .invitation--ivory .kankotri__card {
