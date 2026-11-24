@@ -21,7 +21,7 @@
   }
 
   const dialog = document.createElement("dialog");
-  dialog.className = "invitation";
+  dialog.className = "invitation invitation--ivory";
   dialog.setAttribute("data-invitation", "");
   dialog.setAttribute("aria-labelledby", "invitation-title");
   dialog.setAttribute("aria-describedby", "invitation-hint");
@@ -33,8 +33,10 @@
       <div class="kankotri" data-kankotri>
         <div class="kankotri__back" aria-hidden="true"></div>
         <div class="kankotri__card" aria-hidden="true">
+          <div class="kankotri__ganesha-slot"></div>
           <img class="kankotri__monogram" src="/assets/logo/ms-monogram-burgundy.png" alt="" width="2000" height="2000">
           <p data-envelope-names></p><strong data-envelope-wedding></strong><span data-envelope-invitation></span>
+          <div class="kankotri__flourish"></div>
         </div>
         <div class="kankotri__flap" aria-hidden="true"></div>
         <div class="kankotri__pocket" aria-hidden="true"></div>
@@ -50,7 +52,7 @@
   dialog.querySelector("#invitation-title").textContent = gujarati
     ? `${names}ના લગ્નનું આમંત્રણ`
     : `${names}'s wedding invitation`;
-  dialog.querySelector("[data-envelope-names]").textContent = names;
+  dialog.querySelector("[data-envelope-names]").textContent = gujarati ? `${names}નું` : `${names}'s`;
   dialog.querySelector("[data-envelope-wedding]").textContent = gujarati ? "લગ્નનું" : "Wedding";
   dialog.querySelector("[data-envelope-invitation]").textContent = gujarati ? "આમંત્રણ" : "Invitation";
   dialog.querySelector("[data-envelope-open-label]").textContent = openLabel;
@@ -58,5 +60,15 @@
   dialog.querySelector("#invitation-hint").textContent = gujarati
     ? "આમંત્રણ ખોલવા પ્રતીકચિહ્ન પર ટૅપ કરો"
     : "Tap the monogram seal to open";
+
+  const ganesha = document.querySelector(".hero .ganesha")?.cloneNode(true);
+  if (ganesha) {
+    ganesha.setAttribute("class", "kankotri__ganesha");
+    ganesha.querySelector("filter")?.setAttribute("id", "envelope-ganpati-gold");
+    ganesha.querySelector("image")?.setAttribute("filter", "url(#envelope-ganpati-gold)");
+    dialog.querySelector(".kankotri__ganesha-slot").append(ganesha);
+  }
+  const flourish = document.querySelector(".hero .flourish svg")?.cloneNode(true);
+  if (flourish) dialog.querySelector(".kankotri__flourish").append(flourish);
   document.body.prepend(dialog);
 })();

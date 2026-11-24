@@ -14,6 +14,7 @@
   const envelopeBack = kankotri?.querySelector(".kankotri__back");
   const invitationCard = kankotri?.querySelector(".kankotri__card");
   const cardContents = invitationCard ? Array.from(invitationCard.children) : [];
+  const ivoryEnvelope = dialog?.classList?.contains("invitation--ivory");
   const envelopeFlap = kankotri?.querySelector(".kankotri__flap");
   const envelopePocket = kankotri?.querySelector(".kankotri__pocket");
   const invitationHint = dialog?.querySelector(".invitation__hint");
@@ -268,7 +269,12 @@
 
     add(
       invitationCard,
-      [
+      ivoryEnvelope ? [
+        { opacity: 1, transform: "translateY(0) scale(1)" },
+        { opacity: 1, offset: 0.68, transform: "translateY(-8%) scale(1.005)" },
+        { opacity: 1, offset: 0.84, transform: "translateY(-6%) scale(1)" },
+        { opacity: 1, transform: "translateY(-7%) scale(1)" }
+      ] : [
         { opacity: 1, transform: "translateY(0) scale(0.92)" },
         {
           opacity: 1,
@@ -293,7 +299,7 @@
       add(
         element,
         [
-          { opacity: 0, transform: "translateY(0.4rem)" },
+          { opacity: ivoryEnvelope ? 1 : 0, transform: ivoryEnvelope ? "translateY(0)" : "translateY(0.4rem)" },
           { opacity: 1, transform: "translateY(0)" }
         ],
         {

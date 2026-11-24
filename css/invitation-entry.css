@@ -539,3 +539,212 @@ html[data-invitation-state="closed"] .invitation::after {
 @media (prefers-reduced-motion: reduce) {
   .invitation *, .invitation::after { animation: none !important; transition: none !important; }
 }
+
+/* Ivory stationery: exposed ornamental card and folded paper envelope. */
+.invitation--ivory {
+  background: radial-gradient(ellipse at center, #fffaf4, #f8f1eb);
+}
+
+.invitation--ivory::before,
+.invitation--ivory::after,
+.invitation--ivory .invitation__atmosphere {
+  display: none;
+}
+
+.invitation--ivory .kankotri {
+  width: min(90vw, 72dvh, 44rem);
+  aspect-ratio: .92;
+  container-type: inline-size;
+}
+
+.invitation--ivory .kankotri__back {
+  inset: 47% 0 0;
+  border: 1px solid #d3c3b3;
+  border-radius: 3cqw;
+  background: linear-gradient(115deg, #dfd1c3, #f0e4d7 48%, #d8c7b6);
+  box-shadow: 0 2.5cqw 4cqw #75503c26, inset 0 1px #fff7ec;
+}
+
+.invitation--ivory .kankotri__card {
+  top: 0;
+  left: 7%;
+  width: 86%;
+  height: 80%;
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #eee0ce;
+  border-radius: 2.5cqw;
+  color: #690f26;
+  background:
+    url("../assets/invitation/ivory-card-ornament.svg") center / 100% 100% no-repeat,
+    radial-gradient(ellipse at 50% 30%, #fff9ee, #fbefdf);
+  box-shadow: 0 1cqw 3cqw #76563a29, inset 0 0 0 1px #fffaf2;
+  transform: none;
+  isolation: isolate;
+}
+
+.invitation--ivory .kankotri__card::before,
+.invitation--ivory .kankotri__card::after {
+  position: absolute;
+  z-index: -1;
+  bottom: -12%;
+  width: 115%;
+  height: 75%;
+  background: url("../assets/decor/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
+  mask-image: linear-gradient(transparent, #000 45%);
+  opacity: .18;
+  content: "";
+  pointer-events: none;
+}
+
+.invitation--ivory .kankotri__card::before {
+  left: -44%;
+  transform: scaleX(-1) rotate(-12deg);
+}
+
+.invitation--ivory .kankotri__card::after {
+  right: -44%;
+  transform: rotate(-12deg);
+}
+
+.invitation--ivory .kankotri__card > * {
+  position: absolute;
+  opacity: 1;
+  transform: none;
+}
+
+.invitation--ivory .kankotri__ganesha-slot {
+  top: 1.5%;
+  left: 44%;
+  width: 12%;
+  height: 11.5%;
+}
+
+.kankotri__ganesha-slot::before,
+.kankotri__ganesha-slot::after {
+  position: absolute;
+  top: 54%;
+  width: 135%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ba9559);
+  content: "";
+}
+
+.kankotri__ganesha-slot::before { right: 140%; }
+.kankotri__ganesha-slot::after { left: 140%; transform: scaleX(-1); }
+.kankotri__ganesha { display: block; width: 100%; height: 100%; }
+
+.invitation--ivory .kankotri__monogram {
+  top: 15%;
+  left: 38.5%;
+  width: 23%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.invitation--ivory .kankotri__card [data-envelope-names] {
+  top: 39%;
+  left: 12%;
+  width: 76%;
+  margin: 0;
+  color: #9e742f;
+  font-family: var(--serif);
+  font-size: 4.3cqw;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: normal;
+  text-align: center;
+}
+
+.kankotri__card [data-envelope-names]::before,
+.kankotri__card [data-envelope-names]::after {
+  position: absolute;
+  top: 58%;
+  width: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #b99456);
+  content: "";
+}
+
+.kankotri__card [data-envelope-names]::before { left: 0; }
+.kankotri__card [data-envelope-names]::after { right: 0; transform: scaleX(-1); }
+
+.invitation--ivory .kankotri__card [data-envelope-wedding],
+.invitation--ivory .kankotri__card [data-envelope-invitation] {
+  left: 10%;
+  width: 80%;
+  margin: 0;
+  color: #690f26;
+  font-family: var(--serif);
+  font-size: 11.5cqw;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: center;
+}
+
+.invitation--ivory .kankotri__card [data-envelope-wedding] { top: 48%; }
+.invitation--ivory .kankotri__card [data-envelope-invitation] { top: 62%; }
+
+html[lang="gu"] .invitation--ivory .kankotri__card [data-envelope-wedding],
+html[lang="gu"] .invitation--ivory .kankotri__card [data-envelope-invitation] {
+  font-size: 10.5cqw;
+  line-height: 1.4;
+}
+
+.invitation--ivory .kankotri__flourish {
+  top: 80%;
+  left: 32%;
+  width: 36%;
+  height: 5%;
+  color: #b08a45;
+}
+
+.kankotri__flourish svg { display: block; width: 100%; height: 100%; }
+.invitation--ivory .kankotri__flap { visibility: hidden; }
+
+.invitation--ivory .kankotri__pocket {
+  top: 59%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: auto;
+  border: 1px solid #d2bfae;
+  border-radius: 0 0 3cqw 3cqw;
+  clip-path: polygon(0 0, 50% 49%, 100% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(25deg, transparent 49.75%, #fff7ebad 49.9%, #fff7ebad 50.05%, transparent 50.2%),
+    linear-gradient(155deg, transparent 49.75%, #fff7ebad 49.9%, #fff7ebad 50.05%, transparent 50.2%),
+    linear-gradient(25deg, #d9c8b7, #e7dacd 50%, #dfcebe);
+  box-shadow: inset 0 -1px #bea48d55;
+}
+
+/* The only monogram is on the card; its invisible button stays keyboard-accessible. */
+.invitation--ivory .kankotri__seal {
+  top: 21%;
+  left: 50%;
+  width: 19.8%;
+  height: auto;
+  min-width: 44px;
+  min-height: 44px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.invitation--ivory .kankotri__seal img { opacity: 0; }
+.invitation--ivory .invitation__hint { margin-top: 1.5rem; color: #927652; font-size: .9rem; }
+
+html[data-invitation-state="opening"] .invitation--ivory .kankotri__card {
+  animation: ivory-card-reveal 1570ms cubic-bezier(.16, .76, .18, 1) 610ms both;
+}
+
+@keyframes ivory-card-reveal {
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-7%) scale(1); }
+}
