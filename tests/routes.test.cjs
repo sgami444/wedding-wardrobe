@@ -21,7 +21,7 @@ const guides = [
   ["/wardrobe/garba", ["garba"]]
 ];
 
-function loadInvitation(pathname, { hash = "", seen = false, blockedStorage = false } = {}) {
+function loadInvitation(pathname, { hash = "", seen = false, blockedStorage = false, standalone = false } = {}) {
   const context = loadGuide();
   const nodes = new Map();
   for (const selector of [
@@ -62,6 +62,7 @@ function loadInvitation(pathname, { hash = "", seen = false, blockedStorage = fa
     CustomEvent: function () {},
     requestAnimationFrame: (callback) => frames.push(callback)
   });
+  if (standalone) delete context.window.WardrobeApp;
   vm.runInContext(source("js/invitation.js"), context);
   return { context, nodes, frames, writes, documentElement };
 }
@@ -120,4 +121,21 @@ test("unrelated paths do not accidentally select a single-event guide", () => {
 test("the shared routing API loads before the invitation script", () => {
   const html = source("index.html");
   assert.ok(html.indexOf('src="js/app.js"') < html.indexOf('src="js/invitation.js"'));
+});
+
+test("all invitation routes show the envelope on every load without wardrobe dependencies", () => {
+  for (const path of ["/margee", "/sahil", "/margee/relatives/", "/margee/gujarati/", "/sahil/relatives/"]) {
+    for (const options of [{}, { seen: true }, { hash: "#events" }, { blockedStorage: true }]) {
+      const result = loadInvitation(path, { ...options, standalone: true });
+      assert.equal(result.frames.length, 1, `${path} should schedule the envelope`);
+    }
+  }
+});
+
+test("wardrobe paths always skip the envelope, including nested guides", () => {
+  for (const path of ["/wardrobe/", "/wardrobe/engagement", "/wardrobe/garba", "/wardrobe/future-guide", "/attire/"]) {
+    const result = loadInvitation(path, { standalone: true });
+    assert.equal(result.frames.length, 0);
+    assert.equal(result.nodes.get("[data-invitation]").hidden, true);
+  }
 });

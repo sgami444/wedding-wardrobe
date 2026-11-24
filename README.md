@@ -35,6 +35,11 @@ All four guides open directly without the invitation animation, including on
 a first visit. The main page at <https://thesamarstory.com/> keeps the original
 invitation opening experience. The footer replay button remains available.
 
+Every invitation page under `/margee` and `/sahil` shows the envelope on page
+load, including nested and language-specific invitations. They share
+`js/invitation-entry.js`, `js/invitation.js` and `css/invitation-entry.css`.
+Wardrobe and attire routes always bypass the envelope.
+
 The views are configured in the `routes` object in `js/events.js`. Routes can
 list event IDs in `includeEvents` or `excludeEvents`, while event content still
 lives in one shared `events` array. The GitHub Pages workflow generates each

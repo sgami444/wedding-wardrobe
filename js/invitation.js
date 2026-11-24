@@ -20,11 +20,12 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const storageKey = "samarstory:kankotri:v2";
   const timelineDuration = 3700;
-  const routeView = window.WardrobeApp.resolveRouteView(
+  const routeView = window.WardrobeApp?.resolveRouteView(
     window.WEDDING_WARDROBE,
     window.location.pathname
-  );
-  const isDirectGuide = Boolean(routeView.key);
+  ) || { key: "", events: [] };
+  const isDirectGuide = Boolean(routeView.key) || /^\/(wardrobe|attire)(\/|$)/i.test(window.location.pathname);
+  const isInvitationPage = /^\/(margee|sahil)(\/|$)/i.test(window.location.pathname);
 
   if (!dialog || !siteShell || !openButton || !kankotri) return;
 
@@ -499,6 +500,7 @@
   }
 
   function shouldBypassOpening() {
+    if (isInvitationPage) return false;
     return isDirectGuide || isValidDirectHash() || readSeenState();
   }
 

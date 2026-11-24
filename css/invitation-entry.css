@@ -1,0 +1,541 @@
+/* Reuse the original envelope presentation without applying wardrobe page styles. */
+html.js-enabled:not([data-invitation-state]) body { visibility: hidden; }
+html[data-invitation-state="closed"],
+html[data-invitation-state="opening"] { overflow: hidden; }
+body.is-invitation-open { overflow: hidden; }
+.invitation, .invitation *, .invitation::before, .invitation::after { box-sizing: border-box; }
+.invitation {
+  --ivory: #f5eedf;
+  --ivory-100: var(--ivory);
+  --plum-950: #251611;
+  --deep-teal: #4b3028;
+  --warm-charcoal: #403b36;
+  --blush-400: #cda99a;
+  --script: var(--serif);
+}
+.invitation[hidden] { display: none; }
+.invitation__title {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+
+  .invitation {
+    position: fixed;
+    z-index: 2500;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    color: var(--ivory-100);
+    background:
+      linear-gradient(180deg, rgba(21, 8, 21, 0.05), rgba(21, 8, 21, 0.42)),
+      linear-gradient(var(--plum-950), var(--plum-950));
+    isolation: isolate;
+  }
+
+  .invitation[open] {
+    display: grid;
+    place-items: center;
+  }
+
+  .invitation::backdrop {
+    background: transparent;
+  }
+
+  .invitation::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 43%, rgba(124, 28, 61, 0.18), transparent 39%),
+      linear-gradient(180deg, rgba(21, 8, 21, 0.02), rgba(21, 8, 21, 0.4));
+    content: "";
+    pointer-events: none;
+  }
+
+  .invitation__jasmine {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .invitation__jasmine img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: 50% 6%;
+  }
+
+  html[data-invitation-state="closed"]:not([data-motion-preference="reduced"]) .invitation__jasmine img {
+    animation: jasmine-sway 6.5s ease-in-out infinite alternate;
+  }
+
+  .invitation__stage {
+    position: relative;
+    display: grid;
+    width: 100%;
+    max-height: 100%;
+    place-items: center;
+    padding:
+      max(1rem, env(safe-area-inset-top))
+      max(0.75rem, env(safe-area-inset-right))
+      max(1rem, env(safe-area-inset-bottom))
+      max(0.75rem, env(safe-area-inset-left));
+    perspective: 1500px;
+    text-align: center;
+  }
+
+  .invitation__atmosphere,
+  .invitation__atmosphere span {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .invitation__atmosphere span {
+    top: auto;
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 50%;
+    background: rgba(255, 230, 178, 0.9);
+    box-shadow: 0 0 1rem rgba(242, 181, 68, 0.72);
+    animation: invitation-mote 8s linear infinite;
+  }
+
+  .invitation__atmosphere span:nth-child(1) { left: 12%; animation-delay: -1.2s; }
+  .invitation__atmosphere span:nth-child(2) { left: 29%; animation-delay: -5s; animation-duration: 9.2s; }
+  .invitation__atmosphere span:nth-child(3) { left: 62%; animation-delay: -3.4s; animation-duration: 8.6s; }
+  .invitation__atmosphere span:nth-child(4) { left: 77%; animation-delay: -6.1s; animation-duration: 10.2s; }
+  .invitation__atmosphere span:nth-child(5) { left: 89%; animation-delay: -2.4s; animation-duration: 9s; }
+
+  .kankotri {
+    position: relative;
+    width: min(88vw, 64dvh, 36rem);
+    aspect-ratio: 1.42 / 1;
+    transform-style: preserve-3d;
+  }
+
+  .kankotri__back {
+    position: absolute;
+    z-index: 1;
+    inset: 18% 2% 3%;
+    border: 1px solid rgba(232, 197, 110, 0.9);
+    border-radius: 0.7rem;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 35%),
+      radial-gradient(circle at 50% 0, rgba(242, 181, 68, 0.18), transparent 48%),
+      linear-gradient(150deg, #7b1c3d, #4d112d 48%, #280b20);
+    box-shadow:
+      0 1.8rem 2.8rem rgba(0, 0, 0, 0.4),
+      inset 0 0 0 0.28rem rgba(76, 28, 45, 0.72),
+      inset 0 0 0 0.36rem rgba(232, 197, 110, 0.48);
+  }
+
+  .kankotri__card {
+    position: absolute;
+    z-index: 2;
+    top: 17%;
+    left: 14%;
+    display: grid;
+    width: 72%;
+    height: 78%;
+    align-content: center;
+    justify-items: center;
+    padding: 9% 8%;
+    border: 1px solid rgba(232, 197, 110, 0.88);
+    border-radius: 0.45rem;
+    color: #5d2134;
+    background:
+      linear-gradient(rgba(255, 250, 240, 0.78), rgba(255, 250, 240, 0.78)),
+      url("../assets/invitation/kankotri-card.webp") center / cover no-repeat;
+    box-shadow: 0 0.8rem 2rem rgba(15, 5, 12, 0.3);
+    transform: translateY(0) scale(0.92);
+    transform-origin: center bottom;
+    will-change: transform, opacity;
+  }
+
+  .kankotri__monogram {
+    width: clamp(4rem, 17vw, 7.1rem);
+    height: auto;
+    margin-bottom: 0.15rem;
+    aspect-ratio: 1;
+    object-fit: contain;
+  }
+
+  .kankotri__card p {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(0.7rem, 2.8vw, 1.1rem);
+    letter-spacing: 0.12em;
+  }
+
+  .kankotri__card strong {
+    margin-top: 0.1rem;
+    font-family: var(--serif);
+    font-size: clamp(1.3rem, 5.8vw, 2.65rem);
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .kankotri__card > span {
+    color: var(--blush-400);
+    font-family: var(--script);
+    font-size: clamp(2.15rem, 9vw, 4.4rem);
+    line-height: 0.9;
+  }
+
+  .kankotri__card > * {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+
+  html[data-invitation-state="opening"] .kankotri__card > * {
+    opacity: 1;
+    transform: none;
+    transition: opacity 460ms ease 700ms, transform 460ms ease 700ms;
+  }
+
+  /*
+   * Resilient CSS opening sequence for browsers without Web Animations.
+   * invitation.js suppresses these declarations while its synchronized WAAPI
+   * timeline is active, so both implementations share the same state without
+   * competing for transforms.
+   */
+  html[data-invitation-state="opening"] .kankotri__flap {
+    animation: invitation-flap-fallback 900ms cubic-bezier(0.22, 0.68, 0.2, 1) 160ms forwards;
+  }
+
+  html[data-invitation-state="opening"] .kankotri__card {
+    animation: invitation-card-fallback 1.55s cubic-bezier(0.18, 0.72, 0.2, 1) 620ms forwards;
+  }
+
+  html[data-invitation-state="opening"] .kankotri__pocket {
+    animation: invitation-pocket-fallback 1.12s ease 1.35s forwards;
+  }
+
+  html[data-invitation-state="opening"] .kankotri__seal {
+    animation: invitation-seal-exit-fallback 240ms ease-out forwards;
+  }
+
+  html[data-invitation-state="opening"] .kankotri {
+    animation: invitation-envelope-exit-fallback 700ms cubic-bezier(0.4, 0, 0.2, 1) 2.88s forwards;
+  }
+
+  html[data-invitation-state="opening"] .invitation {
+    animation: invitation-dialog-exit-fallback 700ms cubic-bezier(0.4, 0, 0.2, 1) 3s forwards;
+  }
+
+  .kankotri__flap {
+    position: absolute;
+    z-index: 5;
+    top: 18%;
+    left: 2%;
+    width: 96%;
+    height: 49%;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 42%),
+      linear-gradient(145deg, #861a3f, #4a1029 55%, #2b0c22);
+    box-shadow: inset 0 1px rgba(255, 225, 156, 0.7);
+    transform: rotateX(0deg);
+    transform-origin: 50% 0;
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  .kankotri__flap::after {
+    position: absolute;
+    inset: 0.35rem;
+    clip-path: inherit;
+    border-top: 1px solid rgba(232, 197, 110, 0.74);
+    background: radial-gradient(circle at 50% 5%, rgba(242, 181, 68, 0.14), transparent 52%);
+    content: "";
+  }
+
+  .kankotri__pocket {
+    position: absolute;
+    z-index: 4;
+    right: 2%;
+    bottom: 3%;
+    left: 2%;
+    height: 58%;
+    overflow: hidden;
+    border: 1px solid rgba(232, 197, 110, 0.78);
+    border-radius: 0 0 0.7rem 0.7rem;
+    background:
+      linear-gradient(155deg, transparent 49.4%, rgba(232, 197, 110, 0.32) 50%, transparent 50.6%),
+      linear-gradient(25deg, transparent 49.4%, rgba(232, 197, 110, 0.32) 50%, transparent 50.6%),
+      linear-gradient(150deg, #741737, #4a1029 54%, #310d22);
+    clip-path: polygon(0 0, 50% 47%, 100% 0, 100% 100%, 0 100%);
+    will-change: transform, opacity;
+  }
+
+  .kankotri__seal {
+    position: absolute;
+    z-index: 7;
+    top: 49%;
+    left: 50%;
+    display: grid;
+    width: clamp(4.7rem, 18vw, 6.4rem);
+    height: clamp(4.7rem, 18vw, 6.4rem);
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 229, 168, 0.88);
+    border-radius: 50%;
+    place-items: center;
+    color: var(--ivory-100);
+    background: radial-gradient(circle at 35% 28%, #b93a59, #7c173a 42%, #4a1029 76%);
+    box-shadow:
+      0 0 0 0.3rem rgba(74, 16, 41, 0.68),
+      0 0 0 0.38rem rgba(232, 197, 110, 0.5),
+      0 0.85rem 1.6rem rgba(16, 4, 12, 0.42);
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    isolation: isolate;
+    animation: invitation-seal-pulse 3s ease-in-out infinite;
+  }
+
+  .kankotri__seal::before,
+  .kankotri__seal::after {
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+  }
+
+  .kankotri__seal::before {
+    z-index: 0;
+    inset: -0.48rem;
+    border: 1px solid transparent;
+    border-top-color: rgba(255, 226, 150, 0.95);
+    border-right-color: rgba(255, 226, 150, 0.38);
+    animation: seal-ring-shimmer 4.2s linear infinite;
+  }
+
+  .kankotri__seal::after {
+    z-index: 2;
+    inset: 0.36rem;
+    background: linear-gradient(115deg, transparent 28%, rgba(255, 245, 205, 0.58) 47%, transparent 64%);
+    opacity: 0;
+    animation: seal-face-shimmer 3.6s ease-in-out infinite;
+  }
+
+  .kankotri__seal img {
+    position: relative;
+    z-index: 1;
+    width: 82%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: contain;
+  }
+
+  .kankotri__seal span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .invitation__hint {
+    margin: 0.35rem 0 0;
+    color: rgba(255, 247, 232, 0.88);
+    font-family: var(--serif);
+    font-size: clamp(0.86rem, 3vw, 1rem);
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.82);
+  }
+
+  html[data-invitation-state="opening"] .invitation__hint {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+  }
+
+  @keyframes invitation-flap-fallback {
+    0% { z-index: 5; transform: rotateX(0deg); }
+    49% { z-index: 5; transform: rotateX(90deg); }
+    50%, 100% { z-index: 1; transform: rotateX(178deg); }
+  }
+
+  @keyframes invitation-card-fallback {
+    0% { opacity: 1; transform: translateY(0) scale(0.92); }
+    72%, 100% { opacity: 1; transform: translateY(-104%) scale(1); }
+  }
+
+  @keyframes invitation-pocket-fallback {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0.86; transform: translateY(0.7rem); }
+  }
+
+  @keyframes invitation-seal-exit-fallback {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    to { opacity: 0; transform: translate(-50%, -50%) scale(0.82); }
+  }
+
+  @keyframes invitation-envelope-exit-fallback {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(-2.5vh) scale(1.018); }
+  }
+
+  @keyframes invitation-dialog-exit-fallback {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  .invitation {
+    color: var(--warm-charcoal);
+    background:
+      radial-gradient(circle at 18% 12%, rgba(211, 185, 145, 0.16), transparent 24rem),
+      #f8efe3;
+  }
+
+  .invitation::before {
+    z-index: 0;
+    background:
+      linear-gradient(90deg, rgba(185, 149, 79, 0.025) 1px, transparent 1px),
+      linear-gradient(rgba(185, 149, 79, 0.025) 1px, transparent 1px);
+    background-size: 3rem 3rem;
+  }
+
+  .invitation::after {
+    position: absolute;
+    z-index: 0;
+    top: -1rem;
+    right: -24rem;
+    bottom: auto;
+    left: auto;
+    width: 64rem;
+    height: auto;
+    aspect-ratio: 1672 / 941;
+    background: url("../assets/decor/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
+    content: "";
+    -webkit-mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 48%, rgba(0, 0, 0, 0.9) 60%, transparent 100%);
+    mask-image: radial-gradient(ellipse 68% 61% at 78% 35%, #000 0%, #000 48%, rgba(0, 0, 0, 0.9) 60%, transparent 100%);
+    opacity: 0.62;
+    pointer-events: none;
+    transform: rotate(0.6deg);
+    transform-origin: 70% 88%;
+  }
+
+  .invitation__jasmine {
+    display: none;
+  }
+
+  .invitation__stage {
+    z-index: 1;
+  }
+
+  .invitation__atmosphere {
+    z-index: 0;
+    opacity: 0.45;
+  }
+
+  .invitation__atmosphere span {
+    background: rgba(185, 149, 79, 0.68);
+    box-shadow: none;
+  }
+
+  .kankotri__back {
+    border-color: rgba(212, 175, 55, 0.72);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 38%),
+      linear-gradient(150deg, #75483c, var(--deep-teal) 50%, #251611);
+    box-shadow:
+      0 1.2rem 2.4rem rgba(75, 48, 40, 0.2),
+      inset 0 0 0 0.28rem rgba(37, 22, 17, 0.42),
+      inset 0 0 0 0.36rem rgba(210, 163, 62, 0.36);
+  }
+
+  .kankotri__card {
+    border-color: rgba(185, 149, 79, 0.62);
+    color: var(--warm-charcoal);
+    background:
+      linear-gradient(rgba(252, 248, 239, 0.92), rgba(252, 248, 239, 0.92)),
+      url("../assets/invitation/kankotri-card.webp") center / cover no-repeat;
+    box-shadow: 0 0.7rem 1.8rem rgba(64, 59, 54, 0.15);
+  }
+
+  .kankotri__card > span {
+    color: var(--deep-teal);
+  }
+
+  .kankotri__flap {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 42%),
+      linear-gradient(145deg, #75483c, var(--deep-teal) 56%, #251611);
+    box-shadow: inset 0 1px rgba(229, 203, 137, 0.76);
+  }
+
+  .kankotri__flap::after {
+    border-top-color: rgba(212, 175, 55, 0.62);
+    background: radial-gradient(circle at 50% 5%, rgba(211, 185, 145, 0.18), transparent 52%);
+  }
+
+  .kankotri__pocket {
+    border-color: rgba(212, 175, 55, 0.62);
+    background:
+      linear-gradient(155deg, transparent 49.4%, rgba(212, 175, 55, 0.26) 50%, transparent 50.6%),
+      linear-gradient(25deg, transparent 49.4%, rgba(212, 175, 55, 0.26) 50%, transparent 50.6%),
+      linear-gradient(150deg, #644035, var(--deep-teal) 54%, #251611);
+  }
+
+  .kankotri__seal {
+    padding: 0;
+    border: 0;
+    color: var(--ivory);
+    background: transparent;
+    box-shadow: none;
+    animation: none;
+  }
+
+  .kankotri__seal::before,
+  .kankotri__seal::after {
+    display: none;
+  }
+
+  .kankotri__seal img {
+    width: 100%;
+  }
+
+  .invitation__hint {
+    color: var(--deep-teal);
+    text-shadow: none;
+  }
+
+
+.kankotri__seal:focus-visible { outline: 3px solid #b68a49; outline-offset: 5px; }
+html[data-invitation-state="closed"] .invitation::after {
+  animation: envelope-feather-sway 7.1s ease-in-out -1.8s infinite alternate;
+}
+@keyframes envelope-feather-sway {
+  from { transform: rotate(.15deg) translate3d(-1px, 1px, 0); }
+  to { transform: rotate(1.05deg) translate3d(3px, -2px, 0); }
+}
+@keyframes invitation-mote {
+  0% { opacity: 0; transform: translate3d(0, 8vh, 0) scale(.65); }
+  18% { opacity: .78; }
+  72% { opacity: .4; }
+  100% { opacity: 0; transform: translate3d(1.2rem, -92vh, 0) scale(1.15); }
+}
+@media (max-width: 30rem) {
+  .invitation::after { right: -28rem; opacity: .5; }
+}
+@media (max-height: 30rem) and (orientation: landscape) {
+  .kankotri { width: min(60vw, 70dvh); }
+  .kankotri__seal { width: min(18vw, 20dvh); height: min(18vw, 20dvh); }
+  .invitation__stage { padding-block: .5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .invitation *, .invitation::after { animation: none !important; transition: none !important; }
+}
