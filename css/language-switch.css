@@ -1,15 +1,23 @@
 .site-top > .language-switch {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  min-width: 96px;
-  min-height: 44px;
-  padding: 9px 18px;
+  gap: 4px;
+  padding: 4px;
   border: 1px solid var(--gold);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.language-switch > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 84px;
+  min-height: 44px;
+  padding: 8px 14px;
   border-radius: 4px;
   color: var(--wine);
-  background: var(--paper);
   font-family: Arial, sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -21,16 +29,25 @@
   transition: color 180ms ease, background-color 180ms ease;
 }
 
-.site-top > .language-switch[lang="gu"] {
+.language-switch > a[lang="gu"] {
   font-family: "Noto Sans Gujarati", sans-serif;
 }
 
-.site-top > .language-switch:hover {
+.language-switch > a:hover {
+  background: rgba(182, 138, 73, .14);
+}
+
+.language-switch > a[aria-current="page"] {
   color: var(--paper);
   background: var(--wine);
+  font-weight: 700;
 }
 
 @media (max-width: 800px) {
+  .site-top {
+    padding-top: 76px;
+  }
+
   .site-top > .language-switch {
     position: absolute;
     top: 17px;
@@ -40,7 +57,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-top > .language-switch {
+  .language-switch > a {
     transition: none;
   }
 }
