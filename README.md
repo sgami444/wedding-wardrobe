@@ -21,6 +21,11 @@ and live in `margee/relatives/`. It includes Mandap, Grand Garba and Wedding,
 with the responsive layout and feather backdrop. The existing deployment step
 copies this nested route along with the rest of `margee/`.
 
+The Gujarati invitation is at <https://thesamarstory.com/margee/gujarati/>.
+Its own content, artwork and local Gujarati fonts (including licenses) come
+from `Margee_Sahil_Gujarati_Wedding_Version3_FINAL` and live in `margee/gujarati/`,
+with the same responsive feather backdrop.
+
 - Wedding guide: <https://thesamarstory.com/wardrobe/> (Sagai is omitted.)
 - Family: <https://thesamarstory.com/attire/> (Carnival is omitted.)
 - Engagement: <https://thesamarstory.com/wardrobe/engagement/> (Only Sagai.)
