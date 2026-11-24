@@ -725,11 +725,11 @@ html[lang="gu"] .invitation--ivory .kankotri__card [data-envelope-invitation] {
   box-shadow: inset 0 -1px #bea48d55;
 }
 
-/* The only monogram is on the card; its invisible button stays keyboard-accessible. */
+/* The seal uses the supplied monogram, with no additional circular frame. */
 .invitation--ivory .kankotri__seal {
-  top: 21%;
+  top: 72%;
   left: 50%;
-  width: 19.8%;
+  width: 17.5%;
   height: auto;
   min-width: 44px;
   min-height: 44px;
@@ -737,7 +737,7 @@ html[lang="gu"] .invitation--ivory .kankotri__card [data-envelope-invitation] {
   border-radius: 50%;
 }
 
-.invitation--ivory .kankotri__seal img { opacity: 0; }
+.invitation--ivory .kankotri__seal img { opacity: 1; }
 .invitation--ivory .invitation__hint { margin-top: 1.5rem; color: #927652; font-size: .9rem; }
 
 html[data-invitation-state="opening"] .invitation--ivory .kankotri__card {
@@ -745,6 +745,73 @@ html[data-invitation-state="opening"] .invitation--ivory .kankotri__card {
 }
 
 @keyframes ivory-card-reveal {
-  from { transform: translateY(0) scale(1); }
-  to { transform: translateY(-7%) scale(1); }
+  0% { opacity: 0; transform: translateY(42%) scale(.94); }
+  18% { opacity: 1; transform: translateY(12%) scale(.98); }
+  75%, 100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Closed paper envelope; the decorated portrait card emerges after the seal opens. */
+.invitation--ivory .invitation__stage {
+  --envelope-width: min(90vw, 72dvh, 44rem);
+  --envelope-closed-shift: calc(var(--envelope-width) * -.293478);
+}
+
+.invitation--ivory .kankotri { transform: translateY(-27%); }
+
+.invitation--ivory .kankotri__back {
+  overflow: hidden;
+  transition: top 700ms ease;
+  background:
+    url("../assets/invitation/ivory-paper-grain.svg") center / 180px repeat,
+    linear-gradient(120deg, #ecddcd, #f3e6d8 54%, #ead8c7);
+}
+
+html[data-invitation-state="closed"] .invitation--ivory .kankotri__back { top: 54%; }
+.invitation--ivory .kankotri__card { opacity: 0; transform: translateY(42%) scale(.94); }
+
+.invitation--ivory .kankotri__flap {
+  top: 54%;
+  left: 0;
+  width: 100%;
+  height: 34%;
+  visibility: visible;
+  clip-path: none;
+  background: url("../assets/invitation/ivory-envelope-flap.svg") center top / 100% 100% no-repeat;
+  box-shadow: none;
+}
+
+.invitation--ivory .kankotri__flap::after { display: none; }
+
+.invitation--ivory .kankotri__pocket {
+  background:
+    linear-gradient(25deg, transparent 49.75%, #fff7ebad 49.9%, #fff7ebad 50.05%, transparent 50.2%),
+    linear-gradient(155deg, transparent 49.75%, #fff7ebad 49.9%, #fff7ebad 50.05%, transparent 50.2%),
+    url("../assets/invitation/ivory-paper-grain.svg") center / 180px repeat,
+    linear-gradient(25deg, #e3d1bf, #f0e1d1 50%, #e8d7c5);
+}
+
+.invitation--ivory .kankotri__pocket::before {
+  position: absolute;
+  left: -50%;
+  bottom: -40%;
+  width: 120%;
+  height: 160%;
+  background: url("../assets/decor/peacock-feather-cluster-bg-v4.png") center / contain no-repeat;
+  transform: scaleX(-1);
+  mix-blend-mode: multiply;
+  opacity: .18;
+  content: "";
+  pointer-events: none;
+}
+
+.invitation--ivory .invitation__hint { transform: translateY(var(--envelope-closed-shift)); }
+
+html[data-invitation-state="opening"] .invitation--ivory .kankotri {
+  animation: ivory-envelope-unfold 3580ms cubic-bezier(.4, 0, .2, 1) both;
+}
+
+@keyframes ivory-envelope-unfold {
+  0% { opacity: 1; transform: translateY(-27%) scale(1); }
+  25%, 80% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-2.5vh) scale(1.018); }
 }

@@ -245,7 +245,10 @@
 
     add(
       invitationHint,
-      [
+      ivoryEnvelope ? [
+        { opacity: 1, transform: "translateY(var(--envelope-closed-shift))" },
+        { opacity: 0, transform: "translateY(calc(var(--envelope-closed-shift) + .35rem))" }
+      ] : [
         { opacity: 1, transform: "translateY(0)" },
         { opacity: 0, transform: "translateY(0.35rem)" }
       ],
@@ -270,10 +273,10 @@
     add(
       invitationCard,
       ivoryEnvelope ? [
-        { opacity: 1, transform: "translateY(0) scale(1)" },
-        { opacity: 1, offset: 0.68, transform: "translateY(-8%) scale(1.005)" },
-        { opacity: 1, offset: 0.84, transform: "translateY(-6%) scale(1)" },
-        { opacity: 1, transform: "translateY(-7%) scale(1)" }
+        { opacity: 0, transform: "translateY(42%) scale(.94)" },
+        { opacity: 1, offset: 0.18, transform: "translateY(12%) scale(.98)" },
+        { opacity: 1, offset: 0.75, transform: "translateY(0) scale(1.005)" },
+        { opacity: 1, transform: "translateY(0) scale(1)" }
       ] : [
         { opacity: 1, transform: "translateY(0) scale(0.92)" },
         {
@@ -318,8 +321,8 @@
           { opacity: 0.14, transform: "translateY(24%) scale(0.92)" }
         ],
         {
-          delay: 1430,
-          duration: 1120,
+          delay: ivoryEnvelope ? 2450 : 1430,
+          duration: ivoryEnvelope ? 500 : 1120,
           easing: "cubic-bezier(0.22, 0.65, 0.28, 1)"
         }
       );
@@ -327,13 +330,18 @@
 
     add(
       kankotri,
-      [
+      ivoryEnvelope ? [
+        { opacity: 1, transform: "translateY(-27%) scale(1)" },
+        { opacity: 1, offset: 0.25, transform: "translateY(0) scale(1)" },
+        { opacity: 1, offset: 0.80, transform: "translateY(0) scale(1)" },
+        { opacity: 0, transform: "translateY(-2.5vh) scale(1.018)" }
+      ] : [
         { opacity: 1, transform: "translateY(0) scale(1)" },
         { opacity: 0, transform: "translateY(-2.5vh) scale(1.018)" }
       ],
       {
-        delay: 2880,
-        duration: 700,
+        delay: ivoryEnvelope ? 0 : 2880,
+        duration: ivoryEnvelope ? 3580 : 700,
         easing: "cubic-bezier(0.4, 0, 0.2, 1)"
       }
     );
