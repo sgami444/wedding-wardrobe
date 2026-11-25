@@ -27,6 +27,45 @@
   ) || { key: "", events: [] };
   const isDirectGuide = Boolean(routeView.key) || /^\/(wardrobe|attire)(\/|$)/i.test(window.location.pathname);
   const isInvitationPage = /^\/(margee|sahil)(\/|$)/i.test(window.location.pathname);
+  const isLanguageSwitch = configureLanguageSwitch();
+
+  function configureLanguageSwitch() {
+    const languagePaths = ["/margee/relatives", "/margee/gujarati"];
+    const normalizePath = (path) => path.replace(/\/index\.html$/i, "").replace(/\/$/, "");
+    if (!languagePaths.includes(normalizePath(window.location.pathname))) return false;
+
+    // Only a language-toggle navigation carries this temporary marker. Remove
+    // it immediately so reloads and copied destination URLs keep the envelope.
+    let skipEnvelope = false;
+    try {
+      const current = new URL(window.location.href);
+      if (current.searchParams.get("language-switch") === "1") {
+        const referrer = document.referrer ? new URL(document.referrer) : null;
+        skipEnvelope = Boolean(referrer && referrer.origin === current.origin &&
+          languagePaths.includes(normalizePath(referrer.pathname)) &&
+          normalizePath(referrer.pathname) !== normalizePath(current.pathname));
+        current.searchParams.delete("language-switch");
+        window.history.replaceState(window.history.state, "", current.pathname + current.search + current.hash);
+      }
+    } catch (_error) {
+      // Ordinary invitation entry still works if URL/history access is blocked.
+    }
+
+    document.addEventListener("click", (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey ||
+          event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.target.closest?.(".language-switch a");
+      if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
+      const destination = new URL(link.href, window.location.href);
+      if (destination.origin !== window.location.origin ||
+          !languagePaths.includes(normalizePath(destination.pathname)) ||
+          normalizePath(destination.pathname) === normalizePath(window.location.pathname)) return;
+      event.preventDefault();
+      destination.searchParams.set("language-switch", "1");
+      window.location.assign(destination.href);
+    });
+    return skipEnvelope;
+  }
 
   if (!dialog || !siteShell || !openButton || !kankotri) return;
 
@@ -570,6 +609,7 @@
   }
 
   function shouldBypassOpening() {
+    if (isLanguageSwitch) return true;
     if (isInvitationPage) return false;
     return isDirectGuide || isValidDirectHash() || readSeenState();
   }

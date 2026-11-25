@@ -21,7 +21,7 @@ const guides = [
   ["/wardrobe/garba", ["garba"]]
 ];
 
-function loadInvitation(pathname, { hash = "", seen = false, blockedStorage = false, standalone = false } = {}) {
+function loadInvitation(pathname, { hash = "", search = "", referrer = "", seen = false, blockedStorage = false, standalone = false } = {}) {
   const context = loadGuide();
   const nodes = new Map();
   for (const selector of [
@@ -36,9 +36,11 @@ function loadInvitation(pathname, { hash = "", seen = false, blockedStorage = fa
   }
   const frames = [];
   const writes = [];
+  const historyReplacements = [];
   const documentElement = { dataset: {} };
   Object.assign(context.window, {
-    location: { pathname, hash },
+    location: { pathname, hash, href: `https://thesamarstory.com${pathname}${search}${hash}`, origin: "https://thesamarstory.com" },
+    history: { state: null, replaceState(_state, _title, url) { historyReplacements.push(url); } },
     matchMedia: () => ({ matches: false, addEventListener() {} }),
     addEventListener() {},
     sessionStorage: {
@@ -54,17 +56,19 @@ function loadInvitation(pathname, { hash = "", seen = false, blockedStorage = fa
   });
   Object.assign(context, {
     document: {
+      referrer,
       documentElement,
       querySelector: (selector) => nodes.get(selector) || null,
       addEventListener() {},
       dispatchEvent() {}
     },
     CustomEvent: function () {},
+    URL,
     requestAnimationFrame: (callback) => frames.push(callback)
   });
   if (standalone) delete context.window.WardrobeApp;
   vm.runInContext(source("js/invitation.js"), context);
-  return { context, nodes, frames, writes, documentElement };
+  return { context, nodes, frames, writes, documentElement, historyReplacements };
 }
 
 for (const [path, eventIds] of guides) {
@@ -138,4 +142,31 @@ test("wardrobe paths always skip the envelope, including nested guides", () => {
     assert.equal(result.frames.length, 0);
     assert.equal(result.nodes.get("[data-invitation]").hidden, true);
   }
+});
+
+test("language toggles skip the envelope in both directions and clean the temporary marker", () => {
+  for (const [from, to] of [["relatives", "gujarati"], ["gujarati", "relatives"]]) {
+    const result = loadInvitation(`/margee/${to}/`, {
+      standalone: true,
+      search: "?language-switch=1&other=kept",
+      hash: "#invitation",
+      referrer: `https://thesamarstory.com/margee/${from}/`
+    });
+    assert.equal(result.frames.length, 0);
+    assert.equal(result.context.window.WardrobeInvitation.getState(), "opened");
+    assert.deepEqual(result.historyReplacements, [`/margee/${to}/?other=kept#invitation`]);
+  }
+});
+
+test("direct or unrelated navigation still shows the envelope even with a copied switch marker", () => {
+  for (const referrer of ["", "https://example.com/margee/relatives/", "https://thesamarstory.com/", "https://thesamarstory.com/margee/gujarati/"]) {
+    const result = loadInvitation("/margee/gujarati/", { standalone: true, search: "?language-switch=1", referrer });
+    assert.equal(result.frames.length, 1);
+    assert.deepEqual(result.historyReplacements, ["/margee/gujarati/"]);
+  }
+  const cleanReload = loadInvitation("/margee/gujarati/", {
+    standalone: true,
+    referrer: "https://thesamarstory.com/margee/relatives/"
+  });
+  assert.equal(cleanReload.frames.length, 1);
 });
