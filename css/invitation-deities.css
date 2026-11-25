@@ -1,0 +1,44 @@
+/* Shared blessing row for every family invitation, including narrow phones. */
+#invitation .kankotri__invocations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 12px;
+  margin: 0 auto 30px;
+  color: #b68a49;
+  font-family: 'Noto Serif Gujarati', serif;
+  font-size: clamp(12px, 2.6vw, 16px);
+  font-weight: 500;
+  line-height: 1.9;
+}
+
+#invitation .kankotri__deity { min-width: 0; text-align: center; }
+
+#invitation .kankotri__deity-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 71px;
+  margin-bottom: 14px;
+}
+
+#invitation .kankotri__deity-art img {
+  display: block;
+  width: 61px;
+  height: 71px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+#invitation .kankotri__deity > span {
+  display: block;
+  white-space: normal;
+  text-wrap: balance;
+  line-height: 1.9;
+}
+
+@media (max-width: 520px) {
+  #invitation .kankotri__invocations { gap: 8px; margin-bottom: 24px; }
+  #invitation .kankotri__deity-art { height: 60px; margin-bottom: 10px; }
+  #invitation .kankotri__deity-art img { width: 54px; height: 60px; }
+}
