@@ -33,7 +33,7 @@ from `Margee_Sahil_Gujarati_Wedding_Version3_FINAL` and live in `margee/gujarati
 with the same responsive feather backdrop.
 
 - Wedding guide: <https://thesamarstory.com/wardrobe/> (Sagai is omitted.)
-- Family: <https://thesamarstory.com/attire/> (Carnival is omitted.)
+- Family: <https://thesamarstory.com/attire/> (Sagai and Carnival are omitted.)
 - Engagement: <https://thesamarstory.com/wardrobe/engagement/> (Only Sagai.)
 - Garba: <https://thesamarstory.com/wardrobe/garba/> (Only Garba.)
 

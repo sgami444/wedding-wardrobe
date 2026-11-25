@@ -23,7 +23,7 @@
  *
  * AUDIENCE ROUTES
  * - `/wardrobe/` shows the February celebrations and excludes Sagai.
- * - `/attire/` is the family guide and excludes Carnival.
+ * - `/attire/` is the family guide and excludes Sagai and Carnival.
  * - `/wardrobe/engagement/` shows only Sagai.
  * - `/wardrobe/garba/` shows only Garba.
  * - Use `includeEvents` or `excludeEvents` to adjust a guide.
@@ -54,9 +54,10 @@ window.WEDDING_WARDROBE = {
       }
     },
     attire: {
-      excludeEvents: ["carnival"],
+      excludeEvents: ["sagai", "carnival"],
       site: {
-        canonicalUrl: "https://thesamarstory.com/attire/"
+        canonicalUrl: "https://thesamarstory.com/attire/",
+        footerDates: "February 8–10, 2027"
       }
     },
     "wardrobe/engagement": {
